@@ -17,6 +17,7 @@
     "next"
   ],
   "dependencies": {
+    "@prisma/client": "^6.15.0",
     "@reduxjs/toolkit": "^1.8.1",
     "eslint-config-next": "^15.0.3",
     "lodash": "^4.17.21",
@@ -57,6 +58,7 @@
     "fslightbox-react": "^1.5.0",
     "node-fetch": "^3.1.1",
     "prettier": "^3.4.1",
+    "prisma": "^6.15.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
   }

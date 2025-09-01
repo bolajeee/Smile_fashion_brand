@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String  @id @default(cuid())
+  name         String
+  email        String  @unique
+  passwordHash String
+  address      String
+  orders       Order[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Decimal  // Using Decimal to accommodate Naira currency
+  images      String[]
+  stock       Int
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  status          OrderStatus @default(PENDING)
+  total           Decimal // Using Decimal to accommodate Naira currency
+  shippingAddress String
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Decimal // Using Decimal to accommodate Naira currency
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
