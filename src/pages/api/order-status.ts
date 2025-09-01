@@ -6,24 +6,24 @@ const prisma = new PrismaClient();
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
-      const products = await prisma.product.findMany();
-      return res.status(200).json(products);
+      const orderStatus = await prisma.orderStatus.findMany();
+      return res.status(200).json(orderStatus);
     case 'POST':
-      const product = await prisma.product.create({
+      const newOrderStatus = await prisma.orderStatus.create({
         data: req.body,
       });
-      return res.status(201).json(product);
+      return res.status(201).json(newOrderStatus);
     case 'PUT':
-      const updatedProduct = await prisma.product.update({
+      const updatedOrderStatus = await prisma.orderStatus.update({
         where: { id: req.query.id },
         data: req.body,
       });
-      return res.status(200).json(updatedProduct);
+      return res.status(200).json(updatedOrderStatus);
     case 'DELETE':
-      await prisma.product.delete({
+      await prisma.orderStatus.delete({
         where: { id: req.query.id },
       });
-      return res.status(200).json({ message: 'Product deleted successfully' });
+      return res.status(200).json({ message: 'Order status deleted successfully' });
     default:
       return res.status(405).json({ message: 'Method not allowed' });
   }

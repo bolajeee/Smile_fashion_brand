@@ -4,24 +4,23 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const id = req.query.id;
+
   switch (req.method) {
     case 'GET':
-      const products = await prisma.product.findMany();
-      return res.status(200).json(products);
-    case 'POST':
-      const product = await prisma.product.create({
-        data: req.body,
+      const product = await prisma.product.findUnique({
+        where: { id },
       });
-      return res.status(201).json(product);
+      return res.status(200).json(product);
     case 'PUT':
       const updatedProduct = await prisma.product.update({
-        where: { id: req.query.id },
+        where: { id },
         data: req.body,
       });
       return res.status(200).json(updatedProduct);
     case 'DELETE':
       await prisma.product.delete({
-        where: { id: req.query.id },
+        where: { id },
       });
       return res.status(200).json({ message: 'Product deleted successfully' });
     default:

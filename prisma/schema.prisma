@@ -26,10 +26,12 @@ model Product {
   id          String   @id @default(cuid())
   name        String
   description String
-  price       Decimal  // Using Decimal to accommodate Naira currency
+  price       Decimal  @db.Decimal(12, 2)
   images      String[]
   stock       Int
   orderItems  OrderItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Order {
@@ -37,7 +39,7 @@ model Order {
   userId          String
   user            User        @relation(fields: [userId], references: [id])
   status          OrderStatus @default(PENDING)
-  total           Decimal // Using Decimal to accommodate Naira currency
+  total           Decimal     @db.Decimal(12, 2)
   shippingAddress String
   items           OrderItem[]
 }
@@ -49,7 +51,7 @@ model OrderItem {
   productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
-  price     Decimal // Using Decimal to accommodate Naira currency
+  price     Decimal @db.Decimal(12, 2)
 }
 
 enum OrderStatus {
