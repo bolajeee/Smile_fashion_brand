@@ -1,29 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { OrderStatus } from '@prisma/client';
 
-const prisma = new PrismaClient();
+function getId(req: NextApiRequest): string | null {
+  const value = req.query[id];
+  if (Array.isArray(value)) return value[0] ?? null;
+  if (typeof value === 'string') return value;
+  return null;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = req.query.id;
+  // This route treats [id] as the enum value to validate or describe
+  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
+  if (!id || typeof id !== 'string') return res.status(400).json({ message: 'Missing id' });
 
-  switch (req.method) {
-    case 'GET':
-      const orderStatus = await prisma.orderStatus.findUnique({
-        where: { id },
-      });
-      return res.status(200).json(orderStatus);
-    case 'PUT':
-      const updatedOrderStatus = await prisma.orderStatus.update({
-        where: { id },
-        data: req.body,
-      });
-      return res.status(200).json(updatedOrderStatus);
-    case 'DELETE':
-      await prisma.orderStatus.delete({
-        where: { id },
-      });
-      return res.status(200).json({ message: 'Order status deleted successfully' });
-    default:
-      return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method === 'GET') {
+    const valid = Object.values(OrderStatus).includes(id as OrderStatus);
+    return res.status(200).json({ value: id, valid });
   }
+
+  return res.status(405).json({ message: 'Method not allowed' });
 }

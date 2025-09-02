@@ -1,29 +1,42 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/utils/db';
 
-const prisma = new PrismaClient();
+function getId(req: NextApiRequest): string | null {
+  const value = req.query.id;
+  if (Array.isArray(value)) return value[0] ?? null;
+  if (typeof value === 'string') return value;
+  return null;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const id = req.query.id;
+  const id = getId(req);
+  if (!id) return res.status(400).json({ message: 'Missing id' });
 
-  switch (req.method) {
-    case 'GET':
-      const product = await prisma.product.findUnique({
-        where: { id },
-      });
-      return res.status(200).json(product);
-    case 'PUT':
-      const updatedProduct = await prisma.product.update({
-        where: { id },
-        data: req.body,
-      });
-      return res.status(200).json(updatedProduct);
-    case 'DELETE':
-      await prisma.product.delete({
-        where: { id },
-      });
-      return res.status(200).json({ message: 'Product deleted successfully' });
-    default:
-      return res.status(405).json({ message: 'Method not allowed' });
+  try {
+    switch (req.method) {
+      case 'GET': {
+        const product = await prisma.product.findUnique({ where: { id } });
+        if (!product) return res.status(404).json({ message: 'Not found' });
+        return res.status(200).json(product);
+      }
+      case 'PUT': {
+        const { name, description, price, images, stock } = req.body || {};
+        const updated = await prisma.product.update({
+          where: { id },
+          data: { name, description, price, images, stock },
+        });
+        return res.status(200).json(updated);
+      }
+      case 'DELETE': {
+        await prisma.product.delete({ where: { id } });
+        return res.status(200).json({ message: 'Product deleted successfully' });
+      }
+      default:
+        return res.status(405).json({ message: 'Method not allowed' });
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error in /api/product/[id]:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
