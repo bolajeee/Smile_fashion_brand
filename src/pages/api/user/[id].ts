@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/utils/db';
+import { withAuth } from '@/utils/api-middleware';
 
 function getId(req: NextApiRequest): string | null {
   const value = req.query.id;
@@ -8,9 +9,16 @@ function getId(req: NextApiRequest): string | null {
   return null;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = getId(req);
   if (!id) return res.status(400).json({ message: 'Missing id' });
+  
+  const reqUser = (req as any).user;
+
+  // User can only access their own data unless admin
+  if (reqUser.role !== 'ADMIN' && id !== reqUser.id) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
 
   try {
     switch (req.method) {
@@ -44,3 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+// All operations require auth
+export default withAuth(handler);

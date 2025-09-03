@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { useSelector } from "react-redux";
 import useOnClickOutside from "use-onclickoutside";
 
@@ -14,6 +15,7 @@ type HeaderType = {
 
 const Header = ({ isErrorPage }: HeaderType) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const { cartItems } = useSelector((state: RootState) => state.cart);
   const arrayPaths = ["/"];
 
@@ -69,12 +71,20 @@ const Header = ({ isErrorPage }: HeaderType) => {
           ref={navRef}
           className={`site-nav ${menuOpen ? "site-nav--open" : ""}`}
         >
-                    <Link href="/products">Products</Link>
-          <Link href="/add-product">Add Product</Link>
+          <Link href="/products">Products</Link>
+          {session?.user?.role === 'ADMIN' && (
+            <>
+              <Link href="/admin">Admin Dashboard</Link>
+              <Link href="/admin/products">Manage Products</Link>
+              <Link href="/admin/orders">Manage Orders</Link>
+              <Link href="/admin/settings">Admin Settings</Link>
+              <Link href="/add-product">Add Product</Link>
+            </>
+          )}
           <a href="#">Inspiration</a>
           <a href="#">Rooms</a>
           <button className="site-nav__btn">
-            <p>Account</p>
+            <p>{session?.user ? 'Account' : 'Sign in'}</p>
           </button>
         </nav>
 
@@ -112,6 +122,15 @@ const Header = ({ isErrorPage }: HeaderType) => {
               <i className="icon-avatar" />
             </button>
           </Link>
+          {session?.user && (
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="site-header__btn-avatar"
+              title="Sign out"
+            >
+              <i className="icon-cancel" />
+            </button>
+          )}
           <button
             onClick={() => setMenuOpen(true)}
             className="site-header__btn-menu"

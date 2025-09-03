@@ -9,6 +9,7 @@ import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";
 import Router from "next/router";
 import React, { Fragment } from "react";
+import { SessionProvider } from "next-auth/react";
 
 import { wrapper } from "../store";
 import * as gtag from "../utils/gtag";
@@ -27,15 +28,17 @@ const poppins = Poppins({
   variable: "--main-font",
 });
 
-const MyApp = ({ Component, pageProps }: AppProps) => (
-  <Fragment>
-    <style jsx global>{`
-      :root {
-        --main-font: ${poppins.style.fontFamily};
-      }
-    `}</style>
-    <Component {...pageProps} />
-  </Fragment>
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
+  <SessionProvider session={session}>
+    <Fragment>
+      <style jsx global>{`
+        :root {
+          --main-font: ${poppins.style.fontFamily};
+        }
+      `}</style>
+      <Component {...pageProps} />
+    </Fragment>
+  </SessionProvider>
 );
 
 export default wrapper.withRedux(MyApp);

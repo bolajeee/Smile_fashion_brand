@@ -1,23 +1,58 @@
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Layout from "../layouts/Main";
-import { server } from "../utils/server";
-import { postData } from "../utils/services";
 
 type LoginMail = {
   email: string;
   password: string;
+  keepSigned?: boolean;
 };
 
 const LoginPage = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginMail>();
+  const router = useRouter();
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    if (router.query.success) {
+      setSuccessMessage(router.query.success as string);
+    }
+  }, [router.query]);
 
   const onSubmit = async (data: LoginMail) => {
-    await postData(`${server}/api/login`, {
+    // Clear previous server errors
+    setError('root.serverError', {});
+
+    const result = await signIn("credentials", {
+      redirect: false,
       email: data.email,
       password: data.password,
     });
+
+    if (result?.error) {
+      const errorMessage =
+        result.error === 'CredentialsSignin'
+          ? 'Invalid email or password. Please try again.'
+          : result.error;
+
+      setError("root.serverError", {
+        type: "manual",
+        message: errorMessage,
+      });
+    } else {
+      const callbackUrl =
+        (router.query.callbackUrl as string) || "/account/profile";
+      router.push(callbackUrl);
+    }
   };
 
   return (
@@ -39,17 +74,32 @@ const LoginPage = () => {
               ever since the 1500s
             </p>
 
+            {successMessage && (
+              <p
+                className="message message--success"
+                style={{ marginBottom: '15px', textAlign: 'center' }}
+              >
+                {successMessage}
+              </p>
+            )}
+
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
+              {errors.root?.serverError && (
+                <p
+                  className="message message--error"
+                  style={{ marginBottom: '15px', textAlign: 'center' }}
+                >
+                  {errors.root.serverError.message}
+                </p>
+              )}
               <div className="form__input-row">
                 <input
                   className="form__input"
                   placeholder="email"
                   type="text"
-                  name="email"
-                  ref={register({
+                  {...register("email", {
                     required: true,
-                    pattern:
-                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   })}
                 />
 
@@ -71,8 +121,7 @@ const LoginPage = () => {
                   className="form__input"
                   type="password"
                   placeholder="Password"
-                  name="password"
-                  ref={register({ required: true })}
+                  {...register("password", { required: true })}
                 />
                 {errors.password && errors.password.type === "required" && (
                   <p className="message message--error">
@@ -89,9 +138,8 @@ const LoginPage = () => {
                   >
                     <input
                       type="checkbox"
-                      name="keepSigned"
                       id="check-signed-in"
-                      ref={register({ required: false })}
+                      {...register("keepSigned")}
                     />
                     <span className="checkbox__check" />
                     <p>Keep me signed in</p>
@@ -106,11 +154,11 @@ const LoginPage = () => {
               </div>
 
               <div className="form__btns">
-                <button type="button" className="btn-social fb-btn">
-                  <i className="icon-facebook" />
-                  Facebook
-                </button>
-                <button type="button" className="btn-social google-btn">
+                <button
+                  type="button"
+                  className="btn-social google-btn width-full"
+                  onClick={() => signIn('google')}
+                >
                   <img src="/images/icons/gmail.svg" alt="gmail" /> Gmail
                 </button>
               </div>
@@ -118,8 +166,9 @@ const LoginPage = () => {
               <button
                 type="submit"
                 className="btn btn--rounded btn--yellow btn-submit"
+                disabled={isSubmitting}
               >
-                Sign in
+                {isSubmitting ? 'Signing in...' : 'Sign in'}
               </button>
 
               <p className="form__signup-link">

@@ -1,9 +1,18 @@
-type CheckboxType = {
+export type CheckboxType = {
   type?: string;
   label: string;
   name: string;
-  onChange?: () => void;
+  checked: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
+export interface CheckboxColorType {
+  valueName: string;
+  color: string;
+  name: string;
+  isChecked: boolean;
+  onChange: (checked: boolean) => void;
+}
 
 const Checkbox = ({ type = "", label, name, onChange }: CheckboxType) => (
   <label

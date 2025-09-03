@@ -2,14 +2,21 @@ import { useState } from "react";
 
 import List from "./list";
 
-const ProductsContent = () => {
+import type { Product } from "@/types/product";
+
+interface ProductsContentProps {
+  products: Product[];
+}
+
+
+const ProductsContent: React.FC<ProductsContentProps> = ({ products }) => {
   const [orderProductsOpen, setOrderProductsOpen] = useState(false);
 
   return (
     <section className="products-content">
       <div className="products-content__intro">
         <h2>
-          Men's Tops <span>(133)</span>
+          Men's Tops <span>({products.length})</span>
         </h2>
         <button
           type="button"
@@ -40,7 +47,7 @@ const ProductsContent = () => {
         </form>
       </div>
 
-      <List />
+      <List products={products} />
     </section>
   );
 };

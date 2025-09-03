@@ -1,36 +1,22 @@
-import useSwr from "swr";
-
-import type { ProductTypeList } from "@/types";
+import type { Product } from "@/types/product";
 
 import ProductItem from "../../product-item";
-import ProductsLoading from "./loading";
 
-const ProductsContent = () => {
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  const { data, error } = useSwr("/api/products", fetcher);
+interface ProductListProps {
+  products: Product[];
+}
 
-  if (error) return <div>Failed to load users</div>;
+const List: React.FC<ProductListProps> = ({ products }) => {
   return (
-    <>
-      {!data && <ProductsLoading />}
-
-      {data && (
-        <section className="products-list">
-          {data.map((item: ProductTypeList) => (
-            <ProductItem
-              id={item.id}
-              name={item.name}
-              price={item.price}
-              color={item.color}
-              currentPrice={item.currentPrice}
-              key={item.id}
-              images={item.images}
-            />
-          ))}
-        </section>
-      )}
-    </>
+    <section className="products-list">
+      {products.map((item) => (
+        <ProductItem
+          key={item.id}
+          {...item}
+        />
+      ))}
+    </section>
   );
 };
 
-export default ProductsContent;
+export default List;

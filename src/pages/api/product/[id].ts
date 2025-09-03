@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/utils/db';
+import { withAdmin } from '@/utils/api-middleware';
 
 function getId(req: NextApiRequest): string | null {
   const value = req.query.id;
@@ -8,7 +9,7 @@ function getId(req: NextApiRequest): string | null {
   return null;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = getId(req);
   if (!id) return res.status(400).json({ message: 'Missing id' });
 
@@ -39,4 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Error in /api/product/[id]:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
+}
+
+// GET is public, but PUT/DELETE require admin
+export default async function(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'GET') {
+    return handler(req, res);
+  }
+  return withAdmin(handler)(req, res);
 }

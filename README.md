@@ -111,6 +111,22 @@ curl -X PUT http://localhost:3000/api/order/ORDER_ID \
 - Product lists use `/api/products` via SWR.
 - Static catalog helpers remain in `src/utils/data` (colors, sizes, types) and are independent from product fetching.
 
+### Admin Features
+- **Product Management**: `/admin/products` - View, edit, and delete products (admin only)
+- **Add Products**: `/add-product` - Create new products with form validation
+
+### E-commerce Flow
+- **Shopping Cart**: Redux-based cart with persistent state
+- **Checkout Process**: Integrated with orders API, creates orders with items
+- **Order History**: User profile shows complete order history with status tracking
+- **Checkout Success**: `/checkout-success` page after successful order placement
+
+### Authentication & User Management
+- **NextAuth.js**: Complete authentication system with credentials provider
+- **User Roles**: Admin/User role-based access control
+- **Protected Routes**: Account pages require authentication
+- **Session Management**: JWT-based sessions with 30-day expiry
+
 ### Useful Scripts
 ```
 yarn dev             # run Next.js dev server

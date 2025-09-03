@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/utils/db';
+import { withAdmin } from '@/utils/api-middleware';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'GET': {
@@ -27,3 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+// Only allow admins to create products
+export default withAdmin(handler);

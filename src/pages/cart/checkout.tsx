@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 import CheckoutItems from "@/components/checkout/items";
 import CheckoutStatus from "@/components/checkout-status";
@@ -8,15 +11,87 @@ import type { RootState } from "@/store";
 import Layout from "../../layouts/Main";
 
 const CheckoutPage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    address: '',
+    firstName: '',
+    city: '',
+    lastName: '',
+    postalCode: '',
+    phone: '',
+    country: 'Nigeria'
+  });
+
   const priceTotal = useSelector((state: RootState) => {
     const { cartItems } = state.cart;
     let totalPrice = 0;
     if (cartItems.length > 0) {
       cartItems.map((item) => (totalPrice += item.price * item.count));
     }
-
     return totalPrice;
   });
+
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!session?.user?.id) {
+      router.push('/login');
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Create order
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: session.user.id,
+          total: priceTotal,
+          shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
+          items: cartItems.map(item => ({
+            productId: item.id,
+            quantity: item.count,
+            price: item.price
+          }))
+        }),
+      });
+
+      if (orderResponse.ok) {
+        // Clear cart and redirect to success page
+        // You'll need to implement cart clearing in Redux
+        router.push('/checkout-success');
+      } else {
+        const error = await orderResponse.json();
+        alert(`Error creating order: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      alert('An error occurred during checkout');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <Layout>
@@ -29,22 +104,30 @@ const CheckoutPage = () => {
 
           <div className="checkout-content">
             <div className="checkout__col-6">
-              <div className="checkout__btns">
-                <button className="btn btn--rounded btn--yellow">Log in</button>
-                <button className="btn btn--rounded btn--border">
-                  Sign up
-                </button>
-              </div>
+              {!session ? (
+                <div className="checkout__btns">
+                  <Link href="/login" className="btn btn--rounded btn--yellow">Log in</Link>
+                  <Link href="/register" className="btn btn--rounded btn--border">Sign up</Link>
+                </div>
+              ) : (
+                <div className="checkout__user-info">
+                  <p>Logged in as: {session.user.email}</p>
+                </div>
+              )}
 
               <div className="block">
                 <h3 className="block__title">Shipping information</h3>
-                <form className="form">
+                <form className="form" onSubmit={handleSubmit}>
                   <div className="form__input-row form__input-row--two">
                     <div className="form__col">
                       <input
                         className="form__input form__input--sm"
-                        type="text"
+                        type="email"
+                        name="email"
                         placeholder="Email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
 
@@ -52,7 +135,11 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="address"
                         placeholder="Address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -62,7 +149,11 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="firstName"
                         placeholder="First name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
 
@@ -70,7 +161,11 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="city"
                         placeholder="City"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -80,7 +175,11 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="lastName"
                         placeholder="Last name"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
 
@@ -88,7 +187,11 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="postalCode"
                         placeholder="Postal code / ZIP"
+                        value={formData.postalCode}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -98,15 +201,25 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
+                        name="phone"
                         placeholder="Phone number"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
                       />
                     </div>
 
                     <div className="form__col">
                       <div className="select-wrapper select-form">
-                        <select>
-                          <option>Country</option>
+                        <select
+                          name="country"
+                          value={formData.country}
+                          onChange={handleInputChange}
+                        >
                           <option value="Argentina">Argentina</option>
+                          <option value="United States">United States</option>
+                          <option value="Canada">Canada</option>
+                          <option value="United Kingdom">United Kingdom</option>
                         </select>
                       </div>
                     </div>
@@ -181,11 +294,16 @@ const CheckoutPage = () => {
               <i className="icon-left" /> Back
             </Link>
             <div className="cart-actions__items-wrapper">
-              <button type="button" className="btn btn--rounded btn--border">
+              <Link href="/products" className="btn btn--rounded btn--border">
                 Continue shopping
-              </button>
-              <button type="button" className="btn btn--rounded btn--yellow">
-                Proceed to payment
+              </Link>
+              <button
+                type="submit"
+                className="btn btn--rounded btn--yellow"
+                disabled={isProcessing}
+                onClick={handleSubmit}
+              >
+                {isProcessing ? 'Processing...' : 'Proceed to payment'}
               </button>
             </div>
           </div>

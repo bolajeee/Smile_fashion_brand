@@ -1,0 +1,56 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+import formidable, { type Fields, type Files } from 'formidable';
+import fs from 'fs';
+import path from 'path';
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: 'Method not allowed' });
+    }
+
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const form = formidable({ multiples: false, maxFileSize: 5 * 1024 * 1024 });
+
+    form.parse(req, async (err: unknown, fields: Fields, files: Files) => {
+        try {
+            if (err) {
+                // eslint-disable-next-line no-console
+                console.error('Upload error:', err);
+                return res.status(400).json({ message: 'Invalid form data' });
+            }
+
+            const file = files.file;
+            const fileArray = Array.isArray(file) ? file : [file];
+            const first = fileArray[0] as formidable.File | undefined;
+            if (!first || !first.filepath || !first.originalFilename) {
+                return res.status(400).json({ message: 'No file provided' });
+            }
+
+            const ext = path.extname(first.originalFilename);
+            const base = path.basename(first.originalFilename, ext).replace(/[^a-z0-9-_]/gi, '_');
+            const filename = `${base}_${Date.now()}${ext || '.png'}`;
+            const destPath = path.join(uploadDir, filename);
+
+            await fs.promises.copyFile(first.filepath, destPath);
+
+            const publicUrl = `/uploads/${filename}`;
+            return res.status(200).json({ url: publicUrl });
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error('Upload processing error:', e);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    });
+}
+
+
