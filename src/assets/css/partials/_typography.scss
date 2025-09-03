@@ -1,0 +1,73 @@
+@mixin heading-1 {
+  font-family: $font-primary;
+  font-size: $text-4xl;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+}
+
+@mixin heading-2 {
+  font-family: $font-primary;
+  font-size: $text-3xl;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+}
+
+@mixin heading-3 {
+  font-family: $font-primary;
+  font-size: $text-2xl;
+  font-weight: $font-semibold;
+  line-height: $leading-tight;
+}
+
+@mixin text-body {
+  font-family: $font-primary;
+  font-size: $text-base;
+  font-weight: $font-regular;
+  line-height: $leading-normal;
+}
+
+@mixin text-small {
+  font-family: $font-primary;
+  font-size: $text-sm;
+  font-weight: $font-regular;
+  line-height: $leading-normal;
+}
+
+// Base typography styles
+body {
+  font-family: $font-primary;
+  font-size: $text-base;
+  line-height: $leading-normal;
+  color: $color-gray-900;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .h1 { @include heading-1; }
+h2, .h2 { @include heading-2; }
+h3, .h3 { @include heading-3; }
+
+p {
+  margin-bottom: $space-4;
+  @include text-body;
+}
+
+.text-small {
+  @include text-small;
+}
+
+// Text utilities
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-primary { color: $color-primary; }
+.text-success { color: $color-success; }
+.text-warning { color: $color-warning; }
+.text-error { color: $color-error; }
+
+.font-light { font-weight: $font-light; }
+.font-regular { font-weight: $font-regular; }
+.font-medium { font-weight: $font-medium; }
+.font-semibold { font-weight: $font-semibold; }
+.font-bold { font-weight: $font-bold; }

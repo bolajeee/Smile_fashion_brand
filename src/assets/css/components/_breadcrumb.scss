@@ -1,0 +1,71 @@
+// Breadcrumb Component Styles
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:not(:last-child)::after {
+      content: '/';
+      color: var(--color-text-tertiary);
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary);
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+  }
+
+  &__current {
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  // Breadcrumb variants
+  &--compact {
+    padding: 0.5rem 0;
+    font-size: 0.75rem;
+  }
+
+  &--large {
+    padding: 1.5rem 0;
+    font-size: 1rem;
+  }
+
+  // Dark theme support
+  [data-theme="dark"] & {
+    color: var(--color-text-secondary-dark);
+
+    &__link {
+      color: var(--color-text-secondary-dark);
+
+      &:hover {
+        color: var(--color-primary-light);
+      }
+    }
+
+    &__current {
+      color: var(--color-text-primary-dark);
+    }
+  }
+}

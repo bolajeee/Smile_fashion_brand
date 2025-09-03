@@ -1,0 +1,31 @@
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: $color-gray-900;
+  font-family: $font-primary;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+  margin-bottom: $space-4;
+}
+
+h1 {
+  font-size: $text-4xl;
+}
+
+h2 {
+  font-size: $text-3xl;
+}
+
+h3 {
+  font-size: $text-2xl;
+}
+
+h4 {
+  font-size: $text-xl;
+}
+
+h5 {
+  font-size: $text-lg;
+}

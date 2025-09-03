@@ -1,0 +1,43 @@
+.form {
+  .form__input-row {
+    margin-bottom: 25px;
+  }
+
+  .form__input {
+    width: 100%;
+
+    input {
+      width: 100%;
+      padding: 15px 20px;
+      border-radius: 35px;
+    }
+  }
+
+  .form__btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    @include breakpoint(phone) {
+      flex-direction: row;
+    }
+  }
+
+  .form__signup-link {
+    margin-top: 20px;
+    text-align: center;
+    a {
+      color: $color-primary;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .form__info {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}

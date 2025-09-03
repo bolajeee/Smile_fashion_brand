@@ -7,7 +7,10 @@ import useOnClickOutside from "use-onclickoutside";
 
 import type { RootState } from "@/store";
 
-import Logo from "../../assets/icons/logo";
+import { useCallback } from "react";
+import Image from "next/image";
+
+import { ThemeToggle } from '../theme/ThemeToggle';
 
 type HeaderType = {
   isErrorPage?: boolean;
@@ -58,13 +61,21 @@ const Header = ({ isErrorPage }: HeaderType) => {
   useOnClickOutside(navRef, closeMenu);
   useOnClickOutside(searchRef, closeSearch);
 
+  const toggleTheme = useCallback(() => {
+    const root = document.documentElement;
+    const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('smile-theme', next); } catch (e) { }
+  }, []);
+
   return (
     <header className={`site-header ${!onTop ? "site-header--fixed" : ""}`}>
       <div className="container">
         <Link href="/">
           <h1 className="site-logo">
-            <Logo />
-            E-Shop
+            <Image src="/assets/images/smile_logo.svg" alt="Smile" width={100} height={24} />
+            Smile
           </h1>
         </Link>
         <nav
@@ -89,6 +100,7 @@ const Header = ({ isErrorPage }: HeaderType) => {
         </nav>
 
         <div className="site-header__actions">
+          <ThemeToggle onClick="toggleTheme" />
           <button
             ref={searchRef}
             className={`search-form-wrapper ${searchOpen ? "search-form--active" : ""}`}

@@ -1,0 +1,103 @@
+.site-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  height: 65px;
+  color: var(--color-inverse);
+  box-shadow: none;
+  transition: $transition-base;
+
+  @include breakpoint(phone) {
+    height: 100px;
+  }
+
+  .btn-hamburger {
+    &:before,
+    &:after,
+    span {
+      background-color: var(--color-inverse);
+    }
+  }
+
+  .container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .site-logo {
+    color: var(--color-inverse);
+  }
+
+  .site-header__btn-avatar {
+    display: none;
+
+    @include breakpoint(tablet-lg) {
+      display: block;
+    }
+  }
+
+  .site-header__btn-menu {
+    @include breakpoint(tablet-lg) {
+      display: none;
+    }
+  }
+
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+
+    @include breakpoint(tablet-lg) {
+      margin-left: 0;
+    }
+
+    button {
+      margin-left: 15px;
+
+      @include breakpoint(tablet-lg) {
+        margin-left: 25px;
+      }
+    }
+
+    i {
+      color: var(--color-inverse);
+      z-index: 10;
+      transition: $transition-base;
+      position: relative;
+      font-size: 18px;
+    }
+  }
+
+  &.site-header--fixed {
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+
+    .btn-hamburger {
+      &:before,
+      &:after,
+      span {
+        background-color: var(--color-fg);
+      }
+    }
+
+    a,
+    i {
+      color: var(--color-fg);
+    }
+
+    button {
+      color: var(--color-fg);
+
+      i {
+        color: var(--color-fg);
+      }
+    }
+
+    .site-logo {
+      color: var(--color-fg);
+    }
+  }
+}

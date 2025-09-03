@@ -1,0 +1,74 @@
+// Theme Toggle Component Styles
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: var(--color-background-secondary);
+    }
+
+    &:focus {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    &__icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        transition: transform 0.3s ease;
+
+        &--sun {
+            color: var(--color-warning);
+        }
+
+        &--moon {
+            color: var(--color-info);
+        }
+    }
+
+    &__text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-primary);
+    }
+
+    // Dark theme specific styles
+    [data-theme="dark"] & {
+        &:hover {
+            background-color: var(--color-background-secondary-dark);
+        }
+
+        &__text {
+            color: var(--color-text-primary-dark);
+        }
+    }
+}
+
+// Theme toggle variants
+.theme-toggle--compact {
+    padding: 0.25rem;
+
+    .theme-toggle__text {
+        display: none;
+    }
+}
+
+.theme-toggle--large {
+    padding: 0.75rem;
+
+    .theme-toggle__icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .theme-toggle__text {
+        font-size: 1rem;
+    }
+}

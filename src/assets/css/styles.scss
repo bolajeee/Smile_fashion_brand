@@ -1,5 +1,52 @@
-// import icons
-@import './fonts/icons/icons.css';
+/**
+ * Smile Fashion Brand - Main Stylesheet
+ * Style architecture following the 7-1 pattern
+ */
 
-// import main
-@import './main.scss';
+// 1. Abstract - Variables, Mixins, Functions (no CSS output)
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+@import 'abstracts/animations';
+
+// 2. Vendors
+@import 'partials/reset';
+@import './fonts/icons/icons.css';
+@import 'swiper/swiper.scss';
+@import 'rc-slider/assets/index.css';
+@import 'react-rater/lib/react-rater.css';
+
+// 3. Base
+@import 'base/reset';
+@import 'base/base';
+@import 'base/typography';
+
+// 4. Layout
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/navigation';
+@import 'layout/forms';
+@import 'layout/grid';
+
+// 5. Components
+@import 'components/buttons';
+@import 'components/checkbox';
+@import 'components/product-item';
+@import 'components/theme-toggle';
+@import 'components/quantity';
+@import 'components/breadcrumb';
+@import 'components/select';
+@import 'components/shop-data';
+@import 'components/subscribe';
+@import 'components/page-intro';
+@import 'components/products-filter';
+@import 'components/products-content';
+@import 'components/search-form';
+
+
+// 6. Pages
+@import 'pages/base';
+@import 'pages/products';
+@import 'pages/product';
+@import 'pages/cart';
+@import 'pages/profile';
+@import 'pages/admin';

@@ -93,7 +93,7 @@ export default function AdminOrdersPage() {
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>Created</th>
-                                    <th>Actions</hth>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

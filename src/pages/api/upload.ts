@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const form = formidable({ multiples: false, maxFileSize: 5 * 1024 * 1024 });
 
-    form.parse(req, async (err: unknown, fields: Fields, files: Files) => {
+    form.parse(req, async (err: unknown, _fields: Fields, files: Files) => {
         try {
             if (err) {
                 // eslint-disable-next-line no-console

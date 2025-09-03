@@ -1,17 +1,18 @@
 .admin-products-page,
+.admin-settings,
 .admin-settings {
     padding: 40px 0;
 
     .admin-header {
         display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
 
         h1 {
             margin: 0;
-            font-size: 2rem;
-            color: #333;
         }
     }
 
@@ -19,7 +20,7 @@
     .users-table {
         background: white;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--box-shadow-sm);
         overflow: hidden;
 
         table {
@@ -29,14 +30,14 @@
             th,
             td {
                 padding: 12px;
-                text-align: left;
-                border-bottom: 1px solid #eee;
+                text-align: start;
+                border-bottom: 1px solid var(--color-border);
             }
 
             th {
-                background: #f8f9fa;
+                background: var(--color-background-alt);
                 font-weight: 600;
-                color: #333;
+                color: var(--color-text);
             }
 
             td {
@@ -55,7 +56,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: var(--color-overlay);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -72,7 +73,6 @@
 
             h3 {
                 margin: 0 0 20px 0;
-                color: #333;
             }
 
             .form-group {
@@ -81,18 +81,17 @@
                 label {
                     display: block;
                     margin-bottom: 5px;
-                    font-weight: 500;
-                    color: #555;
+                    font-weight: 600;
                 }
 
                 input,
                 textarea {
                     width: 100%;
                     padding: 10px;
-                    border: 1px solid #ddd;
+                    border: 1px solid var(--color-border);
                     border-radius: 4px;
                     font-size: 14px;
-
+ 
                     &:focus {
                         outline: none;
                         border-color: #007bff;
@@ -107,8 +106,8 @@
 
             .form-actions {
                 display: flex;
-                gap: 10px;
-                justify-content: flex-end;
+                gap: var(--spacing-xs);
+                justify-content: flex-end; /* autoprefixer: ignore */
                 margin-top: 20px;
             }
         }
@@ -120,11 +119,11 @@
     }
 
     .btn--red {
-        background: #dc3545;
-        color: white;
+        background: var(--color-danger);
+        color: var(--color-white);
 
         &:hover {
-            background: #c82333;
+            background: var(--color-danger-dark);
         }
     }
 }
@@ -143,12 +142,12 @@
     }
 
     h1 {
-        color: #4CAF50;
+        color: var(--color-success);
         margin-bottom: 20px;
     }
 
     .success-details {
-        text-align: left;
+        text-align: start;
         margin: 30px 0;
         padding: 20px;
         background: #f8f9fa;
@@ -156,9 +155,8 @@
 
         h3 {
             margin-bottom: 15px;
-            color: #333;
         }
-
+ 
         ul {
             list-style: none;
             padding: 0;
@@ -171,8 +169,8 @@
                 &:before {
                     content: "✓";
                     position: absolute;
-                    left: 0;
-                    color: #4CAF50;
+                    inset-inline-start: 0;
+                    color: var(--color-success);
                     font-weight: bold;
                 }
             }
@@ -181,7 +179,7 @@
 
     .success-actions {
         display: flex;
-        gap: 15px;
+        gap: var(--spacing-sm);
         justify-content: center;
         margin-top: 30px;
     }

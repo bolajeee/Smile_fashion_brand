@@ -1,0 +1,81 @@
+.btn {
+  color: $color-gray-900;
+  cursor: pointer;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  padding: $space-3 $space-5;
+  transition: $transition-base;
+
+  &.btn--rounded {
+    background: $color-white;
+    display: inline-block;
+    border-radius: 50px;
+    text-transform: uppercase;
+
+    @include breakpoint(phone) {
+      font-size: $text-base;
+      padding: $space-4 $space-6;
+    }
+
+    &.btn--border {
+      border: 1px solid $color-gray-300;
+    }
+
+    &.btn--primary {
+      background-color: $color-primary;
+      color: $color-white;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
+  }
+}
+
+.btn-hamburger {
+  display: block;
+  position: relative;
+  z-index: 100;
+  width: 25px;
+  height: 25px;
+  margin-left: auto;
+
+  &:before,
+  &:after,
+  span {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    border-radius: 3px;
+    margin-top: -1px;
+    position: absolute;
+    left: 50%;
+    margin-left: -10px;
+    transition: none .3s ease .3s;
+    transition-property: transform, top, bottom, right, opacity;
+  }
+
+  &:before {
+    transform: translateY(-6px);
+  }
+
+  &:after {
+    transform: translateY(6px);
+  }
+
+  &.is-active {
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+
+    span {
+      opacity: 0;
+    }
+  }
+}

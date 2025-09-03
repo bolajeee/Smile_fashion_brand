@@ -10,6 +10,9 @@ import { Poppins } from "next/font/google";
 import Router from "next/router";
 import React, { Fragment } from "react";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "../components/theme/ThemeProvider";
+import { AppContextProvider } from '@/contexts/AppContext';
+
 
 import { wrapper } from "../store";
 import * as gtag from "../utils/gtag";
@@ -30,14 +33,18 @@ const poppins = Poppins({
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
-    <Fragment>
-      <style jsx global>{`
-        :root {
-          --main-font: ${poppins.style.fontFamily};
-        }
-      `}</style>
-      <Component {...pageProps} />
-    </Fragment>
+    <ThemeProvider>
+      <AppContextProvider>
+      <Fragment>
+        <style jsx global>{`
+          :root {
+            --main-font: ${poppins.style.fontFamily};
+          }
+        `}</style>
+        <Component {...pageProps} />
+      </Fragment>
+      </AppContextProvider>
+    </ThemeProvider>
   </SessionProvider>
 );
 

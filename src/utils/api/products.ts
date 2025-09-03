@@ -15,7 +15,7 @@ export const getProducts = async (): Promise<Product[]> => {
 
 export const getProduct = async (id: string): Promise<Product | null> => {
   try {
-    const response = await fetch(`/api/products/${id}`);
+    const response = await fetch(`/api/product/${id}`);
     if (!response.ok) {
       throw new Error('Failed to fetch product');
     }
@@ -47,7 +47,7 @@ export const createProduct = async (product: Omit<Product, 'id'>): Promise<Produ
 
 export const updateProduct = async (id: string, product: Partial<Product>): Promise<Product | null> => {
   try {
-    const response = await fetch(`/api/products/${id}`, {
+    const response = await fetch(`/api/product/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const updateProduct = async (id: string, product: Partial<Product>): Prom
 
 export const deleteProduct = async (id: string): Promise<boolean> => {
   try {
-    const response = await fetch(`/api/products/${id}`, {
+    const response = await fetch(`/api/product/${id}`, {
       method: 'DELETE',
     });
     return response.ok;

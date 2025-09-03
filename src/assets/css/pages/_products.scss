@@ -1,0 +1,352 @@
+// Products Page Styles
+.products-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 0;
+
+    &__header {
+        text-align: center;
+        margin-bottom: 2rem;
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+            margin: 0 0 1rem 0;
+            line-height: 1.2;
+
+            @media (max-width: 768px) {
+                font-size: 2rem;
+            }
+        }
+
+        p {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__sidebar {
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+
+        @media (max-width: 1024px) {
+            position: static;
+            order: 2;
+        }
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        @media (max-width: 1024px) {
+            order: 1;
+        }
+    }
+
+    &__filters-mobile {
+        display: none;
+
+        @media (max-width: 1024px) {
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .filters-toggle {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.5rem;
+            background-color: var(--color-background-primary);
+            color: var(--color-text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: var(--color-background-secondary);
+                border-color: var(--color-primary);
+            }
+
+            .toggle-icon {
+                transition: transform 0.2s ease;
+
+                &.expanded {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    &__results {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 4rem 2rem;
+        text-align: center;
+
+        &-icon {
+            width: 6rem;
+            height: 6rem;
+            color: var(--color-text-tertiary);
+            opacity: 0.5;
+        }
+
+        &-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        &-message {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            margin: 0;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        &-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+
+            @media (max-width: 768px) {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    }
+
+    &__loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+
+        &-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid var(--color-border-light);
+            border-top: 3px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        &-text {
+            margin-left: 1rem;
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+        }
+    }
+
+    &__pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--color-border-light);
+
+        &-button {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.25rem;
+            background-color: var(--color-background-primary);
+            color: var(--color-text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 3rem;
+            text-align: center;
+
+            &:hover:not(:disabled) {
+                background-color: var(--color-background-secondary);
+                border-color: var(--color-primary);
+                color: var(--color-primary);
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            &.active {
+                background-color: var(--color-primary);
+                color: white;
+                border-color: var(--color-primary);
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.3);
+            }
+        }
+
+        &-info {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin: 0 1rem;
+        }
+
+        &-jump {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+
+            label {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+            }
+
+            input {
+                width: 4rem;
+                padding: 0.25rem 0.5rem;
+                border: 1px solid var(--color-border);
+                border-radius: 0.25rem;
+                background-color: var(--color-background-primary);
+                color: var(--color-text-primary);
+                font-size: 0.875rem;
+                text-align: center;
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--color-primary);
+                }
+            }
+
+            button {
+                padding: 0.25rem 0.5rem;
+                border: 1px solid var(--color-border);
+                border-radius: 0.25rem;
+                background-color: var(--color-background-primary);
+                color: var(--color-text-primary);
+                font-size: 0.75rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background-color: var(--color-background-secondary);
+                    border-color: var(--color-primary);
+                }
+            }
+        }
+    }
+
+    // Products page variants
+    &--grid-view {
+        .products-page__results {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+    }
+
+    &--list-view {
+        .products-page__results {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    &--compact {
+        .products-page__header {
+            margin-bottom: 1.5rem;
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        .products-page__content {
+            gap: 1.5rem;
+        }
+    }
+
+    // Dark theme support
+    [data-theme="dark"] & {
+        &__filters-mobile .filters-toggle {
+            background-color: var(--color-background-primary-dark);
+            border-color: var(--color-border-dark);
+            color: var(--color-text-primary-dark);
+
+            &:hover {
+                background-color: var(--color-background-secondary-dark);
+            }
+        }
+
+        &__pagination {
+            border-top-color: var(--color-border-light-dark);
+
+            &-button {
+                background-color: var(--color-background-primary-dark);
+                border-color: var(--color-border-dark);
+                color: var(--color-text-primary-dark);
+
+                &:hover:not(:disabled) {
+                    background-color: var(--color-background-secondary-dark);
+                }
+            }
+
+            &-jump input,
+            &-jump button {
+                background-color: var(--color-background-primary-dark);
+                border-color: var(--color-border-dark);
+                color: var(--color-text-primary-dark);
+
+                &:hover {
+                    background-color: var(--color-background-secondary-dark);
+                }
+            }
+        }
+    }
+}
+
+// Loading spinner animation
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
