@@ -1,74 +1,39 @@
-// Theme Toggle Component Styles
 .theme-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
+  background: none;
+  border: none;
+  color: #111827;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 
-    &:hover {
-        background-color: var(--color-background-secondary);
-    }
+  &:hover {
+    background: #f9fafb;
+    color: #ff6b6b;
+    transform: translateY(-1px);
+  }
 
-    &:focus {
-        outline: 2px solid var(--color-primary);
-        outline-offset: 2px;
-    }
+  &:active {
+    transform: translateY(0);
+  }
 
-    &__icon {
-        width: 1.25rem;
-        height: 1.25rem;
-        transition: transform 0.3s ease;
-
-        &--sun {
-            color: var(--color-warning);
-        }
-
-        &--moon {
-            color: var(--color-info);
-        }
-    }
-
-    &__text {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--color-text-primary);
-    }
-
-    // Dark theme specific styles
-    [data-theme="dark"] & {
-        &:hover {
-            background-color: var(--color-background-secondary-dark);
-        }
-
-        &__text {
-            color: var(--color-text-primary-dark);
-        }
-    }
+  &__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: currentColor;
+  }
 }
 
-// Theme toggle variants
-.theme-toggle--compact {
-    padding: 0.25rem;
+[data-theme="dark"] .theme-toggle {
+  color: #f9fafb;
 
-    .theme-toggle__text {
-        display: none;
-    }
-}
-
-.theme-toggle--large {
-    padding: 0.75rem;
-
-    .theme-toggle__icon {
-        width: 1.5rem;
-        height: 1.5rem;
-    }
-
-    .theme-toggle__text {
-        font-size: 1rem;
-    }
+  &:hover {
+    background: #374151;
+    color: #4ecdc4;
+  }
 }

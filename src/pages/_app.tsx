@@ -10,11 +10,8 @@ import { Poppins } from "next/font/google";
 import Router from "next/router";
 import React, { Fragment } from "react";
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "../components/theme/ThemeProvider";
 import { AppContextProvider } from '@/contexts/AppContext';
 
-
-import { wrapper } from "../store";
 import * as gtag from "../utils/gtag";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -33,8 +30,7 @@ const poppins = Poppins({
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
-    <ThemeProvider>
-      <AppContextProvider>
+    <AppContextProvider>
       <Fragment>
         <style jsx global>{`
           :root {
@@ -43,9 +39,8 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         `}</style>
         <Component {...pageProps} />
       </Fragment>
-      </AppContextProvider>
-    </ThemeProvider>
+    </AppContextProvider>
   </SessionProvider>
 );
 
-export default wrapper.withRedux(MyApp);
+export default MyApp;

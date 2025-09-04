@@ -22,6 +22,19 @@
   }
 }
 
+// Breakpoint mixin for max-width
+@mixin breakpointMax($point) {
+  @if $point == desktop-lg {
+    @media (max-width: $breakpoint-xl) { @content; }
+  } @else if $point == tablet-lg {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $point == tablet {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $point == phone {
+    @media (max-width: $breakpoint-sm) { @content; }
+  }
+}
+
 // Input placeholder mixin
 @mixin placeholder {
   &::-webkit-input-placeholder {

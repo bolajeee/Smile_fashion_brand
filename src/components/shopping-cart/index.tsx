@@ -1,13 +1,10 @@
 import Link from "next/link";
-import { useSelector } from "react-redux";
-
-import type { RootState } from "@/store";
-
+import { useCart } from "@/contexts/CartContext";
 import CheckoutStatus from "../checkout-status";
 import Item from "./item";
 
 const ShoppingCart = () => {
-  const { cartItems } = useSelector((state: RootState) => state.cart);
+  const { cartItems } = useCart();
 
   const priceTotal = () => {
     let totalPrice = 0;
@@ -28,17 +25,18 @@ const ShoppingCart = () => {
 
         <div className="cart-list">
           {cartItems.length > 0 && (
-            <table>
-              <tbody>
+            <table className="cart-table">
+              <thead>
                 <tr>
-                  <th style={{ textAlign: "left" }}>Product</th>
-                  <th>Color</th>
-                  <th>Size</th>
-                  <th>Ammount</th>
-                  <th>Price</th>
-                  <th />
+                  <th className="cart-table__header">Product</th>
+                  <th className="cart-table__header">Color</th>
+                  <th className="cart-table__header">Size</th>
+                  <th className="cart-table__header">Amount</th>
+                  <th className="cart-table__header">Price</th>
+                  <th className="cart-table__header"></th>
                 </tr>
-
+              </thead>
+              <tbody>
                 {cartItems.map((item) => (
                   <Item
                     key={item.id}
@@ -55,31 +53,46 @@ const ShoppingCart = () => {
             </table>
           )}
 
-          {cartItems.length === 0 && <p>Nothing in the cart</p>}
+          {cartItems.length === 0 && (
+            <div className="cart-empty">
+              <p className="cart-empty__message">Your cart is empty</p>
+              <Link href="/products" className="btn btn--primary">
+                Start Shopping
+              </Link>
+            </div>
+          )}
         </div>
 
-        <div className="cart-actions">
-          <Link href="/products" className="cart__btn-back">
-            <i className="icon-left" /> Continue Shopping
-          </Link>
-          <input
-            type="text"
-            placeholder="Promo Code"
-            className="cart__promo-code"
-          />
-
-          <div className="cart-actions__items-wrapper">
-            <p className="cart-actions__total">
-              Total cost <strong>${priceTotal().toFixed(2)}</strong>
-            </p>
-            <Link
-              href="/cart/checkout"
-              className="btn btn--rounded btn--yellow"
-            >
-              Checkout
+        {cartItems.length > 0 && (
+          <div className="cart-actions">
+            <Link href="/products" className="cart__btn-back">
+              <i className="icon-left" /> Continue Shopping
             </Link>
+
+            <div className="cart-promo">
+              <input
+                type="text"
+                placeholder="Promo Code"
+                className="cart__promo-code"
+              />
+              <button type="button" className="btn btn--secondary btn--small">
+                Apply
+              </button>
+            </div>
+
+            <div className="cart-actions__items-wrapper">
+              <p className="cart-actions__total">
+                Total cost <strong>${priceTotal().toFixed(2)}</strong>
+              </p>
+              <Link
+                href="/cart/checkout"
+                className="btn btn--rounded btn--yellow"
+              >
+                Checkout
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

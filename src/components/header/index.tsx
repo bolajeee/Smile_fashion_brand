@@ -1,156 +1,78 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { useSelector } from "react-redux";
+import { useRef, useState } from 'react';
 import useOnClickOutside from "use-onclickoutside";
 
-import type { RootState } from "@/store";
-
-import { useCallback } from "react";
-import Image from "next/image";
-
+import { useCart } from '@/contexts/CartContext'; // Assuming this context exists
 import { ThemeToggle } from '../theme/ThemeToggle';
+// import Image from "next/image";
 
 type HeaderType = {
   isErrorPage?: boolean;
 };
 
-const Header = ({ isErrorPage }: HeaderType) => {
-  const router = useRouter();
+const Header = ({}: HeaderType) => {
   const { data: session } = useSession();
-  const { cartItems } = useSelector((state: RootState) => state.cart);
-  const arrayPaths = ["/"];
-
-  const [onTop, setOnTop] = useState(
-    !(!arrayPaths.includes(router.pathname) || isErrorPage),
-  );
+  const { state: { cartItems } } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const navRef = useRef(null);
-  const searchRef = useRef(null);
 
-  const headerClass = () => {
-    if (window.pageYOffset === 0) {
-      setOnTop(true);
-    } else {
-      setOnTop(false);
-    }
+  const navRef = useRef(null); 
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
   };
 
-  useEffect(() => {
-    if (!arrayPaths.includes(router.pathname) || isErrorPage) {
-      return;
-    }
-
-    headerClass();
-    window.onscroll = function () {
-      headerClass();
-    };
-  }, []);
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  const closeSearch = () => {
-    setSearchOpen(false);
-  };
-
-  // on click outside
-  useOnClickOutside(navRef, closeMenu);
-  useOnClickOutside(searchRef, closeSearch);
-
-  const toggleTheme = useCallback(() => {
-    const root = document.documentElement;
-    const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('smile-theme', next); } catch (e) { }
-  }, []);
+  useOnClickOutside(navRef, () => setMenuOpen(false));
 
   return (
-    <header className={`site-header ${!onTop ? "site-header--fixed" : ""}`}>
+    <header className="site-header">
       <div className="container">
-        <Link href="/">
-          <h1 className="site-logo">
-            <Image src="/assets/images/smile_logo.svg" alt="Smile" width={100} height={24} />
-            Smile
-          </h1>
-        </Link>
-        <nav
-          ref={navRef}
-          className={`site-nav ${menuOpen ? "site-nav--open" : ""}`}
-        >
-          <Link href="/products">Products</Link>
-          {session?.user?.role === 'ADMIN' && (
-            <>
-              <Link href="/admin">Admin Dashboard</Link>
-              <Link href="/admin/products">Manage Products</Link>
-              <Link href="/admin/orders">Manage Orders</Link>
-              <Link href="/admin/settings">Admin Settings</Link>
-              <Link href="/add-product">Add Product</Link>
-            </>
-          )}
-          <a href="#">Inspiration</a>
-          <a href="#">Rooms</a>
-          <button className="site-nav__btn">
-            <p>{session?.user ? 'Account' : 'Sign in'}</p>
-          </button>
-        </nav>
-
-        <div className="site-header__actions">
-          <ThemeToggle onClick="toggleTheme" />
-          <button
-            ref={searchRef}
-            className={`search-form-wrapper ${searchOpen ? "search-form--active" : ""}`}
-          >
-            <form className="search-form">
-              <i
-                className="icon-cancel"
-                onClick={() => setSearchOpen(!searchOpen)}
-              />
-              <input
-                type="text"
-                name="search"
-                placeholder="Enter the product you are looking for"
-              />
-            </form>
-            <i
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="icon-search"
-            />
-          </button>
-          <Link href="/cart" legacyBehavior>
-            <button className="btn-cart">
-              <i className="icon-cart" />
-              {cartItems.length > 0 && (
-                <span className="btn-cart__count">{cartItems.length}</span>
+        <div className="site-header__wrapper">
+          <Link href="/" className="site-header__logo">
+            Smile 
+          </Link>
+          <nav className={`site-header__nav ${menuOpen ? 'site-header__nav--open' : ''}`} ref={navRef}> 
+            <Link href="/" className="site-header__nav-link">
+              Shop
+            </Link>
+            <Link href="/about" className="site-header__nav-link">
+              About
+            </Link>
+            {/* Mobile only links */}
+            <div className="site-header__nav-mobile-actions">
+              {session ? (
+                <button className="btn btn--primary" onClick={() => signOut()}>Logout</button>
+              ) : (
+                <Link href="/login" className="btn btn--primary">Login</Link>
               )}
+            </div>
+          </nav>
+          <div className="site-header__actions">
+            <ThemeToggle />
+            <Link href="/cart" className="site-header__action-link site-header__cart">
+              <i className="icon-cart"></i>
+              <span className="site-header__cart-count">{cartItems.length}</span>
+            </Link>
+            {session ? (
+              <Link href="/account/profile" className="site-header__action-link site-header__profile">
+                <i className="icon-avatar"></i>
+                <div className="site-header__profile-info">
+                  <span>Hello,</span>
+                  <strong>{session.user.name?.split(' ')[0]}</strong>
+                </div>
+              </Link>
+            ) : (
+              <Link href="/login" className="site-header__action-link">
+                Login
+              </Link>
+            )}
+            <button onClick={toggleMenu} className="site-header__menu-toggle">
+              <i className={`icon-${menuOpen ? 'cancel' : 'filters'}`}></i>
             </button>
-          </Link>
-          <Link href="/login" legacyBehavior>
-            <button className="site-header__btn-avatar">
-              <i className="icon-avatar" />
-            </button>
-          </Link>
-          {session?.user && (
-            <button
-              onClick={() => signOut({ callbackUrl: '/' })}
-              className="site-header__btn-avatar"
-              title="Sign out"
-            >
-              <i className="icon-cancel" />
-            </button>
-          )}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="site-header__btn-menu"
-          >
-            <i className="btn-hamburger">
-              <span />
-            </i>
-          </button>
+            {session && (
+              <button onClick={() => signOut()} className="site-header__action-link site-header__logout-btn">Logout</button>
+            )}
+          </div>
         </div>
       </div>
     </header>

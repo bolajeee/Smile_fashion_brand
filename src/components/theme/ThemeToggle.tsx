@@ -1,20 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export const ThemeToggle = () => {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-
-  // Only render after mounting to prevent hydration mismatch
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) return null;
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      onClick={toggleTheme}
       className="theme-toggle"
       aria-label="Toggle theme"
     >
@@ -25,7 +18,7 @@ export const ThemeToggle = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6"
+          className="theme-toggle__icon"
         >
           <path
             strokeLinecap="round"
@@ -40,7 +33,7 @@ export const ThemeToggle = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6"
+          className="theme-toggle__icon"
         >
           <path
             strokeLinecap="round"

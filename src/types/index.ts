@@ -44,11 +44,13 @@ export type ProductTypeList = {
 export type ProductStoreType = {
   id: string;
   name: string;
-  thumb: string;
+  images: string[];
   price: number;
   count: number;
   color: string;
   size: string;
+  discount?: number;
+  currentPrice?: number;
 };
 
 export type GtagEventType = {

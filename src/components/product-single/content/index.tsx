@@ -1,10 +1,7 @@
 import { some } from "lodash";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import type { RootState } from "@/store";
-import { addProduct } from "@/store/reducers/cart";
-import { toggleFavProduct } from "@/store/reducers/user";
+import { useCart } from "@/contexts/CartContext";
+import { useUser } from "@/contexts/UserContext";
 import type { ProductStoreType, ProductType } from "@/types";
 
 import productsColors from "../../../utils/data/products-colors";
@@ -16,7 +13,8 @@ type ProductContent = {
 };
 
 const Content = ({ product }: ProductContent) => {
-  const dispatch = useDispatch();
+  const { addProduct } = useCart();
+  const { favProducts, toggleFavProduct } = useUser();
   const [count, setCount] = useState<number>(1);
   const [color, setColor] = useState<string>("");
   const [itemSize, setItemSize] = useState<string>("");
@@ -25,37 +23,34 @@ const Content = ({ product }: ProductContent) => {
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setItemSize(e.target.value);
 
-  const { favProducts } = useSelector((state: RootState) => state.user);
   const isFavourite = some(
     favProducts,
     (productId) => productId === product.id,
   );
 
   const toggleFav = () => {
-    dispatch(
-      toggleFavProduct({
-        id: product.id,
-      }),
-    );
+    toggleFavProduct(product.id);
   };
 
   const addToCart = () => {
+    if (!color || !itemSize) {
+      alert('Please select both color and size');
+      return;
+    }
+
     const productToSave: ProductStoreType = {
       id: product.id,
       name: product.name,
-      thumb: product.images ? product.images[0] : "",
+      images: product.images || [],
       price: product.currentPrice,
-      count,
+      count: 1,
       color,
       size: itemSize,
+      discount: product.discount || 0,
+      currentPrice: product.currentPrice,
     };
 
-    const productStore = {
-      count,
-      product: productToSave,
-    };
-
-    dispatch(addProduct(productStore));
+    addProduct(productToSave, count);
   };
 
   return (
@@ -66,12 +61,12 @@ const Content = ({ product }: ProductContent) => {
           <br />
           {product.id}
         </h5>
-        <span className="product-on-sale">Sale</span>
+        {product.discount && <span className="product-on-sale">Sale</span>}
         <h2 className="product__name">{product.name}</h2>
 
         <div className="product__prices">
-          <h4>${product.currentPrice}</h4>
-          {product.discount && <span>${product.price}</span>}
+          <h4 className="product__current-price">${product.currentPrice}</h4>
+          {product.discount && <span className="product__original-price">${product.price}</span>}
         </div>
       </div>
 
@@ -91,14 +86,15 @@ const Content = ({ product }: ProductContent) => {
             ))}
           </div>
         </div>
+
         <div className="product-filter-item">
           <h5>
             Size: <strong>See size table</strong>
           </h5>
           <div className="checkbox-color-wrapper">
             <div className="select-wrapper">
-              <select onChange={onSelectChange}>
-                <option>Choose size</option>
+              <select onChange={onSelectChange} value={itemSize}>
+                <option value="">Choose size</option>
                 {productsSizes.map((type) => (
                   <option key={type.id} value={type.label}>
                     {type.label}
@@ -108,38 +104,44 @@ const Content = ({ product }: ProductContent) => {
             </div>
           </div>
         </div>
+
         <div className="product-filter-item">
           <h5>Quantity:</h5>
           <div className="quantity-buttons">
             <div className="quantity-button">
               <button
                 type="button"
-                onClick={() => setCount(count - 1)}
-                className="quantity-button__btn"
+                onClick={() => setCount(Math.max(1, count - 1))}
+                className="quantity-button__btn quantity-button__btn--decrease"
+                aria-label="Decrease quantity"
               >
                 -
               </button>
-              <span>{count}</span>
+              <span className="quantity-button__count">{count}</span>
               <button
                 type="button"
                 onClick={() => setCount(count + 1)}
-                className="quantity-button__btn"
+                className="quantity-button__btn quantity-button__btn--increase"
+                aria-label="Increase quantity"
               >
                 +
               </button>
             </div>
 
             <button
-              type="submit"
-              onClick={() => addToCart()}
+              type="button"
+              onClick={addToCart}
               className="btn btn--rounded btn--yellow"
+              disabled={!color || !itemSize}
             >
               Add to cart
             </button>
+
             <button
               type="button"
               onClick={toggleFav}
               className={`btn-heart ${isFavourite ? "btn-heart--active" : ""}`}
+              aria-label={isFavourite ? "Remove from favorites" : "Add to favorites"}
             >
               <i className="icon-heart" />
             </button>

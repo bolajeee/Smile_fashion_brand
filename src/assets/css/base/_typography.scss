@@ -3,7 +3,7 @@ h2,
 h3,
 h4,
 h5 {
-  color: $color-gray-900;
+  color: var(--color-text-primary);
   font-family: $font-primary;
   font-weight: $font-bold;
   line-height: $leading-tight;

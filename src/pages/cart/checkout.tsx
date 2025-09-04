@@ -1,18 +1,19 @@
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import CheckoutItems from "@/components/checkout/items";
 import CheckoutStatus from "@/components/checkout-status";
-import type { RootState } from "@/store";
+import { useCart } from "@/contexts/CartContext";
+import type { ProductStoreType } from "@/types";
 
 import Layout from "../../layouts/Main";
 
 const CheckoutPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const { state: { cartItems }, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -25,16 +26,13 @@ const CheckoutPage = () => {
     country: 'Nigeria'
   });
 
-  const priceTotal = useSelector((state: RootState) => {
-    const { cartItems } = state.cart;
+  const priceTotal = () => {
     let totalPrice = 0;
     if (cartItems.length > 0) {
-      cartItems.map((item) => (totalPrice += item.price * item.count));
+      cartItems.map((item: ProductStoreType) => (totalPrice += item.price * item.count));
     }
     return totalPrice;
-  });
-
-  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -67,9 +65,9 @@ const CheckoutPage = () => {
         },
         body: JSON.stringify({
           userId: session.user.id,
-          total: priceTotal,
+          total: priceTotal(),
           shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
-          items: cartItems.map(item => ({
+          items: cartItems.map((item: ProductStoreType) => ({
             productId: item.id,
             quantity: item.count,
             price: item.price
@@ -79,7 +77,7 @@ const CheckoutPage = () => {
 
       if (orderResponse.ok) {
         // Clear cart and redirect to success page
-        // You'll need to implement cart clearing in Redux
+        clearCart();
         router.push('/checkout-success');
       } else {
         const error = await orderResponse.json();
@@ -236,19 +234,19 @@ const CheckoutPage = () => {
                     <img src="/images/logos/paypal.png" alt="Paypal" />
                   </li>
                   <li className="round-item">
-                    <img src="/images/logos/visa.png" alt="Paypal" />
+                    <img src="/images/logos/visa.png" alt="Visa" />
                   </li>
                   <li className="round-item">
-                    <img src="/images/logos/mastercard.png" alt="Paypal" />
+                    <img src="/images/logos/mastercard.png" alt="Mastercard" />
                   </li>
                   <li className="round-item">
-                    <img src="/images/logos/maestro.png" alt="Paypal" />
+                    <img src="/images/logos/maestro.png" alt="Maestro" />
                   </li>
                   <li className="round-item">
-                    <img src="/images/logos/discover.png" alt="Paypal" />
+                    <img src="/images/logos/discover.png" alt="Discover" />
                   </li>
                   <li className="round-item">
-                    <img src="/images/logos/ideal-logo.svg" alt="Paypal" />
+                    <img src="/images/logos/ideal-logo.svg" alt="Ideal" />
                   </li>
                 </ul>
               </div>
@@ -257,19 +255,19 @@ const CheckoutPage = () => {
                 <h3 className="block__title">Delivery method</h3>
                 <ul className="round-options round-options--two">
                   <li className="round-item round-item--bg">
-                    <img src="/images/logos/inpost.svg" alt="Paypal" />
+                    <img src="/images/logos/inpost.svg" alt="InPost" />
                     <p>$20.00</p>
                   </li>
                   <li className="round-item round-item--bg">
-                    <img src="/images/logos/dpd.svg" alt="Paypal" />
+                    <img src="/images/logos/dpd.svg" alt="DPD" />
                     <p>$12.00</p>
                   </li>
                   <li className="round-item round-item--bg">
-                    <img src="/images/logos/dhl.svg" alt="Paypal" />
+                    <img src="/images/logos/dhl.svg" alt="DHL" />
                     <p>$15.00</p>
                   </li>
                   <li className="round-item round-item--bg">
-                    <img src="/images/logos/maestro.png" alt="Paypal" />
+                    <img src="/images/logos/maestro.png" alt="Maestro" />
                     <p>$10.00</p>
                   </li>
                 </ul>
@@ -283,7 +281,7 @@ const CheckoutPage = () => {
 
                 <div className="checkout-total">
                   <p>Total cost</p>
-                  <h3>${priceTotal}</h3>
+                  <h3>${priceTotal().toFixed(2)}</h3>
                 </div>
               </div>
             </div>

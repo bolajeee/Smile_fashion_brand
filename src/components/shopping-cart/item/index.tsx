@@ -1,9 +1,7 @@
-import { useDispatch } from "react-redux";
-
-import { removeProduct, setCount } from "@/store/reducers/cart";
+import { useCart } from "@/contexts/CartContext";
 import type { ProductStoreType } from "@/types";
 
-const ShoppingCart = ({
+const CartItem = ({
   thumb,
   name,
   id,
@@ -12,88 +10,99 @@ const ShoppingCart = ({
   count,
   price,
 }: ProductStoreType) => {
-  const dispatch = useDispatch();
+  const { removeProduct, setCount } = useCart();
 
   const removeFromCart = () => {
-    dispatch(
-      removeProduct({
-        thumb,
-        name,
-        id,
-        color,
-        size,
-        count,
-        price,
-      }),
-    );
+    removeProduct({
+      id,
+      name,
+      price,
+      images: [thumb],
+      color,
+      discount: 0,
+      currentPrice: price,
+      count: 1
+    });
   };
 
-  const setProductCount = (count: number) => {
-    if (count <= 0) {
+  const setProductCount = (newCount: number) => {
+    if (newCount <= 0) {
+      removeFromCart();
       return;
     }
 
-    const payload = {
-      product: {
-        thumb,
-        name,
-        id,
-        color,
-        size,
-        count,
-        price,
-      },
-      count,
-    };
-
-    dispatch(setCount(payload));
+    setCount({
+      id,
+      name,
+      price,
+      images: [thumb],
+      color,
+      discount: 0,
+      currentPrice: price,
+      count: 1
+    }, newCount);
   };
 
   return (
-    <tr>
-      <td>
+    <tr className="cart-item">
+      <td className="cart-item__product">
         <div className="cart-product">
           <div className="cart-product__img">
-            <img src={thumb} alt="" />
+            <img src={thumb} alt={name} />
           </div>
 
           <div className="cart-product__content">
-            <h3>{name}</h3>
-            <p>#{id}</p>
+            <h3 className="cart-product__title">{name}</h3>
+            <p className="cart-product__id">#{id}</p>
           </div>
         </div>
       </td>
-      <td className="cart-item-before" data-label="Color">
+
+      <td className="cart-item__color" data-label="Color">
+        <span className="cart-item__color-swatch" style={{ backgroundColor: color }}></span>
         {color}
       </td>
-      <td className="cart-item-before" data-label="Size">
+
+      <td className="cart-item__size" data-label="Size">
         {size}
       </td>
-      <td>
+
+      <td className="cart-item__quantity">
         <div className="quantity-button">
           <button
             type="button"
             onClick={() => setProductCount(count - 1)}
-            className="quantity-button__btn"
+            className="quantity-button__btn quantity-button__btn--decrease"
+            aria-label="Decrease quantity"
           >
             -
           </button>
-          <span>{count}</span>
+          <span className="quantity-button__count">{count}</span>
           <button
             type="button"
             onClick={() => setProductCount(count + 1)}
-            className="quantity-button__btn"
+            className="quantity-button__btn quantity-button__btn--increase"
+            aria-label="Increase quantity"
           >
             +
           </button>
         </div>
       </td>
-      <td>${price}</td>
-      <td className="cart-item-cancel">
-        <i className="icon-cancel" onClick={() => removeFromCart()} />
+
+      <td className="cart-item__price">${price}</td>
+
+      <td className="cart-item__actions">
+        <button
+          type="button"
+          onClick={removeFromCart}
+          className="cart-item__remove"
+          aria-label="Remove item from cart"
+        >
+          <i className="icon-cancel" />
+        </button>
       </td>
     </tr>
   );
 };
 
-export default ShoppingCart;
+export default CartItem;

@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<RegisterData>();
   const router = useRouter();
@@ -62,125 +62,121 @@ const RegisterPage = () => {
       <section className="form-page">
         <div className="container">
           <div className="back-button-section">
-            <Link href="/products">
+            <Link href="/">
               <i className="icon-left" />
               Back to store
             </Link>
           </div>
 
-          <div className="form-block">
-            <h2 className="form-block__title">
-              Create an account and discover the benefits
-            </h2>
-            <p className="form-block__description">
-              Create an account to track your orders, create wishlists, and enjoy a personalized shopping experience.
-            </p>
-
-            <form className="form" onSubmit={handleSubmit(onSubmit)}>
-              <div className="form__input-row">
-                <input
-                  className="form__input"
-                  placeholder="First Name"
-                  type="text"
-                  {...register("firstName", { required: true })}
-                />
-                {errors.firstName && (
-                  <p className="message message--error">First name is required</p>
-                )}
+          <div className="form-container">
+            <div className="form-image">
+              <img src="/images/form-image-2.jpg" alt="Fashion model posing" />
+            </div>
+            <div className="form-block">
+              <div className="form-block__title-wrapper">
+              <h2 className="form-block__title ">
+                Create an account and discover the benefits
+              </h2>
+              <p className="form-block__description">
+                Create an account to track orders, create wishlists, and more.
+              </p>
               </div>
 
-              <div className="form__input-row">
-                <input
-                  className="form__input"
-                  placeholder="Last Name"
-                  type="text"
-                  {...register("lastName", { required: true })}
-                />
-                {errors.lastName && (
-                  <p className="message message--error">Last name is required</p>
-                )}
-              </div>
-
-              <div className="form__input-row">
-                <input
-                  className="form__input"
-                  placeholder="Email"
-                  type="email"
-                  {...register("email", {
-                    required: true,
-                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  })}
-                />
-                {errors.email && errors.email.type === "required" && (
-                  <p className="message message--error">Email is required</p>
-                )}
-                {errors.email && errors.email.type === "pattern" && (
-                  <p className="message message--error">Invalid email address</p>
-                )}
-                {errors.email && errors.email.type === "manual" && (
-                  <p className="message message--error">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="form__input-row">
-                <input
-                  className="form__input"
-                  type="password"
-                  placeholder="Password"
-                  {...register("password", {
-                    required: true,
-                    minLength: 6,
-                  })}
-                />
-                {errors.password && errors.password.type === "required" && (
-                  <p className="message message--error">Password is required</p>
-                )}
-                {errors.password && errors.password.type === "minLength" && (
-                  <p className="message message--error">
-                    Password must be at least 6 characters
-                  </p>
-                )}
-              </div>
-
-              <div className="form__info">
-                <div className="checkbox-wrapper">
-                  <label
-                    htmlFor="check-signed-in"
-                    className="checkbox checkbox--sm"
-                  >
+              <form className="form mt-8" onSubmit={handleSubmit(onSubmit)}>
+                <div className="form__input-row form__input-row--duo">
+                  <div className="form__input-container">
                     <input
-                      type="checkbox"
-                      id="check-signed-in"
-                      {...register("terms")}
+                      className="form__input"
+                      placeholder="First Name"
+                      type="text"
+                      {...register("firstName", { required: "First name is required" })}
                     />
-                    <span className="checkbox__check" />
-                    <p>
-                      I agree to the Terms of Service and Privacy Policy
-                    </p>
-                  </label>
+                    {errors.firstName && <p className="message message--error">{errors.firstName.message}</p>}
+                  </div>
+                  <div className="form__input-container">
+                    <input
+                      className="form__input"
+                      placeholder="Last Name"
+                      type="text"
+                      {...register("lastName", { required: "Last name is required" })}
+                    />
+                    {errors.lastName && <p className="message message--error">{errors.lastName.message}</p>}
+                  </div>
+                </div>
+
+                <div className="form__input-row">
+                  <input
+                    className="form__input"
+                    placeholder="Email"
+                    type="email"
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Invalid email address"
+                      }
+                    })}
+                  />
+                  {errors.email && <p className="message message--error">{errors.email.message}</p>}
+                </div>
+
+                <div className="form__input-row">
+                  <input
+                    className="form__input"
+                    type="password"
+                    placeholder="Password"
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters"
+                      },
+                    })}
+                  />
+                  {errors.password && <p className="message message--error">{errors.password.message}</p>}
+                </div>
+
+                <div className="form__info">
+                  <div className="checkbox-wrapper">
+                    <label
+                      htmlFor="terms-checkbox"
+                      className="checkbox checkbox--sm"
+                    >
+                      <input
+                        type="checkbox"
+                        id="terms-checkbox"
+                        {...register("terms")}
+                      />
+                      <span className="checkbox__check" />
+                      <p>
+                        I agree to the Terms of Service and Privacy Policy
+                      </p>
+                    </label>
+                  </div>
                   {errors.terms && (
-                    <p className="message message--error">{errors.terms.message}</p>
+                    <p className="message message--error" style={{ textAlign: 'center', marginTop: '10px' }}>{errors.terms.message}</p>
                   )}
                 </div>
-              </div>
 
-              {errors.root?.serverError && (
-                <p className="message message--error" style={{ marginBottom: '15px', textAlign: 'center' }}>
-                  {errors.root.serverError.message}
+                {errors.root?.serverError && (
+                  <p className="message message--error" style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                    {errors.root.serverError.message}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn btn--rounded btn--yellow btn-submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Creating account...' : 'Sign up'}
+                </button>
+
+                <p className="form__signup-link">
+                  <Link href="/login">Are you already a member?</Link>
                 </p>
-              )}
-
-              <button
-                type="submit"
-                className="btn btn--rounded btn--yellow btn-submit"
-              >
-                Sign up
-              </button>
-
-              <p className="form__signup-link">
-                <Link href="/login">Are you already a member?</Link>
-              </p>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </section>

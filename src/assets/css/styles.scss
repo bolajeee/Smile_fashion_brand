@@ -9,7 +9,6 @@
 @import 'abstracts/animations';
 
 // 2. Vendors
-@import 'partials/reset';
 @import './fonts/icons/icons.css';
 @import 'swiper/swiper.scss';
 @import 'rc-slider/assets/index.css';
@@ -21,7 +20,7 @@
 @import 'base/typography';
 
 // 4. Layout
-@import 'layout/header';
+@import 'layout/_header';
 @import 'layout/footer';
 @import 'layout/navigation';
 @import 'layout/forms';
