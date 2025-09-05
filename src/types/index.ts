@@ -51,6 +51,7 @@ export type ProductStoreType = {
   size: string;
   discount?: number;
   currentPrice?: number;
+  thumb: string;
 };
 
 export type GtagEventType = {

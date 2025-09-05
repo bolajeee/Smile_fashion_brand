@@ -55,6 +55,7 @@
 
     // Brand colors for Smile Fashion
     --color-brand-primary: #ff6b6b;
+    --color-brand-primary-rgb: 255, 107, 107; // RGB values for animations
     --color-brand-secondary: #4ecdc4;
     --color-brand-accent: #45b7d1;
     --color-brand-warm: #ffa07a;
@@ -73,6 +74,7 @@
     --color-bg: var(--color-gray-900);
     --color-bg-secondary: var(--color-gray-800);
     --color-border: var(--color-gray-700);
+    --color-brand-primary: #ff6b6b;
 }
 
 // SCSS Variables (for backward compatibility)

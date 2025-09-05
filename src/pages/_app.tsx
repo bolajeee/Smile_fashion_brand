@@ -1,6 +1,6 @@
 // global styles
 import "../assets/css/styles.scss";
-import "swiper/swiper.scss";
+import "swiper/css";
 import "rc-slider/assets/index.css";
 import "react-rater/lib/react-rater.css";
 

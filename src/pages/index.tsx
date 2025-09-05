@@ -2,62 +2,198 @@ import Footer from "@/components/footer";
 import PageIntro from "@/components/page-intro";
 import ProductsFeatured from "@/components/products-featured";
 import Subscribe from "@/components/subscribe";
-
+import { motion } from "framer-motion";
 import Layout from "../layouts/Main";
+import FeatureScanner from "@/components/features/FeatureScanner";
 
 const IndexPage = () => {
   return (
     <Layout>
       <PageIntro />
 
-      <section className="featured">
-        <div className="container">
-          <article
-            style={{ backgroundImage: "url(/images/featured-1.jpg)" }}
-            className="featured-item featured-item-large"
-          >
-            <div className="featured-item__content">
-              <h3>New arrivals are now in!</h3>
-              <a href="#" className="btn btn--rounded">
-                Show Collection
-              </a>
-            </div>
-          </article>
+        <motion.section 
+          className="featured" 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
+          <div className="container">
+            <motion.article
+              style={{ backgroundImage: "url(/images/featured-1.jpg)" }}
+              className="featured-item featured-item--A"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: {
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1]
+                  }
+                }
+              }}
+            >
+              <div className="featured-item__content">
+                <motion.h3
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      transition: { delay: 0.2, duration: 0.6 }
+                    }
+                  }}
+                >
+                  New arrivals are now in!
+                </motion.h3>
+                <motion.a
+                  href="#"
+                  className="btn btn--rounded"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      transition: { delay: 0.3, duration: 0.6 }
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Show Collection
+                </motion.a>
+              </div>
+            </motion.article>
 
-          <article
-            style={{ backgroundImage: "url(/images/featured-2.jpg)" }}
-            className="featured-item featured-item-small-first"
-          >
-            <div className="featured-item__content">
-              <h3>Basic t-shirts $29,99</h3>
-              <a href="#" className="btn btn--rounded">
-                More details
-              </a>
-            </div>
-          </article>
+            <motion.article
+              style={{ backgroundImage: "url(/images/featured-2.jpg)" }}
+              className="featured-item featured-item--B"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                },
+              }}
+            >
+              <div className="featured-item__content">
+                <motion.h3
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: 0.2, duration: 0.6 },
+                    },
+                  }}
+                >
+                  Basic t-shirts $29,99
+                </motion.h3>
+                <motion.a
+                  href="#"
+                  className="btn btn--rounded"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: 0.3, duration: 0.6 },
+                    },
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  More details
+                </motion.a>
+              </div>
+            </motion.article>
 
-          <article
-            style={{ backgroundImage: "url(/images/featured-3.jpg)" }}
-            className="featured-item featured-item-small"
-          >
-            <div className="featured-item__content">
-              <h3>Sale this summer</h3>
-              <a href="#" className="btn btn--rounded">
-                VIEW ALL
-              </a>
-            </div>
-          </article>
-        </div>
-      </section>
+            <motion.article
+              style={{ backgroundImage: "url(/images/featured-3.jpg)" }}
+              className="featured-item featured-item--C"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                }
+              }}
+            >
+              <div className="featured-item__content">
+                <motion.h3
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: 0.2, duration: 0.6 },
+                    },
+                  }}
+                >
+                  Summer Sale is Live!
+                </motion.h3>
+                <motion.a
+                  href="#"
+                  className="btn btn--rounded"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: 0.3, duration: 0.6 },
+                    },
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  VIEW ALL
+                </motion.a>
+              </div>
+            </motion.article>
+          </div>
+        </motion.section>
 
-      <section className="section">
+ <motion.section 
+        className="section section--features" 
+        initial={{ opacity: 0, y: 18 }} 
+        whileInView={{ opacity: 1, y: 0 }} 
+        viewport={{ once: true }} 
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <FeatureScanner />
         <div className="container">
           <header className="section__intro">
-            <h4>Why should you choose us?</h4>
+            <motion.h4
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="section__title"
+            >
+              Why should you choose us?
+            </motion.h4>
           </header>
 
-          <ul className="shop-data-items">
-            <li>
+          <motion.ul className="shop-data-items" initial="hidden" whileInView="show" viewport={{ once: true }}
+            variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}>
+            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
               <i className="icon-shipping" />
               <div className="data-item__content">
                 <h4>Free Shipping</h4>
@@ -66,9 +202,9 @@ const IndexPage = () => {
                   USPS First Class Mail.
                 </p>
               </div>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
               <i className="icon-payment" />
               <div className="data-item__content">
                 <h4>Easy Payments</h4>
@@ -77,20 +213,20 @@ const IndexPage = () => {
                   protocol.
                 </p>
               </div>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
               <i className="icon-cash" />
               <div className="data-item__content">
                 <h4>Money-Back Guarantee</h4>
                 <p>
-                  If an item arrived damaged or you've changed your mind, you
+                  If an item arrived damaged, you
                   can send it back for a full refund.
                 </p>
               </div>
-            </li>
+            </motion.li>
 
-            <li>
+            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
               <i className="icon-materials" />
               <div className="data-item__content">
                 <h4>Finest Quality</h4>
@@ -99,10 +235,10 @@ const IndexPage = () => {
                   the finest materials.
                 </p>
               </div>
-            </li>
-          </ul>
+            </motion.li>
+          </motion.ul>
         </div>
-      </section>
+      </motion.section>
 
       <ProductsFeatured />
       <Subscribe />

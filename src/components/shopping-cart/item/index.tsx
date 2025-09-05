@@ -9,7 +9,7 @@ const CartItem = ({
   size,
   count,
   price,
-}: ProductStoreType) => {
+}: ProductStoreType & { thumb: string }) => {
   const { removeProduct, setCount } = useCart();
 
   const removeFromCart = () => {
@@ -19,6 +19,8 @@ const CartItem = ({
       price,
       images: [thumb],
       color,
+      size,
+      thumb,
       discount: 0,
       currentPrice: price,
       count: 1
@@ -37,6 +39,8 @@ const CartItem = ({
       price,
       images: [thumb],
       color,
+      size,
+      thumb,
       discount: 0,
       currentPrice: price,
       count: 1

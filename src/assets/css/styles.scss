@@ -10,7 +10,10 @@
 
 // 2. Vendors
 @import './fonts/icons/icons.css';
-@import 'swiper/swiper.scss';
+// Swiper styles
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/effect-fade';
 @import 'rc-slider/assets/index.css';
 @import 'react-rater/lib/react-rater.css';
 
@@ -31,15 +34,22 @@
 @import 'components/checkbox';
 @import 'components/product-item';
 @import 'components/theme-toggle';
+@import 'components/features-scanner';
 @import 'components/quantity';
 @import 'components/breadcrumb';
 @import 'components/select';
 @import 'components/shop-data';
+@import 'components/shop-data-items';
 @import 'components/subscribe';
 @import 'components/page-intro';
 @import 'components/products-filter';
 @import 'components/products-content';
 @import 'components/search-form';
+@import 'components/featured';
+@import 'components/products-featured';
+@import 'components/product-carousel';
+@import 'components/carousel-nav';
+@import 'components/section';
 
 
 // 6. Pages

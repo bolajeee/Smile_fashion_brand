@@ -1,58 +1,74 @@
-// import Swiper core and required components
-import { Swiper, SwiperSlide } from "swiper/react";
-
+import { useState, useEffect } from "react";
 import type { ProductTypeList } from "@/types";
-
 import ProductItem from "../../product-item";
-
-let slidesPerView = 1.3;
-let centeredSlides = true;
-let spaceBetween = 30;
-if (process.browser) {
-  if (window.innerWidth > 768) {
-    slidesPerView = 3;
-    spaceBetween = 35;
-    centeredSlides = false;
-  }
-  if (window.innerWidth > 1024) {
-    slidesPerView = 4;
-    spaceBetween = 65;
-    centeredSlides = false;
-  }
-}
 
 type ProductsCarouselType = {
   products: ProductTypeList[];
 };
 
 const ProductsCarousel = ({ products }: ProductsCarouselType) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   if (!Array.isArray(products) || products.length === 0) return <div>Loading...</div>;
+
+  const updateCarousel = (newIndex: number) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+
+    const normalizedIndex = (newIndex + products.length) % products.length;
+    setCurrentIndex(normalizedIndex);
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 800);
+  };
+
+  const getSlideClass = (index: number) => {
+    const offset = (index - currentIndex + products.length) % products.length;
+    if (offset === 0) return 'center';
+    if (offset === 1) return 'right-1';
+    if (offset === 2) return 'right-2';
+    if (offset === products.length - 1) return 'left-1';
+    if (offset === products.length - 2) return 'left-2';
+    return 'hidden';
+  };
 
   return (
     <div className="products-carousel">
-      <Swiper
-        spaceBetween={spaceBetween}
-        loop
-        centeredSlides={centeredSlides}
-        watchOverflow
-        slidesPerView={slidesPerView}
-        className="swiper-wrapper"
-      >
-        {products?.map((item) => (
-          <SwiperSlide key={item.id}>
-            <ProductItem
+      <div className="products-carousel__track">
+        {products.map((item, index) => (
+          <div key={item.id} className={`swiper-slide ${getSlideClass(index)}`}>
+                        <ProductItem
               id={item.id}
               name={item.name}
               price={item.price}
               color={item.color}
               discount={item.discount}
               currentPrice={item.currentPrice}
-              key={item.id}
               images={item.images}
             />
-          </SwiperSlide>
+          </div>
         ))}
-      </Swiper>
+      </div>
+
+      <button 
+        className="nav-arrow left" 
+        onClick={() => updateCarousel(currentIndex - 1)}
+        aria-label="Previous product"
+      >
+        <i className="icon-arrow-long-left"></i>
+      </button>
+      
+      <button 
+        className="nav-arrow right" 
+        onClick={() => updateCarousel(currentIndex + 1)}
+        aria-label="Next product"
+      >
+        <i className="icon-arrow-long-right"></i>
+      </button>
+
+
     </div>
   );
 };

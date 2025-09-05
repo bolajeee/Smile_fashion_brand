@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
-    "export": "next build && next export"
+    "export": "next build && next export",
+    "lint": "next lint",
+    "seed": "ts-node --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\" prisma/seed.ts"
   },
   "keywords": [
     "react",
@@ -19,16 +21,17 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/bcryptjs": "^2.4.6",
     "@types/formidable": "^3.4.5",
-     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.2",
     "eslint-config-next": "^15.0.3",
     "formidable": "^3.5.4",
+    "framer-motion": "^11.0.0",
     "lodash": "^4.17.21",
     "next": "^13.5.6",
     "next-auth": "^4.24.5",
-    "next-themes": "^0.4.6",
     "next-redux-wrapper": "^8.1.0",
+    "next-themes": "^0.4.6",
     "rc-slider": "^9.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -42,13 +45,14 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sass": "^1.26.10",
-    "swiper": "^6.5.1",
+    "swiper": "^10.2.0",
     "swr": "^0.3.2",
     "use-onclickoutside": "^0.3.1",
     "zod": "^4.1.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@prisma/client": "^6.15.0",
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.34",
     "@types/react": "^18.0.9",
@@ -66,8 +70,8 @@
     "node-fetch": "^3.1.1",
     "prettier": "^3.4.1",
     "prisma": "^6.15.0",
-    "@prisma/client": "^6.15.0",
-    "typescript": "^5.7.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
     "typescript-eslint": "^8.16.0"
   }
 }

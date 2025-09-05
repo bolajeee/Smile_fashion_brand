@@ -1,0 +1,281 @@
+.products-carousel {
+  width: 100%;
+  max-width: var(--container-width);
+  height: 500px;
+  position: relative;
+  perspective: 1000px;
+  margin: 2rem auto;
+
+  &__track {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .swiper-slide {
+    position: absolute;
+    width: 280px;
+    height: 400px;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &.center {
+      z-index: 10;
+      transform: scale(1.1) translateZ(0);
+      .product-item {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        img {
+          filter: none;
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    &.left-2 {
+      z-index: 1;
+      transform: translateX(-400px) scale(0.8) translateZ(-300px);
+      opacity: 0.5;
+      .product-item img {
+        filter: brightness(0.7);
+      }
+    }
+
+    &.left-1 {
+      z-index: 5;
+      transform: translateX(-200px) scale(0.9) translateZ(-100px);
+      opacity: 0.8;
+      .product-item img {
+        filter: brightness(0.85);
+      }
+    }
+
+    &.right-1 {
+      z-index: 5;
+      transform: translateX(200px) scale(0.9) translateZ(-100px);
+      opacity: 0.8;
+      .product-item img {
+        filter: brightness(0.85);
+      }
+    }
+
+    &.right-2 {
+      z-index: 1;
+      transform: translateX(400px) scale(0.8) translateZ(-300px);
+      opacity: 0.5;
+      .product-item img {
+        filter: brightness(0.7);
+      }
+    }
+  }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-primary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &.left {
+      left: 20px;
+    }
+
+    &.right {
+      right: 20px;
+    }
+
+    i {
+      font-size: 1.25rem;
+    }
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(var(--color-primary-rgb), 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.active {
+        background: var(--color-primary);
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+// Update product item styles for carousel
+.product-item {
+  background: var(--color-surface);
+  border-radius: calc(var(--border-radius) * 2);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  
+  &__image {
+    height: 75%;
+    overflow: hidden;
+    position: relative;
+    background: var(--color-surface-dark);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+  }
+
+  &__content {
+    padding: var(--space-md);
+    text-align: center;
+    background: var(--color-surface);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(var(--color-border-rgb), 0.1);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(calc(100% - 60px));
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__name {
+    font-size: var(--text-md);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-primary);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &__price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+
+    &-current {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    &-original {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      text-decoration: line-through;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0.1s;
+
+    .btn {
+      padding: var(--space-xs) var(--space-md);
+      font-size: var(--text-sm);
+      flex: 1;
+      min-width: 110px;
+      font-weight: 500;
+      border-radius: var(--border-radius-full);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &--border {
+        background: var(--color-surface-dark);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+
+        &:hover {
+          border-color: var(--color-primary);
+          color: var(--color-primary);
+          background: var(--color-surface);
+          box-shadow: var(--shadow-sm);
+        }
+      }
+
+      &--primary {
+        background: var(--color-primary);
+        border: 1px solid var(--color-primary);
+        color: var(--color-white);
+
+        &:hover {
+          background: var(--color-primary-dark);
+          border-color: var(--color-primary-dark);
+          box-shadow: var(--shadow-sm);
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  &:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-lg);
+
+    .product-item__content {
+      transform: translateY(0);
+    }
+
+    .product-item__buttons {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    img {
+      transform: scale(1.1);
+    }
+  }
+}

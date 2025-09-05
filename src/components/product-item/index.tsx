@@ -51,7 +51,8 @@ const ProductItem = ({
         price: productPrice,
         count: 1,
         color: '',
-        size: ''
+        size: '',
+        images: images || [],
       }, 1);
 
       addNotification({
@@ -80,98 +81,49 @@ const ProductItem = ({
 
   return (
     <article className="product-item">
-      <div className="product-item__wrapper">
-        <div className="product-item__image"
-          onMouseEnter={handleImageHover}
-          onMouseLeave={handleImageLeave}>
-
-          <button
-            type="button"
-            onClick={toggleFav}
-            className={`product-item__favorite ${isFavourite ? "product-item__favorite--active" : ""}`}
-            aria-label={isFavourite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <i className="icon-heart" />
-          </button>
-
-          {hasDiscount && (
-            <div className="product-item__badge">
-              <span className="product-item__discount">-{discountValue}%</span>
-            </div>
-          )}
-
-          <Link href={`/product/${id}`} className="product-item__link">
-            <div className="product-item__image-container">
-              <img
-                src={currentImage}
-                alt={name}
-                className="product-item__img"
-                loading="lazy"
-              />
-              {images && images.length > 1 && (
-                <div className="product-item__image-indicators">
-                  {images.slice(0, 3).map((_, index) => (
-                    <span
-                      key={index}
-                      className={`product-item__indicator ${index === currentImageIndex ? 'active' : ''}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </Link>
-
-          <div className="product-item__actions">
-            <button
-              onClick={handleAddToCart}
-              disabled={isAddingToCart}
-              className="product-item__add-to-cart"
-              aria-label="Add to cart"
-            >
-              {isAddingToCart ? (
-                <i className="icon-loading" />
-              ) : (
-                <i className="icon-cart" />
-              )}
-            </button>
-
-            <Link href={`/product/${id}`} className="product-item__quick-view">
-              <i className="icon-eye" />
-              <span>Quick View</span>
-            </Link>
+      <div className="product-item__image">
+        <Link href={`/product/${id}`}>
+          <img
+            src={currentImage}
+            alt={name}
+            loading="lazy"
+          />
+        </Link>
+        
+        {hasDiscount && (
+          <div className="product-item__badge">
+            <span className="product-item__discount">-{discountValue}%</span>
           </div>
+        )}
+      </div>
+
+      <div className="product-item__content">
+        <h3 className="product-item__name">
+          <Link href={`/product/${id}`}>{name}</Link>
+        </h3>
+        
+        <div className="product-item__price">
+          <span className="product-item__price-current">${currentPrice}</span>
+          {hasDiscount && (
+            <span className="product-item__price-original">${price}</span>
+          )}
         </div>
 
-        <div className="product-item__content">
-          <div className="product-item__details">
-            <h3 className="product-item__title">
-              <Link href={`/product/${id}`}>{name}</Link>
-            </h3>
-
-            <div className="product-item__price">
-              <span className="product-item__current-price">${currentPrice}</span>
-              {hasDiscount && (
-                <span className="product-item__original-price">${price}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="product-item__rating">
-            <div className="product-item__stars">
-              <i className="icon-star" />
-              <i className="icon-star" />
-              <i className="icon-star" />
-              <i className="icon-star" />
-              <i className="icon-star-empty" />
-            </div>
-            <span className="product-item__rating-count">(24)</span>
-          </div>
-
-          <div className="product-item__tags">
-            {hasDiscount && <span className="product-item__tag product-item__tag--sale">Sale</span>}
-            <span className="product-item__tag product-item__tag--new">New</span>
-            <span className="product-item__tag product-item__tag--trending">Trending</span>
-          </div>
+        <div className="product-item__buttons">
+          <Link href={`/product/${id}`} className="btn btn--rounded btn--border">
+            View Details
+          </Link>
+          <button
+            onClick={handleAddToCart}
+            disabled={isAddingToCart}
+            className="btn btn--rounded btn--primary"
+          >
+            {isAddingToCart ? (
+              <i className="icon-loading" />
+            ) : (
+              <>Add to Cart</>
+            )}
+          </button>
         </div>
       </div>
     </article>

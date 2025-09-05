@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from "next";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import { useState } from "react";
 
 import Breadcrumb from "@/components/breadcrumb";
@@ -18,16 +18,27 @@ type ProductPageType = {
   product: ProductType;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { pid } = query;
-  const res = await fetch(`${server}/api/product/${pid}`);
-  const product = await res.json();
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const res = await fetch(`${server}/api/products`);
+    const products: Array<{ id: string }> = await res.json();
+    const paths = products.map((p) => ({ params: { pid: String(p.id) } }));
+    return { paths, fallback: 'blocking' };
+  } catch {
+    return { paths: [], fallback: 'blocking' };
+  }
+};
 
-  return {
-    props: {
-      product,
-    },
-  };
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const pid = params?.pid as string;
+  try {
+    const res = await fetch(`${server}/api/product/${pid}`);
+    if (!res.ok) return { notFound: true, revalidate: 60 };
+    const product = await res.json();
+    return { props: { product }, revalidate: 60 };
+  } catch {
+    return { notFound: true, revalidate: 60 };
+  }
 };
 
 const Product = ({ product }: ProductPageType) => {

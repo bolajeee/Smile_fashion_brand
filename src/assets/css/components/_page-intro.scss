@@ -1,214 +1,237 @@
-// Page Intro Component Styles
 .page-intro {
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  padding-top: 20px;
+  margin: 0;
+
+  // The swiper instance itself
+  .swiper {
+    min-height: 85vh;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      min-height: 72vh;
+    }
+  }
+
+  &__slide {
+    min-height: 85vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-white);
+    transition: transform 1.2s ease, opacity 0.8s ease;
+
+    @media (max-width: 768px) {
+      min-height: 70vh;
+      align-items: flex-end;
+      padding-bottom: 8rem;
+      text-align: left;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.12);
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover::before {
+      opacity: 0.5;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    &__content {
+      max-width: 760px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      animation: fadeUpIn 0.7s ease forwards 0.25s;
+
+      @media (max-width: 768px) {
+        margin: 0;
+        max-width: 100%;
+      }
+
+      h2 {
+        font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+        font-weight: $font-bold;
+        line-height: 1.2;
+        margin-bottom: clamp(1.25rem, 3.25vw, 2rem);
+        color: var(--color-white);
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+
+        @media (max-width: 768px) {
+          font-size: clamp(1.75rem, 4vw, 2.25rem);
+          text-align: left;
+        }
+      }
+
+      @keyframes fadeUpIn {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .btn {
+        margin-top: 0.5rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+
+        i {
+          transition: transform 0.3s ease;
+        }
+
+        &:hover i {
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
+
+  .shop-data-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 3rem;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    @media (max-width: 992px) {
+      display: none; // Hide on tablets and smaller for a cleaner look
+    }
+  }
+
+  // This is the original .shop-data, now repurposed for the overlay
+  .shop-data {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: $radius-lg;
+    max-width: 320px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    @media (max-width: 992px) {
+      max-width: 280px;
+      padding: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      display: none; // Hide the data box on small mobile to avoid clutter
+    }
+
+    &__items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-align: left;
+
+        i {
+          font-size: 2rem;
+          color: var(--color-brand-primary);
+          flex-shrink: 0;
+        }
+
+        .data-item__content {
+          h4 {
+            font-size: $text-base;
+            font-weight: $font-semibold;
+            color: var(--color-white);
+            margin: 0 0 0.25rem 0;
+          }
+
+          p {
+            font-size: $text-sm;
+            color: var(--color-gray-200);
+            margin: 0;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  }
+
+  &__navigation {
+    position: absolute;
+    top: 50%;
+    right: 3rem;
+    transform: translateY(-50%);
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 3rem 0;
-    text-align: center;
-    background-color: var(--color-background-secondary);
+    gap: 0.75rem;
 
-    &__header {
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0 0 1rem 0;
-            color: var(--color-text-primary);
-            line-height: 1.2;
-
-            @media (max-width: 768px) {
-                font-size: 2rem;
-            }
-        }
-
-        p {
-            font-size: 1.25rem;
-            margin: 0;
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-
-            @media (max-width: 768px) {
-                font-size: 1.125rem;
-            }
-        }
+    @media (max-width: 768px) {
+      // On mobile, move to top right and display horizontally
+      top: 3rem;
+      right: 1.5rem;
+      transform: none;
+      flex-direction: row;
+      gap: 0.5rem;
     }
 
-    &__breadcrumb {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: var(--color-text-tertiary);
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--color-white);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      @include flex-center;
 
-        .breadcrumb-separator {
-            margin: 0 0.5rem;
-            opacity: 0.5;
-        }
+      &:hover:not(.swiper-button-disabled) {
+        background: var(--color-brand-primary);
+        border-color: var(--color-brand-primary);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
 
-        a {
-            color: var(--color-text-tertiary);
-            text-decoration: none;
-            transition: color 0.2s ease;
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+      }
 
-            &:hover {
-                color: var(--color-primary);
-            }
-        }
+      &.swiper-button-disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: scale(1);
+        background: rgba(0, 0, 0, 0.2);
+      }
 
-        .current-page {
-            color: var(--color-text-primary);
-            font-weight: 500;
-        }
+      i {
+        font-size: 0.95rem;
+        margin: 0; // Reset icon margin
+      }
     }
-
-    &__actions {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1rem;
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-
-    &__button {
-        padding: 0.875rem 2rem;
-        border: 2px solid var(--color-primary);
-        border-radius: 0.5rem;
-        background-color: var(--color-primary);
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        &:hover {
-            background-color: var(--color-primary-dark);
-            border-color: var(--color-primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.3);
-        }
-
-        &--secondary {
-            background-color: transparent;
-            color: var(--color-primary);
-
-            &:hover {
-                background-color: var(--color-primary);
-                color: white;
-            }
-        }
-
-        &--outline {
-            background-color: transparent;
-            color: var(--color-text-primary);
-            border-color: var(--color-border);
-
-            &:hover {
-                background-color: var(--color-background-primary);
-                border-color: var(--color-primary);
-                color: var(--color-primary);
-            }
-        }
-    }
-
-    &__stats {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        margin-top: 2rem;
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-    }
-
-    &__stat {
-        text-align: center;
-
-        &-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        &-label {
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-        }
-    }
-
-    // Page intro variants
-    &--compact {
-        padding: 2rem 0;
-
-        .page-intro__header h1 {
-            font-size: 2rem;
-        }
-
-        .page-intro__header p {
-            font-size: 1.125rem;
-        }
-    }
-
-    &--large {
-        padding: 4rem 0;
-
-        .page-intro__header h1 {
-            font-size: 3rem;
-        }
-
-        .page-intro__header p {
-            font-size: 1.375rem;
-        }
-    }
-
-    &--hero {
-        min-height: 60vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, var(--color-background-secondary) 0%, var(--color-background-tertiary) 100%);
-
-        .page-intro__header h1 {
-            font-size: 3.5rem;
-
-            @media (max-width: 768px) {
-                font-size: 2.5rem;
-            }
-        }
-
-        .page-intro__header p {
-            font-size: 1.375rem;
-
-            @media (max-width: 768px) {
-                font-size: 1.25rem;
-            }
-        }
-    }
-
-    // Dark theme support
-    [data-theme="dark"] & {
-        background-color: var(--color-background-secondary-dark);
-
-        &--hero {
-            background: linear-gradient(135deg, var(--color-background-secondary-dark) 0%, var(--color-background-tertiary-dark) 100%);
-        }
-    }
+  }
 }

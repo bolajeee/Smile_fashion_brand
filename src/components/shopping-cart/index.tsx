@@ -1,19 +1,11 @@
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
+import type { ProductStoreType } from "@/types";
 import CheckoutStatus from "../checkout-status";
 import Item from "./item";
 
 const ShoppingCart = () => {
-  const { cartItems } = useCart();
-
-  const priceTotal = () => {
-    let totalPrice = 0;
-    if (cartItems.length > 0) {
-      cartItems.map((item) => (totalPrice += item.price * item.count));
-    }
-
-    return totalPrice;
-  };
+  const { state: { cartItems, totalPrice } } = useCart();
 
   return (
     <section className="cart">
@@ -37,16 +29,19 @@ const ShoppingCart = () => {
                 </tr>
               </thead>
               <tbody>
-                {cartItems.map((item) => (
+                {cartItems.map((item: ProductStoreType) => (
                   <Item
                     key={item.id}
                     id={item.id}
-                    thumb={item.thumb}
+                    thumb={item?.images?.[0]}
+                    images={item.images}
                     name={item.name}
                     color={item.color}
                     price={item.price}
                     size={item.size}
                     count={item.count}
+                    discount={item.discount}
+                    currentPrice={item.currentPrice}
                   />
                 ))}
               </tbody>
@@ -82,7 +77,7 @@ const ShoppingCart = () => {
 
             <div className="cart-actions__items-wrapper">
               <p className="cart-actions__total">
-                Total cost <strong>${priceTotal().toFixed(2)}</strong>
+                Total cost <strong>${totalPrice.toFixed(2)}</strong>
               </p>
               <Link
                 href="/cart/checkout"

@@ -1,5 +1,6 @@
 
 import Slider from "rc-slider";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import type { ProductColor, ProductSize, ProductType } from "@/types/product";
@@ -112,38 +113,45 @@ const ProductsFilter = ({
       <button
         type="button"
         onClick={() => setFiltersOpen(!filtersOpen)}
-        className={`products-filter__menu-btn ${
-          filtersOpen ? "products-filter__menu-btn--active" : ""
-        }`}
+        className={`products-filter__menu-btn ${filtersOpen ? "products-filter__menu-btn--active" : ""
+          }`}
+        aria-expanded={filtersOpen}
+        aria-controls="filters-panel"
       >
         Add Filter <i className="icon-down-open" />
       </button>
 
-      <div
-        className={`products-filter__wrapper ${
-          filtersOpen ? "products-filter__wrapper--open" : ""
-        }`}
-      >
-        {/* Product Type Filter */}
-      <div className="products-filter__block">
-        <button type="button">Product type</button>
-        <div className="products-filter__block__content">
-          {productTypes.map((type) => (
-            <Checkbox
-              key={type.id}
-              name="product-type"
-              label={type.name}
-              checked={activeFilters.type.includes(type.name)}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                updateFilters("type", type.name, e.target.checked)
-              }
-            />
-          ))}
-        </div>
-      </div>
+      <AnimatePresence initial={false}>
+        {filtersOpen && (
+          <motion.div
+            id="filters-panel"
+            className="products-filter__wrapper products-filter__wrapper--open"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="products-filter__row">
+              {/* Product Type Filter */}
+              <div className="products-filter__block">
+                <button type="button">Product type</button>
+                <div className="products-filter__block__content">
+                  {productTypes.map((type) => (
+                    <Checkbox
+                      key={type.id}
+                      name="product-type"
+                      label={type.name}
+                      checked={activeFilters.type.includes(type.name)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        updateFilters("type", type.name, e.target.checked)
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
 
-        {/* Price Range Filter */}
-        {/* <div className="products-filter__block">
+              {/* Price Range Filter */}
+              {/* <div className="products-filter__block">
           <button type="button">Price</button>
           <div className="products-filter__block__content">
             <Range
@@ -156,62 +164,65 @@ const ProductsFilter = ({
           </div>
         </div> */}
 
-        {/* Size Filter */}
-        <div className="products-filter__block">
-          <button type="button">Size</button>
-          <div className="products-filter__block__content checkbox-square-wrapper">
-            {productSizes.map((size) => (
-              <Checkbox
-                type="square"
-                key={size.id}
-                name="product-size"
-                label={size.label}
-                checked={activeFilters.size.includes(size.label)}
-                onChange={(e) =>
-                  updateFilters("size", size.label, e.target.checked)
-                }
-              />
-            ))}
-          </div>
-        </div>
+              {/* Size Filter */}
+              <div className="products-filter__block">
+                <button type="button">Size</button>
+                <div className="products-filter__block__content checkbox-square-wrapper">
+                  {productSizes.map((size) => (
+                    <Checkbox
+                      type="square"
+                      key={size.id}
+                      name="product-size"
+                      label={size.label}
+                      checked={activeFilters.size.includes(size.label)}
+                      onChange={(e) =>
+                        updateFilters("size", size.label, e.target.checked)
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
 
-        {/* Color Filter */}
-        <div className="products-filter__block">
-        <button type="button">Color</button>
-        <div className="products-filter__block__content">
-          <div className="checkbox-color-wrapper">
-            {productColors.map((type) => (
-              <CheckboxColor
-                key={type.id}
-                valueName={type.color}
-                name="product-color"
-                color={type.color}
-                isChecked={activeFilters.color.includes(type.color)}
-                onChange={(checked: boolean) =>
-                  updateFilters("color", type.color, checked)
-                }
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+              {/* Color Filter */}
+              <div className="products-filter__block">
+                <button type="button">Color</button>
+                <div className="products-filter__block__content">
+                  <div className="checkbox-color-wrapper">
+                    {productColors.map((type) => (
+                      <CheckboxColor
+                        key={type.id}
+                        valueName={type.color}
+                        name="product-color"
+                        color={type.color}
+                        isChecked={activeFilters.color.includes(type.color)}
+                        onChange={(checked: boolean) =>
+                          updateFilters("color", type.color, checked)
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <div className="products-filter__buttons">
-          <button
-            type="submit"
-            className="btn btn-submit btn--rounded btn--yellow"
-          >
-            Apply Filters
-          </button>
-          <button
-            type="button"
-            className="btn btn-submit btn--rounded btn--gray"
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </button>
-        </div>
-      </div>
+            <div className="products-filter__buttons">
+              <button
+                type="submit"
+                className="btn btn-submit btn--rounded btn--yellow"
+              >
+                Apply Filters
+              </button>
+              <button
+                type="button"
+                className="btn btn-submit btn--rounded btn--gray"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </form>
   );
 };

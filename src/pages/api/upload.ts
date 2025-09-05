@@ -22,12 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const form = formidable({ multiples: false, maxFileSize: 5 * 1024 * 1024 });
 
     form.parse(req, async (err: unknown, _fields: Fields, files: Files) => {
+        if (err) {
+            // eslint-disable-next-line no-console
+            console.error('Upload error:', err);
+            return res.status(400).json({ message: 'Invalid form data' });
+        }
+        
         try {
-            if (err) {
-                // eslint-disable-next-line no-console
-                console.error('Upload error:', err);
-                return res.status(400).json({ message: 'Invalid form data' });
-            }
 
             const file = files.file;
             const fileArray = Array.isArray(file) ? file : [file];
@@ -44,13 +45,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await fs.promises.copyFile(first.filepath, destPath);
 
             const publicUrl = `/uploads/${filename}`;
-            return res.status(200).json({ url: publicUrl });
+            res.status(200).json({ url: publicUrl });
         } catch (e) {
             // eslint-disable-next-line no-console
             console.error('Upload processing error:', e);
-            return res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ message: 'Internal server error' });
         }
     });
+
+    // Send a timeout response after 10 seconds if no response has been sent
+    const timeout = setTimeout(() => {
+        if (!res.writableEnded) {
+            res.status(408).json({ message: 'Request timeout' });
+        }
+    }, 10000);
+
+    // Clean up the timeout when the request ends
+    req.on('close', () => clearTimeout(timeout));
 }
 
 

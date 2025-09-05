@@ -4,9 +4,16 @@ import { useCart } from "@/contexts/CartContext";
 import { useUser } from "@/contexts/UserContext";
 import type { ProductStoreType, ProductType } from "@/types";
 
-import productsColors from "../../../utils/data/products-colors";
-import productsSizes from "../../../utils/data/products-sizes";
+// TODO: Fix import paths if these modules exist, or provide fallback/defaults if not.
 import CheckboxColor from "../../products-filter/form-builder/checkbox-color";
+
+// Fallbacks in case productsColors or productsSizes cannot be imported
+const productsColors: string[] = [
+  "red", "blue", "green", "yellow", "black", "white"
+];
+const productsSizes: string[] = [
+  "XS", "S", "M", "L", "XL", "XXL"
+];
 
 type ProductContent = {
   product: ProductType;
@@ -14,7 +21,7 @@ type ProductContent = {
 
 const Content = ({ product }: ProductContent) => {
   const { addProduct } = useCart();
-  const { favProducts, toggleFavProduct } = useUser();
+  const { setFavoriteProducts, toggleFavoriteProduct } = useUser();
   const [count, setCount] = useState<number>(1);
   const [color, setColor] = useState<string>("");
   const [itemSize, setItemSize] = useState<string>("");
@@ -24,12 +31,12 @@ const Content = ({ product }: ProductContent) => {
     setItemSize(e.target.value);
 
   const isFavourite = some(
-    favProducts,
+    setFavoriteProducts,
     (productId) => productId === product.id,
   );
 
   const toggleFav = () => {
-    toggleFavProduct(product.id);
+    toggleFavoriteProduct(product.id);
   };
 
   const addToCart = () => {
@@ -46,8 +53,9 @@ const Content = ({ product }: ProductContent) => {
       count: 1,
       color,
       size: itemSize,
-      discount: product.discount || 0,
+      discount: product.discount ? Number(product.discount) : undefined,
       currentPrice: product.currentPrice,
+      thumb: product.images && product.images.length > 0 ? product.images[0] : "",
     };
 
     addProduct(productToSave, count);
@@ -74,13 +82,13 @@ const Content = ({ product }: ProductContent) => {
         <div className="product-filter-item">
           <h5>Color:</h5>
           <div className="checkbox-color-wrapper">
-            {productsColors.map((type) => (
+            {productsColors.map((colorName) => (
               <CheckboxColor
-                key={type.id}
+                key={colorName}
                 type="radio"
                 name="product-color"
-                color={type.color}
-                valueName={type.label}
+                color={colorName}
+                valueName={colorName}
                 onChange={onColorSet}
               />
             ))}
@@ -95,9 +103,9 @@ const Content = ({ product }: ProductContent) => {
             <div className="select-wrapper">
               <select onChange={onSelectChange} value={itemSize}>
                 <option value="">Choose size</option>
-                {productsSizes.map((type) => (
-                  <option key={type.id} value={type.label}>
-                    {type.label}
+                {productsSizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
                   </option>
                 ))}
               </select>

@@ -1,6 +1,6 @@
 .site-footer {
-  background: #111827;
-  color: #f9fafb;
+  background: var(--color-gray-900);
+  color: var(--color-gray-50);
   padding: 3rem 0 1rem;
   margin-top: auto;
 
@@ -12,11 +12,11 @@
 
   &__top {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+    grid-template-columns: 2fr 1.5fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
@@ -39,7 +39,7 @@
         margin: 0;
 
         .highlight {
-          background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+          background: var(--color-brand-primary);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -48,71 +48,9 @@
     }
 
     .site-footer__description {
-      color: #d1d5db;
+      color: var(--color-gray-300);
       line-height: 1.6;
       margin-bottom: 1.5rem;
-    }
-
-    .site-footer__social {
-      h4 {
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: #f9fafb;
-      }
-
-      .social-networks {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-
-        .social-link {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          color: #d1d5db;
-          text-decoration: none;
-          padding: 0.5rem;
-          border-radius: 8px;
-          transition: all 0.3s ease;
-
-          &:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(4px);
-          }
-
-          i {
-            font-size: 1.125rem;
-            width: 20px;
-            text-align: center;
-          }
-
-          span {
-            font-size: 0.875rem;
-            font-weight: 500;
-          }
-
-          &--instagram:hover {
-            color: #e4405f;
-          }
-
-          &--tiktok:hover {
-            color: #000000;
-          }
-
-          &--twitter:hover {
-            color: #1da1f2;
-          }
-
-          &--youtube:hover {
-            color: #ff0000;
-          }
-        }
-      }
     }
   }
 
@@ -120,7 +58,7 @@
     &__title {
       font-size: 1rem;
       font-weight: 600;
-      color: #f9fafb;
+      color: var(--color-gray-50);
       margin-bottom: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -135,20 +73,20 @@
       gap: 0.75rem;
 
       li a {
-        color: #d1d5db;
+        color: var(--color-gray-300);
         text-decoration: none;
         font-size: 0.875rem;
         transition: color 0.3s ease;
 
         &:hover {
-          color: #ff6b6b;
+          color: var(--color-brand-primary);
         }
       }
     }
 
     &__content {
       .footer-column__text {
-        color: #9ca3af;
+        color: var(--color-gray-500);
         font-size: 0.875rem;
         margin-bottom: 1rem;
         line-height: 1.5;
@@ -164,26 +102,26 @@
 
           .newsletter-input {
             flex: 1;
-            background: #374151;
-            border: 1px solid #4b5563;
+            background: var(--color-gray-800);
+            border: 1px solid var(--color-gray-700);
             border-radius: 8px;
             padding: 0.75rem;
-            color: #f9fafb;
+            color: var(--color-gray-50);
             font-size: 0.875rem;
 
             &::placeholder {
-              color: #9ca3af;
+              color: var(--color-gray-500);
             }
 
             &:focus {
-              border-color: #ff6b6b;
+              border-color: var(--color-brand-primary);
               outline: none;
             }
           }
 
           .newsletter-button {
-            background: #ff6b6b;
-            color: #ffffff;
+            background: var(--color-brand-primary);
+            color: var(--color-white);
             border: none;
             border-radius: 8px;
             padding: 0.75rem;
@@ -191,7 +129,7 @@
             transition: all 0.3s ease;
 
             &:hover {
-              background: #ff5252;
+              background: var(--color-brand-secondary);
               transform: translateY(-1px);
             }
 
@@ -202,7 +140,7 @@
         }
 
         .newsletter-note {
-          color: #9ca3af;
+          color: var(--color-gray-500);
           font-size: 0.75rem;
           line-height: 1.4;
         }
@@ -216,14 +154,14 @@
         .contact-link {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          color: #d1d5db;
+          gap: 0.75rem;
+          color: var(--color-gray-300);
           text-decoration: none;
           font-size: 0.875rem;
           transition: color 0.3s ease;
 
           &:hover {
-            color: #ff6b6b;
+            color: var(--color-brand-primary);
           }
 
           i {
@@ -236,14 +174,63 @@
     }
   }
 
+  .social-networks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--color-gray-300);
+      text-decoration: none;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: var(--color-white);
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(4px);
+      }
+
+      i {
+        font-size: 1.125rem;
+        width: 20px;
+        text-align: center;
+      }
+
+      span {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      &--instagram:hover {
+        color: #e4405f;
+      }
+
+      &--twitter:hover {
+        color: #1da1f2;
+      }
+
+      &--youtube:hover {
+        color: #ff0000;
+      }
+    }
+  }
+
   &__payment {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
     padding: 2rem 0;
-    border-top: 1px solid #374151;
-    border-bottom: 1px solid #374151;
+    border-top: 1px solid var(--color-gray-700);
+    border-bottom: 1px solid var(--color-gray-700);
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -253,7 +240,7 @@
     h4 {
       font-size: 1rem;
       font-weight: 600;
-      color: #f9fafb;
+      color: var(--color-gray-50);
       margin-bottom: 1rem;
     }
 
@@ -264,19 +251,30 @@
       margin: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1rem 1.25rem;
       align-items: center;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--color-gray-800);
+        border-radius: 10px;
+      }
 
       .payment-logo,
       .shipping-logo {
-        height: 32px;
+        height: 24px;
         width: auto;
         filter: brightness(0) invert(1);
-        opacity: 0.7;
-        transition: opacity 0.3s ease;
+        opacity: 0.85;
+        transition: opacity 0.25s ease, transform 0.2s ease;
 
         &:hover {
           opacity: 1;
+          transform: translateY(-1px);
         }
       }
     }
@@ -297,13 +295,13 @@
 
       .footer-bottom__left {
         .copyright {
-          color: #9ca3af;
+          color: var(--color-gray-500);
           font-size: 0.875rem;
           margin: 0 0 0.5rem 0;
         }
 
         .design-credit {
-          color: #6b7280;
+          color: var(--color-gray-600);
           font-size: 0.75rem;
           margin: 0;
         }
@@ -324,13 +322,13 @@
           }
 
           li a {
-            color: #9ca3af;
+            color: var(--color-gray-500);
             text-decoration: none;
             font-size: 0.875rem;
             transition: color 0.3s ease;
 
             &:hover {
-              color: #ff6b6b;
+              color: var(--color-brand-primary);
             }
           }
         }
@@ -341,6 +339,6 @@
 
 // Dark theme adjustments
 [data-theme="dark"] .site-footer {
-  background: #000000;
-  border-top: 1px solid #1f2937;
+  background: var(--color-gray-900);
+  border-top: 1px solid var(--color-gray-800);
 }

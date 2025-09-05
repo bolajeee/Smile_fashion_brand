@@ -10,6 +10,8 @@ export interface UserProfile {
   name: string;
   email: string;
   address?: string;
+  image?: string;
+  phoneNumber?: string;
   role: Role;
   createdAt: Date;
   updatedAt: Date;
@@ -43,12 +45,16 @@ declare module 'next-auth' {
       name: string;
       email: string;
       role: Role;
+      image?: string;
+      phoneNumber?: string;
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
     id: string;
     role: Role;
+    image?: string;
+    phoneNumber?: string;
   }
 }
 
@@ -56,5 +62,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     role: Role;
+    image?: string;
+    phoneNumber?: string;
   }
 }

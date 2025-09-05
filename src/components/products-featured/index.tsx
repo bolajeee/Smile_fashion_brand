@@ -5,7 +5,7 @@ import ProductsCarousel from "./carousel";
 
 const ProductsFeatured = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  const { data } = useSwr("/api/products", fetcher);
+  const { data } = useSwr("/api/products/featured", fetcher);
 
   return (
     <section className="section section-products-featured">

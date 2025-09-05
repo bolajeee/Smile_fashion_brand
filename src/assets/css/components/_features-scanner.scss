@@ -1,0 +1,109 @@
+.section--features {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+  background: rgba(0, 0, 0, 0.02);
+  
+  .scanner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .scanner-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--color-brand-primary) 50%,
+      transparent 100%
+    );
+    opacity: 0.5;
+    filter: blur(4px);
+    animation: scannerPulse 2s ease-in-out infinite;
+  }
+
+  .particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .shop-data-items {
+    position: relative;
+    z-index: 1;
+  }
+
+  .data-item__content {
+    position: relative;
+    transition: clip-path 0.6s ease-out;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(var(--color-brand-primary-rgb), 0.1),
+        transparent
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
+
+    &.scanning {
+      clip-path: polygon(0 0, var(--scan-progress, 0%) 0, var(--scan-progress, 0%) 100%, 0 100%);
+
+      &::before {
+        animation: scanEffect 1.2s ease-out forwards;
+      }
+    }
+  }
+}
+
+@keyframes scannerPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(4px) brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(4px) brightness(1.5);
+  }
+}
+
+@keyframes scanEffect {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .section--features {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
