@@ -7,24 +7,69 @@ This project is a Next.js e-commerce app using PostgreSQL with Prisma as the ORM
 - Node.js 18+
 - PostgreSQL (local or remote)
 
-### Environment
-Create a `.env` file in the project root with your database URL:
-```
+### Environment Setup
+Create a `.env` file in the project root with the following configuration:
+
+```env
+# Database Connection
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DBNAME?schema=public"
+
+# NextAuth Configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key-at-least-32-chars"  # Generate with: openssl rand -base64 32
+
+# Admin Seeding Configuration (for npm run seed)
+ADMIN_EMAIL="admin@example.com"
+ADMIN_PASSWORD="your-admin-password"
+ADMIN_NAME="Admin User"
 ```
 
+Replace the placeholders with your actual values:
+- `USER`: Your PostgreSQL username
+- `PASSWORD`: Your PostgreSQL password
+- `HOST`: Database host (usually localhost for local development)
+- `DBNAME`: Your database name (e.g., "smileDb")
+- `NEXTAUTH_SECRET`: A secure random string for session encryption
+- Admin credentials for seeding (these will be used to create the admin user)
+
 ### Install & Run
-```
-yarn install
+```bash
+# Install dependencies
+npm install
 
 # Generate Prisma Client
 npx prisma generate
 
-# Setup DB (apply migrations in dev)
+# Setup DB (apply migrations)
 npx prisma migrate dev
 
-# Start the app
-yarn dev
+# Seed the database with admin user
+npm run seed
+
+# Start the development server
+npm run dev
+```
+
+### Creating Admin User
+The project includes a seed script that creates an admin user based on the environment variables. To create an admin user:
+
+1. Ensure your `.env` file includes the admin configuration:
+   ```env
+   ADMIN_EMAIL="admin@example.com"
+   ADMIN_PASSWORD="your-admin-password"
+   ADMIN_NAME="Admin User"
+   ```
+
+2. Run the seed command:
+   ```bash
+   npm run seed
+   ```
+
+This will create an admin user with the specified credentials. You can then log in using these credentials to access admin features.
+
+Note: If you need to reset the database and recreate the admin user:
+```bash
+npx prisma migrate reset --force  # This will also run the seed script
 ```
 
 ### Database & Prisma

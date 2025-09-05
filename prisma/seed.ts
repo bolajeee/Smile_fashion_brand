@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminName = process.env.ADMIN_NAME;
 
-  if (!adminEmail || !adminPassword) {
+  if (!adminEmail || !adminPassword || !adminName) {
     throw new Error(
-      'Please provide ADMIN_EMAIL and ADMIN_PASSWORD in your .env file'
+      'Please provide ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_NAME in your .env file'
     );
   }
 
@@ -20,7 +21,7 @@ async function main() {
     update: {},
     create: {
       email: adminEmail,
-      name: 'Admin',
+      name: adminName,
       passwordHash: passwordHash,
       role: 'ADMIN',
     },
