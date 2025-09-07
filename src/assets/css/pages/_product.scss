@@ -295,12 +295,13 @@
 }
 
 .product-recommendations {
-  padding: var(--space-2xl) 0;
+  padding: 4rem 0 5rem 0;
   background: var(--color-background-alt);
+  margin-bottom: 3rem;
 
   .section-title {
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: 2rem;
     font-size: var(--text-2xl);
     font-weight: 700;
     color: var(--color-text-primary);
