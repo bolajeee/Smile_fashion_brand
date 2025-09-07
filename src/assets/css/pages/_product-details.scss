@@ -1,0 +1,391 @@
+.product-details {
+  padding: 4rem 0;
+  min-height: calc(100vh - var(--header-height));
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem;
+    }
+  }
+
+  &__gallery {
+    position: relative;
+    background: var(--color-background-light);
+    border-radius: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+
+    &-main {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    &-thumbs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 0.5rem;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 0.5rem;
+      scrollbar-width: thin;
+
+      &-item {
+        position: relative;
+        aspect-ratio: 1;
+        border: 2px solid transparent;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        &--active {
+          border-color: var(--color-primary);
+        }
+
+        &:hover {
+          border-color: var(--color-primary-light);
+        }
+      }
+    }
+  }
+
+  &__info {
+    padding: 2rem;
+    background: var(--color-background-light);
+    border-radius: 1rem;
+    margin-top: 2rem;
+
+    &-btns {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 1rem;
+
+      .btn {
+        flex: 1;
+        max-width: 200px;
+
+        &--active {
+          background: var(--color-primary);
+          color: var(--color-white);
+        }
+      }
+    }
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+    animation: slideDown 0.5s ease;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    animation: slideIn 0.5s ease;
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-light);
+
+      i {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &__description {
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    animation: fadeIn 0.5s ease;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    animation: slideUp 0.5s ease;
+
+    .btn {
+      min-width: 180px;
+
+      &--primary {
+        flex: 2;
+      }
+    }
+  }
+}
+
+// Product Options
+.product-options {
+  margin: 2rem 0;
+  animation: fadeIn 0.5s ease;
+
+  &__section {
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--color-text-light);
+  }
+
+  &__colors {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__sizes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__color-btn,
+  &__size-btn {
+    padding: 0.5rem;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &--selected {
+      border-color: var(--color-primary);
+    }
+  }
+
+  &__color-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__size-btn {
+    padding: 0.5rem 1rem;
+    background: var(--color-background);
+
+    &:hover {
+      background: var(--color-background-dark);
+    }
+
+    &--selected {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+  }
+}
+
+// Reviews Section
+.product-reviews {
+  padding: 2rem 0;
+  animation: fadeIn 0.5s ease;
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  &__list {
+    display: grid;
+    gap: 2rem;
+  }
+}
+
+.review-card {
+  background: var(--color-background);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  animation: slideIn 0.5s ease;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__user {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  &__avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--color-background-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__rating {
+    color: var(--color-primary);
+  }
+
+  &__content {
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  &__date {
+    margin-top: 1rem;
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+  }
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Quantity Control
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--color-background);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  animation: fadeIn 0.5s ease;
+
+  &__btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background-light);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-background-dark);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__value {
+    width: 3rem;
+    text-align: center;
+    font-weight: 500;
+  }
+}
+
+// Price Display
+.price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  animation: slideIn 0.5s ease;
+
+  &__current {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  &__original {
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    text-decoration: line-through;
+  }
+
+  &__discount {
+    font-size: 1rem;
+    color: var(--color-success);
+    font-weight: 500;
+  }
+}

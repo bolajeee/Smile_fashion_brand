@@ -1,0 +1,229 @@
+.admin-products {
+  padding: 4rem 0;
+  min-height: calc(100vh - var(--header-height));
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+  }
+
+  &__controls {
+    margin-bottom: 2rem;
+
+    .search-box {
+      max-width: 40rem;
+      width: 100%;
+
+      .search-input {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.4rem;
+        font-size: 1.4rem;
+        color: var(--color-text);
+        background: var(--color-bg);
+        transition: border-color 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: var(--color-primary);
+        }
+
+        &::placeholder {
+          color: var(--color-text-muted);
+        }
+      }
+    }
+  }
+
+  .products-table {
+    background: var(--color-bg);
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 1.6rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      th {
+        font-weight: 600;
+        color: var(--color-text);
+        background: var(--color-bg-secondary);
+
+        &.sortable {
+          cursor: pointer;
+          user-select: none;
+
+          &:hover {
+            background: darken(#f8f9fa, 5%);
+          }
+
+          .sort-indicator {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+          }
+        }
+      }
+
+      td {
+        color: var(--color-text-secondary);
+        vertical-align: middle;
+
+        &.product-image {
+          width: 7rem;
+
+          .product-thumbnail {
+            width: 5rem;
+            height: 5rem;
+            object-fit: cover;
+            border-radius: 0.4rem;
+          }
+        }
+
+        &.actions {
+          white-space: nowrap;
+
+          .btn {
+            margin-right: 0.8rem;
+
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+        }
+
+        .btn {
+          padding: 0.6rem 1.2rem;
+          font-size: 1.4rem;
+
+          &--yellow {
+            background-color: #ffd700;
+            color: #000;
+            border: none;
+
+            &:hover {
+              background-color: darken(#ffd700, 10%);
+            }
+          }
+
+          &--border {
+            border: 1px solid var(--color-border);
+            background: transparent;
+            color: var(--color-text);
+
+            &:hover {
+              background: var(--color-bg-secondary);
+            }
+          }
+        }
+      }
+
+      tr {
+        &:hover {
+          background: var(--color-bg-hover);
+        }
+
+        &:last-child td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  .alert {
+    padding: 1.2rem 1.6rem;
+    border-radius: 0.4rem;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+
+    &--success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    &--error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 20rem;
+    font-size: 1.6rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 0;
+
+    &__header {
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .products-table {
+      table {
+        th, td {
+          padding: 1.2rem;
+          font-size: 1.4rem;
+        }
+
+        td.actions {
+          .btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Dark mode specific styles
+  [data-theme="dark"] & {
+    .products-table {
+      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+
+      table {
+        td .btn--yellow {
+          background-color: #d4af37;
+          color: #fff;
+
+          &:hover {
+            background-color: darken(#d4af37, 10%);
+          }
+        }
+      }
+    }
+  }
+}

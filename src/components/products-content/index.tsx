@@ -21,7 +21,10 @@ const ProductsContent: React.FC<ProductsContentProps> = ({ products }) => {
     if (type) type.split(",").forEach((v) => entries.push({ key: "type", label: "Type", value: v }));
     if (size) size.split(",").forEach((v) => entries.push({ key: "size", label: "Size", value: v }));
     if (color) color.split(",").forEach((v) => entries.push({ key: "color", label: "Color", value: v }));
-    if (price) entries.push({ key: "price", label: "Price", value: price });
+    if (price) {
+      const [min, max] = price.split("-").map(Number);
+      entries.push({ key: "price", label: "Price", value: `$${ min} - $${max}` });
+    }
     return entries;
   }, [router.query]);
 
@@ -51,56 +54,57 @@ const ProductsContent: React.FC<ProductsContentProps> = ({ products }) => {
         animate="show"
         variants={headerVariants}
       >
-        <h2>
-          Men's Tops <span>({products.length})</span>
-        </h2>
-        <div className="products-content__filters-applied">
-          {appliedFilters.map((f, idx) => (
-            <span key={`${f.key}-${f.value}-${idx}`} className="filter-tag">
-              {f.label}: {f.value}
-              <button
-                type="button"
-                className="remove-filter"
-                onClick={() => removeFilter(f.key, f.key === "price" ? undefined : f.value)}
-                aria-label={`Remove ${f.label} ${f.value}`}
+        <div className="products-content__header">
+          <div className="products-content__header-left">
+            <h2 className="products-content__title">
+              All Products <span className="products-content__count">{products.length}</span>
+            </h2>
+          </div>
+          <div className="products-content__header-right">
+            <div className="products-content__sort">
+              <label htmlFor="sort">Sort by:</label>
+              <select id="sort">
+                <option value="popular">Popular</option>
+                <option value="newest">Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
+            </div>
+            <div className="products-content__view-toggle">
+              <button 
+                type="button" 
+                className="active"
+                aria-label="Grid view"
               >
-                ×
+                <i className="icon-grid " />Prev
               </button>
-            </span>
-          ))}
-          {appliedFilters.length > 0 && (
-            <button type="button" className="products-filter__clear" onClick={() => router.push(router.pathname)}>
-              Clear all
-            </button>
-          )}
+              <button 
+                type="button"
+                aria-label="List view"
+              >
+                <i className="icon-list" />Next
+              </button>
+            </div>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setOrderProductsOpen(!orderProductsOpen)}
-          className="products-filter-btn"
-        >
-          <i className="icon-filters" />
-        </button>
-        <form
-          className={`products-content__filter ${orderProductsOpen ? "products-order-open" : ""}`}
-        >
-          <div className="products__filter__select">
-            <h4>Show products: </h4>
-            <div className="select-wrapper">
-              <select>
-                <option>Popular</option>
-              </select>
-            </div>
+        
+        {appliedFilters.length > 0 && (
+          <div className="products-content__filters-applied">
+            {appliedFilters.map((f, idx) => (
+              <span key={`${f.key}-${f.value}-${idx}`} className="filter-tag">
+                {f.label}: {f.value}
+                <button
+                  type="button"
+                  className="remove-filter"
+                  onClick={() => removeFilter(f.key, f.key === "price" ? undefined : f.value)}
+                  aria-label={`Remove ${f.label} ${f.value}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
           </div>
-          <div className="products__filter__select">
-            <h4>Sort by: </h4>
-            <div className="select-wrapper">
-              <select>
-                <option>Popular</option>
-              </select>
-            </div>
-          </div>
-        </form>
+        )}
       </motion.div>
 
       {products.length === 0 ? (

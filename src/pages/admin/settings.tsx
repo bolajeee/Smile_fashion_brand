@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import Layout from '@/layouts/Main';
+import { useSession } from 'next-auth/react';
+import { withAdminProtection } from '@/components/auth/withAdminProtection';
 
 interface User {
   id: string;
@@ -20,25 +20,16 @@ const getErrorMessage = (error: unknown): string => {
 };
 
 const AdminSettingsPage = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { data: session } = useSession();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionInProgress, setActionInProgress] = useState<string>('');
+  const [statusMessage, setStatusMessage] = useState('');
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.replace('/login');
-    } else if (session?.user?.role !== 'ADMIN') {
-      router.replace('/');
-    }
-  }, [status, session, router]);
-
-  useEffect(() => {
-    if (session?.user?.role === 'ADMIN') {
-      fetchUsers();
-    }
-  }, [session]);
+    fetchUsers();
+  }, []);
 
   const fetchUsers = async () => {
     try {
@@ -59,6 +50,10 @@ const AdminSettingsPage = () => {
     }
 
     try {
+      setActionInProgress(userId);
+      setStatusMessage('');
+      setError('');
+
       const res = await fetch(`/api/user/${userId}`, {
         method: 'DELETE',
       });
@@ -68,13 +63,20 @@ const AdminSettingsPage = () => {
       }
 
       setUsers(users.filter(user => user.id !== userId));
+      setStatusMessage('User deleted successfully');
     } catch (err) {
       setError(getErrorMessage(err));
+    } finally {
+      setActionInProgress('');
     }
   };
 
   const handleToggleRole = async (user: User) => {
     try {
+      setActionInProgress(user.id);
+      setStatusMessage('');
+      setError('');
+
       const newRole = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
       const res = await fetch(`/api/user/${user.id}`, {
         method: 'PUT',
@@ -94,12 +96,15 @@ const AdminSettingsPage = () => {
           ? { ...u, role: newRole }
           : u
       ));
+      setStatusMessage(`User role updated to ${newRole}`);
     } catch (err) {
       setError(getErrorMessage(err));
+    } finally {
+      setActionInProgress('');
     }
   };
 
-  if (status === 'loading' || isLoading) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="container mt-8">
@@ -119,15 +124,23 @@ const AdminSettingsPage = () => {
     );
   }
 
-  if (!session || session.user.role !== 'ADMIN') {
-    return null;
-  }
-
   return (
     <Layout>
       <section className="admin-settings">
         <div className="container">
           <h1 className="admin-settings__title">User Management</h1>
+
+          {statusMessage && (
+            <div className="alert alert--success mb-4">
+              {statusMessage}
+            </div>
+          )}
+          
+          {error && (
+            <div className="alert alert--error mb-4">
+              {error}
+            </div>
+          )}
 
           <div className="users-table">
             <table>
@@ -153,8 +166,9 @@ const AdminSettingsPage = () => {
                             ? 'btn--yellow' 
                             : 'btn--border'
                         }`}
+                        disabled={actionInProgress === user.id || user.id === session?.user.id}
                       >
-                        {user.role}
+                        {actionInProgress === user.id ? 'Updating...' : user.role}
                       </button>
                     </td>
                     <td>{new Date(user.createdAt).toLocaleDateString()}</td>
@@ -162,9 +176,9 @@ const AdminSettingsPage = () => {
                       <button
                         onClick={() => handleDeleteUser(user.id)}
                         className="btn btn--sm btn--rounded btn--danger"
-                        disabled={user.id === session.user.id}
+                        disabled={actionInProgress === user.id || user.id === session?.user.id}
                       >
-                        Delete
+                        {actionInProgress === user.id ? 'Deleting...' : 'Delete'}
                       </button>
                     </td>
                   </tr>
@@ -178,4 +192,4 @@ const AdminSettingsPage = () => {
   );
 };
 
-export default AdminSettingsPage;
+export default withAdminProtection(AdminSettingsPage);

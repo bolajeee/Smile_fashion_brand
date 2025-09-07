@@ -11,10 +11,13 @@ import Router from "next/router";
 import React, { Fragment } from "react";
 import { SessionProvider } from "next-auth/react";
 import { AppContextProvider } from '@/contexts/AppContext';
+import { Provider } from "react-redux";
+import { makeStore } from "@/store";
 
 import * as gtag from "../utils/gtag";
 
 const isProduction = process.env.NODE_ENV === "production";
+const store = makeStore();
 
 // only events on production
 if (isProduction) {
@@ -31,6 +34,7 @@ const poppins = Poppins({
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <AppContextProvider>
+      <Provider store={store}>
       <Fragment>
         <style jsx global>{`
           :root {
@@ -39,6 +43,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         `}</style>
         <Component {...pageProps} />
       </Fragment>
+      </Provider>
     </AppContextProvider>
   </SessionProvider>
 );

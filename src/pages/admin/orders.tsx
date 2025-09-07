@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import Layout from '../../layouts/Main';
+import Layout from '@/layouts/Main';
+import { withAdminProtection } from '@/components/auth/withAdminProtection';
 
 type OrderItem = {
     id: string;
@@ -20,21 +19,12 @@ type Order = {
     items: OrderItem[];
 };
 
-export default function AdminOrdersPage() {
-    const { data: session, status } = useSession();
-    const router = useRouter();
+function AdminOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [statuses, setStatuses] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.replace('/login');
-        } else if (session?.user?.role !== 'ADMIN') {
-            router.replace('/');
-        }
-    }, [status, session, router]);
+    
 
     useEffect(() => {
         async function load() {
@@ -57,10 +47,8 @@ export default function AdminOrdersPage() {
                 setIsLoading(false);
             }
         }
-        if (session?.user?.role === 'ADMIN') {
-            load();
-        }
-    }, [session]);
+        load();
+    }, []);
 
     async function updateStatus(orderId: string, status: string) {
         try {
@@ -77,8 +65,24 @@ export default function AdminOrdersPage() {
         }
     }
 
-    if (status === 'loading' || isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (isLoading) {
+        return (
+            <Layout>
+                <div className="container">
+                    <div>Loading...</div>
+                </div>
+            </Layout>
+        );
+    }
+    if (error) {
+        return (
+            <Layout>
+                <div className="container">
+                    <div>Error: {error}</div>
+                </div>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>
@@ -124,4 +128,4 @@ export default function AdminOrdersPage() {
     );
 }
 
-
+export default withAdminProtection(AdminOrdersPage);

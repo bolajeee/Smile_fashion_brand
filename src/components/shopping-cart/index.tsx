@@ -51,7 +51,7 @@ const ShoppingCart = () => {
           {cartItems.length === 0 && (
             <div className="cart-empty">
               <p className="cart-empty__message">Your cart is empty</p>
-              <Link href="/products" className="btn btn--primary">
+              <Link href="/product" className="btn btn--primary">
                 Start Shopping
               </Link>
             </div>
@@ -60,7 +60,7 @@ const ShoppingCart = () => {
 
         {cartItems.length > 0 && (
           <div className="cart-actions">
-            <Link href="/products" className="cart__btn-back">
+            <Link href="/product" className="cart__btn-back">
               <i className="icon-left" /> Continue Shopping
             </Link>
 

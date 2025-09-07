@@ -1,5 +1,13 @@
-# Smile_fashion_brand
-## Smile Fashion Brand – Backend & API Guide
+# Smile Fashion Brand
+
+A modern e-commerce platform built with Next.js, TypeScript, and Prisma.
+
+## Documentation
+
+- [Frontend Components & Routes](./docs/FRONTEND.md)
+- [Backend & API Guide](#backend--api-guide)
+
+## Backend & API Guide
 
 This project is a Next.js e-commerce app using PostgreSQL with Prisma as the ORM. The backend exposes RESTful API routes under `src/pages/api` for products, users, orders, order items, and order status (enum values).
 
@@ -94,6 +102,11 @@ Base path: `/api`
 - `GET /api/product/:id` – get one product
 - `PUT /api/product/:id` – update product
 - `DELETE /api/product/:id` – delete product
+- `GET /api/products/featured` – get featured products in display order
+- `PATCH /api/products/featured/:id` – toggle product featured status
+  - Body: `{ featured: boolean, featuredOrder?: number }`
+- `PATCH /api/products/featured/reorder` – reorder featured products
+  - Body: `{ orderedIds: Array<{ id: string, order: number }> }`
 
 Example (create):
 ```bash
@@ -159,6 +172,7 @@ curl -X PUT http://localhost:3000/api/order/ORDER_ID \
 ### Admin Features
 - **Product Management**: `/admin/products` - View, edit, and delete products (admin only)
 - **Add Products**: `/add-product` - Create new products with form validation
+- **Featured Products**: `/admin/featured-products` - Manage featured products with drag-and-drop reordering
 
 ### E-commerce Flow
 - **Shopping Cart**: Redux-based cart with persistent state

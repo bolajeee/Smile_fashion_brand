@@ -44,7 +44,7 @@ export const makeStore = () => {
       }),
   });
 
-  (store as any).__persistor = persistStore(store);
+  (store as { __persistor?: ReturnType<typeof persistStore> }).__persistor = persistStore(store);
 
   return store;
 };

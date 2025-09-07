@@ -1,17 +1,19 @@
 export interface Product {
   id: string;
   name: string;
-  price: number;
-  color: string;
-  type: string;
-  sizes: string[];
+  price: number;  // Always store as number internally
+  color?: string;
+  type?: string;
+  sizes?: string[];
   images: string[];
-  discount?: number;
+  discount?: number;  // Always store as number
   currentPrice?: number;
   description?: string;
   stock?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  featured?: boolean;
+  featuredOrder?: number | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export interface ProductType {
@@ -28,3 +30,4 @@ export interface ProductColor {
   id: string;
   color: string;
 }
+

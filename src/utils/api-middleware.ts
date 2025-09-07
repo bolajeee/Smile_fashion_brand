@@ -1,5 +1,10 @@
 import { getToken } from 'next-auth/jwt';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import type { JWT } from 'next-auth/jwt';
+
+interface AuthenticatedRequest extends NextApiRequest {
+  user: JWT;
+}
 
 export function withAuth(handler: NextApiHandler) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
@@ -11,7 +16,7 @@ export function withAuth(handler: NextApiHandler) {
       }
 
       // Add user info to request
-      (req as any).user = token;
+      (req as AuthenticatedRequest).user = token;
       
       return handler(req, res);
     } catch (error) {
@@ -35,7 +40,7 @@ export function withAdmin(handler: NextApiHandler) {
       }
 
       // Add user info to request
-      (req as any).user = token;
+      (req as AuthenticatedRequest).user = token;
       
       return handler(req, res);
     } catch (error) {

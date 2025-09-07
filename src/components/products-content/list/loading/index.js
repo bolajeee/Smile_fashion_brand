@@ -1,4 +1,4 @@
-import ProductItemLoading from "../../../product-item/loading";
+import ProductCardLoading from "@/components/product/card/loading";
 
 const ProductsLoading = () => {
   return (

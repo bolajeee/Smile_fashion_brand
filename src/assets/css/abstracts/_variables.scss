@@ -1,5 +1,19 @@
+// Define custom property for card glow rotation
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 132deg;
+  inherits: false;
+}
+
 // CSS Custom Properties for theming
 :root {
+    // Card dimensions and glow colors
+    --card-height: 45rem;
+    --card-width: 280px;
+    --glow-primary: #5ddcff;
+    --glow-secondary: #3c67e3;
+    --glow-tertiary: #4e00c2;
+
     // Light theme colors
     --color-primary: #6366f1;
     --color-primary-dark: #4f46e5;

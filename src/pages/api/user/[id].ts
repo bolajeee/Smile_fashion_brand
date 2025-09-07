@@ -13,7 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = getId(req);
   if (!id) return res.status(400).json({ message: 'Missing id' });
   
-  const reqUser = (req as any).user;
+  const reqUser = (req as { user: { id: string; role: string } }).user;
 
   // User can only access their own data unless admin
   if (reqUser.role !== 'ADMIN' && id !== reqUser.id) {

@@ -180,7 +180,7 @@ const ProfilePage = () => {
                 <div className="empty-state">
                   <i className="icon-bag" />
                   <p>No orders found</p>
-                  <Link href="/products" className="btn btn--rounded btn--primary">
+                  <Link href="/product" className="btn btn--rounded btn--primary">
                     Start Shopping
                   </Link>
                 </div>

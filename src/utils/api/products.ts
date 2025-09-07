@@ -1,12 +1,52 @@
 import { Product } from '@/types/product';
+import { prisma } from '@/utils/db';
 
 export const getProducts = async (): Promise<Product[]> => {
   try {
-    const response = await fetch('/api/products');
-    if (!response.ok) {
-      throw new Error('Failed to fetch products');
+    if (typeof window === 'undefined') {
+      // Server-side: Use Prisma directly
+      const products = await prisma.product.findMany({
+        orderBy: [
+          { featuredOrder: 'asc' },
+          { createdAt: 'desc' }
+        ],
+      });
+
+      // Transform Prisma Product to our Product type
+      return products.map(p => ({
+        id: p.id,
+        name: p.name,
+        description: p.description || null,
+        price: Number(p.price),
+        images: p.images,
+        stock: p.stock || 0,
+        color: null,
+        type: null,
+        sizes: [],
+        currentPrice: Number(p.price),
+        featured: p.featured || false,
+        featuredOrder: p.featuredOrder || null,
+        discount: null
+      }));
+    } else {
+      // Client-side: Use API route
+      const response = await fetch('/api/products');
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      const products = await response.json();
+      return products.map((p: { id: string; name: string; price: number | string; images: string[]; discount?: number | string; color?: string; type?: string; sizes?: string[]; description?: string; stock?: number }) => ({
+        ...p,
+        price: Number(p.price),
+        currentPrice: Number(p.price),
+        discount: p.discount ? Number(p.discount) : null,
+        color: p.color || null,
+        type: p.type || null,
+        sizes: p.sizes || [],
+        description: p.description || null,
+        stock: p.stock || 0
+      }));
     }
-    return response.json();
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];

@@ -34,6 +34,8 @@ model Product {
   price       Decimal  @db.Decimal(12, 2)
   images      String[]
   stock       Int
+  featured    Boolean  @default(false)
+  featuredOrder Int?   // For controlling the order of featured products
   orderItems  OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

@@ -292,7 +292,7 @@ const CheckoutPage = () => {
               <i className="icon-left" /> Back
             </Link>
             <div className="cart-actions__items-wrapper">
-              <Link href="/products" className="btn btn--rounded btn--border">
+              <Link href="/product" className="btn btn--rounded btn--border">
                 Continue shopping
               </Link>
               <button

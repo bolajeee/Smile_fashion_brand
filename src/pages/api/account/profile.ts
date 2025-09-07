@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Prepare update data with only provided fields
-        const updateData: any = {};
+        const updateData: { name?: string; phoneNumber?: string; image?: string } = {};
         if (name) updateData.name = name;
         if (address) updateData.address = address;
         if (phoneNumber) updateData.phoneNumber = phoneNumber;

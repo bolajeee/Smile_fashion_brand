@@ -1,3 +1,4 @@
+@import 'pages/product-details-grid';
 /**
  * Smile Fashion Brand - Main Stylesheet
  * Style architecture following the 7-1 pattern
@@ -7,6 +8,19 @@
 @import 'abstracts/variables';
 @import 'abstracts/mixins';
 @import 'abstracts/animations';
+@import 'abstracts/card-glow';
+
+// Custom animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 // 2. Vendors
 @import './fonts/icons/icons.css';
@@ -49,8 +63,11 @@
 @import 'components/products-featured';
 @import 'components/product-carousel';
 @import 'components/carousel-nav';
+@import 'components/product-details';
 @import 'components/section';
-
+@import 'components/admin-form';
+@import 'components/admin-settings';
+@import 'components/admin-products';
 
 // 6. Pages
 @import 'pages/base';
@@ -59,3 +76,4 @@
 @import 'pages/cart';
 @import 'pages/profile';
 @import 'pages/admin';
+@import 'pages/admin-dashboard';

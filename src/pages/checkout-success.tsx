@@ -28,7 +28,7 @@ const CheckoutSuccessPage = () => {
                             <Link href="/account/profile" className="btn btn--rounded btn--yellow">
                                 View My Orders
                             </Link>
-                            <Link href="/products" className="btn btn--rounded btn--border">
+                            <Link href="/product" className="btn btn--rounded btn--border">
                                 Continue Shopping
                             </Link>
                         </div>

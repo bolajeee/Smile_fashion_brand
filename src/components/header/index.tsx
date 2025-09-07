@@ -5,7 +5,10 @@ import useOnClickOutside from "use-onclickoutside";
 import Image from "next/image";
 
 import { useCart } from '@/contexts/CartContext'; // Assuming this context exists
-import { ThemeToggle } from '../theme/ThemeToggle';
+import dynamic from 'next/dynamic';
+const ThemeToggle = dynamic(() => import('../theme/ThemeToggle').then(mod => mod.ThemeToggle), {
+  ssr: false
+});
 
 const Header = () => {
   const { data: session } = useSession();
@@ -84,7 +87,7 @@ const Header = () => {
               {session && <hr className="site-header__nav-separator" />}
 
               <div className="site-header__nav-links">
-                <Link href="/products" className="site-header__nav-link">
+                <Link href="/product" className="site-header__nav-link">
                   Shop
                 </Link>
                 <Link href="/about" className="site-header__nav-link">

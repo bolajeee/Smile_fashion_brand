@@ -27,7 +27,7 @@ const ForgotPassword = () => {
       <section className="form-page">
         <div className="container">
           <div className="back-button-section">
-            <Link href="/products">
+            <Link href="/product">
               <i className="icon-left" />
               Back to shop
             </Link>

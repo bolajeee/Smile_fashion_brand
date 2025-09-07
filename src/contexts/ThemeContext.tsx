@@ -23,30 +23,34 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem('smile-theme') as Theme;
-      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-        setThemeState(savedTheme);
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      } else {
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const defaultTheme: Theme = prefersDark ? 'dark' : 'light';
-        setThemeState(defaultTheme);
-        document.documentElement.setAttribute('data-theme', defaultTheme);
+    if (typeof window !== 'undefined') {
+      try {
+        const savedTheme = localStorage.getItem('smile-theme') as Theme;
+        if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+          setThemeState(savedTheme);
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else {
+          // Check system preference
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const defaultTheme: Theme = prefersDark ? 'dark' : 'light';
+          setThemeState(defaultTheme);
+          document.documentElement.setAttribute('data-theme', defaultTheme);
+        }
+      } catch (error) {
+        console.error('Error loading theme from localStorage:', error);
       }
-    } catch (error) {
-      console.error('Error loading theme from localStorage:', error);
     }
   }, []);
 
   // Save theme to localStorage and update DOM whenever it changes
   useEffect(() => {
-    try {
-      localStorage.setItem('smile-theme', theme);
-      document.documentElement.setAttribute('data-theme', theme);
-    } catch (error) {
-      console.error('Error saving theme to localStorage:', error);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('smile-theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (error) {
+        console.error('Error saving theme to localStorage:', error);
+      }
     }
   }, [theme]);
 

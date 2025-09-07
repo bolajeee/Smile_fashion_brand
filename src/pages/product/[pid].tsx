@@ -1,21 +1,28 @@
 import type { GetStaticPaths, GetStaticProps } from "next";
-import { useState } from "react";
+
+import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
 
 import Breadcrumb from "@/components/breadcrumb";
 import Footer from "@/components/footer";
-import Content from "@/components/product-single/content";
-import Description from "@/components/product-single/description";
-import Gallery from "@/components/product-single/gallery";
-import Reviews from "@/components/product-single/reviews";
-import ProductsFeatured from "@/components/products-featured";
-// types
-import type { ProductType } from "@/types";
+import Gallery from "@/components/product/details/gallery";
+import { Tabs } from "./Tabs";
+import ProductDetails from "@/components/product/details/content";
+import type { Product } from "@/types/product";
+import Layout from "@/layouts/Main";
+import { server } from "@/utils/server";
 
-import Layout from "../../layouts/Main";
-import { server } from "../../utils/server";
+// Unused: Description, Reviews (now handled in ProductTabs inside ProductDetails)
+// Remove these imports if not needed elsewhere
+// const Description = dynamic(() => import("@/components/product/details/description"));
+// const Reviews = dynamic(() => import("@/components/product/details/reviews"));
+const ProductsFeatured = dynamic(() => import("@/components/products-featured"));
 
-type ProductPageType = {
-  product: ProductType;
+type ProductPageProps = {
+  product: Product;
+  title: string;
+  limit: number;
+  excludeIds?: string[];
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -29,59 +36,80 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params }) => {
   const pid = params?.pid as string;
   try {
     const res = await fetch(`${server}/api/product/${pid}`);
     if (!res.ok) return { notFound: true, revalidate: 60 };
     const product = await res.json();
-    return { props: { product }, revalidate: 60 };
+    return { 
+      props: { 
+        product,
+        title: product.name || '',
+        limit: 4
+      }, 
+      revalidate: 60 
+    };
   } catch {
     return { notFound: true, revalidate: 60 };
   }
 };
 
-const Product = ({ product }: ProductPageType) => {
-  const [showBlock, setShowBlock] = useState("description");
+const Product = ({ product }: ProductPageProps) => {
+  // Removed unused activeTab state
 
   return (
     <Layout>
       <Breadcrumb />
 
-      <section className="product-single">
-        <div className="container">
-          <div className="product-single__content">
-            <Gallery images={product.images} />
-            <Content product={product} />
-          </div>
-
-          <div className="product-single__info">
-            <div className="product-single__info-btns">
-              <button
-                type="button"
-                onClick={() => setShowBlock("description")}
-                className={`btn btn--rounded ${showBlock === "description" ? "btn--active" : ""}`}
-              >
-                Description
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowBlock("reviews")}
-                className={`btn btn--rounded ${showBlock === "reviews" ? "btn--active" : ""}`}
-              >
-                Reviews (2)
-              </button>
+      <motion.section 
+        className="product-details"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+  <div className="container">
+    {/* ...rest of the content... */}
+  </div>
+            <div className="container product-details__container">
+              <div className="product-details__main-grid">
+                <div className="product-details__gallery-col">
+                  <Gallery images={product.images || []} />
+                </div>
+                <div className="product-details__content-col">
+                  <ProductDetails product={product} />
+                </div>
+              </div>
+              <div className="product-details__info-row">
+                <motion.div 
+                  className="product-details__info"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <Tabs product={product} />
+                </motion.div>
+              </div>
             </div>
+      </motion.section>
 
-            <Description show={showBlock === "description"} />
-            <Reviews product={product} show={showBlock === "reviews"} />
-          </div>
+      <motion.section 
+        className="product-recommendations"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+      >
+        <div className="container">
+          <h2 className="section-title">You May Also Like</h2>
+          <ProductsFeatured
+            // excludeIds prop removed as it is not valid for this component
+            // limit prop removed as it is not valid for this component
+
+          />
         </div>
-      </section>
+      </motion.section>
 
-      <div className="product-single-page">
-        <ProductsFeatured />
-      </div>
       <Footer />
     </Layout>
   );

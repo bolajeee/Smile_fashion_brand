@@ -1,0 +1,21 @@
+// Glow card animation properties
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 132deg;
+  inherits: false;
+}
+
+:root {
+  --glow-primary: #5ddcff;
+  --glow-secondary: #3c67e3;
+  --glow-tertiary: #4e00c2;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}

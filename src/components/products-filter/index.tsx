@@ -95,6 +95,9 @@ const ProductsFilter = ({
     router.push({
       pathname: router.pathname,
       query,
+    }, undefined, { shallow: true }).then(() => {
+      // Close the filter dropdown after applying filters
+      setFiltersOpen(false);
     });
   };
 
@@ -151,18 +154,45 @@ const ProductsFilter = ({
               </div>
 
               {/* Price Range Filter */}
-              {/* <div className="products-filter__block">
-          <button type="button">Price</button>
-          <div className="products-filter__block__content">
-            <Range
-              min={0}
-              max={500}
-              value={activeFilters.price}
-              onChange={handlePriceChange}
-              tipFormatter={(value) => `$${value}`}
-            />
-          </div>
-        </div> */}
+              <div className="products-filter__block">
+                <button type="button">Price Range</button>
+                <div className="products-filter__block__content">
+                  <div className="products-filter__range">
+                    <Range
+                      min={0}
+                      max={500}
+                      value={activeFilters.price}
+                      onChange={handlePriceChange}
+                      tipFormatter={(value) => `$${value}`}
+                      railStyle={{ backgroundColor: 'var(--color-border-light)' }}
+                      trackStyle={[{ backgroundColor: 'var(--color-primary)' }]}
+                      handleStyle={[
+                        { borderColor: 'var(--color-primary)', backgroundColor: 'white' },
+                        { borderColor: 'var(--color-primary)', backgroundColor: 'white' }
+                      ]}
+                    />
+                    <div className="products-filter__range-inputs">
+                      <input
+                        type="number"
+                        className="products-filter__range-input"
+                        value={activeFilters.price[0]}
+                        onChange={(e) => handlePriceChange([parseInt(e.target.value), activeFilters.price[1]])}
+                        min={0}
+                        max={activeFilters.price[1]}
+                      />
+                      <span className="products-filter__range-separator">-</span>
+                      <input
+                        type="number"
+                        className="products-filter__range-input"
+                        value={activeFilters.price[1]}
+                        onChange={(e) => handlePriceChange([activeFilters.price[0], parseInt(e.target.value)])}
+                        min={activeFilters.price[0]}
+                        max={500}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Size Filter */}
               <div className="products-filter__block">
@@ -195,8 +225,8 @@ const ProductsFilter = ({
                         name="product-color"
                         color={type.color}
                         isChecked={activeFilters.color.includes(type.color)}
-                        onChange={(checked: boolean) =>
-                          updateFilters("color", type.color, checked)
+                        onChange={(color: string) =>
+                          updateFilters("color", color, true)
                         }
                       />
                     ))}

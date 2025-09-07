@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ProductTypeList } from "@/types";
-import ProductItem from "../../product-item";
+import ProductCard from "@/components/product/card";
 
 type ProductsCarouselType = {
   products: ProductTypeList[];
@@ -39,7 +39,7 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
       <div className="products-carousel__track">
         {products.map((item, index) => (
           <div key={item.id} className={`swiper-slide ${getSlideClass(index)}`}>
-                        <ProductItem
+            <ProductCard
               id={item.id}
               name={item.name}
               price={item.price}
@@ -53,7 +53,7 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
       </div>
 
       <button 
-        className="nav-arrow left" 
+        className="nav-arrow btn btn--primary left" 
         onClick={() => updateCarousel(currentIndex - 1)}
         aria-label="Previous product"
       >
@@ -61,14 +61,23 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
       </button>
       
       <button 
-        className="nav-arrow right" 
+        className="nav-arrow btn btn--primary right" 
         onClick={() => updateCarousel(currentIndex + 1)}
         aria-label="Next product"
       >
         <i className="icon-arrow-long-right"></i>
       </button>
 
-
+      <div className="dots">
+        {products.map((_, index) => (
+          <button
+            key={index}
+            className={`dot ${index === currentIndex ? 'active' : ''}`}
+            onClick={() => updateCarousel(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

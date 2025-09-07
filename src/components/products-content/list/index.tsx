@@ -1,6 +1,6 @@
 import type { Product } from "@/types/product";
 
-import ProductItem from "../../product-item";
+import ProductCard from "@/components/product/card";
 import { motion } from "framer-motion";
 
 interface ProductListProps {
@@ -28,7 +28,11 @@ const List: React.FC<ProductListProps> = ({ products }) => {
     <motion.section className="products-list" variants={container} initial="hidden" animate="show">
       {products.map((p) => (
         <motion.div key={p.id} variants={item}>
-          <ProductItem {...p} />
+          <ProductCard 
+            {...p}
+            price={p.price}
+            discount={p.discount}
+          />
         </motion.div>
       ))}
     </motion.section>

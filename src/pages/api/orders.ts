@@ -3,7 +3,7 @@ import { prisma } from '@/utils/db';
 import { withAuth } from '@/utils/api-middleware';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const user = (req as any).user;
+  const user = (req as { user: { id: string; role: string } }).user;
   try {
     switch (req.method) {
       case 'GET': {
@@ -27,7 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             shippingAddress,
             items: items?.length
               ? {
-                create: items.map((item: any) => ({
+                create: items.map((item: { productId: string; quantity: number; price: number }) => ({
                   productId: item.productId,
                   quantity: item.quantity,
                   price: item.price,

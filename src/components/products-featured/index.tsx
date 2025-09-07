@@ -12,7 +12,7 @@ const ProductsFeatured = () => {
       <div className="container">
         <header className="section-products-featured__header">
           <h3>Selected just for you</h3>
-          <Link href="/products" className="btn btn--rounded btn--border">
+          <Link href="/product" className="btn btn--primary btn--rounded-lg">
             Show All
           </Link>
         </header>

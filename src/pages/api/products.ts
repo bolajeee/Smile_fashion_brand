@@ -6,7 +6,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'GET': {
-        const products = await prisma.product.findMany();
+        const products = await prisma.product.findMany({
+          orderBy: [
+            { featuredOrder: 'asc' },
+            { createdAt: 'desc' }
+          ],
+        });
         return res.status(200).json(products);
       }
       case 'POST': {
@@ -29,5 +34,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-// Only allow admins to create products
-export default withAdmin(handler);
+// Only allow admins to create products, but allow public access to GET
+export default async function productsHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'GET') {
+    return handler(req, res);
+  }
+  return withAdmin(handler)(req, res);
+}

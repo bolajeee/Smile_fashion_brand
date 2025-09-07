@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="site-footer__top">
           <div className="site-footer__brand">
             <div className="site-footer__logo">
-              <Image src="/images/smile_logo.jpg" alt="Smile" width={60} height={60} />
+              <Image src="/images/logos/smile_logo.jpg" alt="Smile" width={60} height={60} priority />
               <h3 className="site-footer__brand-name">
                 <span className="highlight">Smile</span> Fashion
               </h3>

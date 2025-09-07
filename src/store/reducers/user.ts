@@ -16,18 +16,25 @@ type ToggleFavType = {
   id: string;
 };
 
+interface UserData {
+  name: string;
+  email?: string;
+  role?: string;
+  image?: string;
+  phoneNumber?: string;
+}
+
 interface UserSliceTypes {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
+  user: UserData;
   favProducts: string[];
 }
 
-const initialState = {
+const initialState: UserSliceTypes = {
   user: {
     name: "Lucas Pulliese",
   },
   favProducts: [],
-} as UserSliceTypes;
+};
 
 const userSlice = createSlice({
   name: "user",

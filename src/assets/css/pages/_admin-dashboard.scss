@@ -1,0 +1,229 @@
+.admin-dashboard {
+  padding: 2rem 0;
+
+  &__title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  &__metric-card {
+    position: relative;
+    background: var(--color-card-bg, var(--color-white));
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-color: var(--color-primary);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-primary);
+      opacity: 0.05;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover::before {
+      opacity: 0.1;
+    }
+
+    h3 {
+      color: var(--color-text-light);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    p {
+      color: var(--color-text);
+      font-size: 1.75rem;
+      font-weight: 600;
+      position: relative;
+    }
+
+    &--revenue {
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--color-success, #4CAF50);
+      }
+    }
+
+    &--orders {
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--color-primary);
+      }
+    }
+
+    &--products {
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--color-warning, #FF9800);
+      }
+    }
+
+    &--users {
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--color-info, #2196F3);
+      }
+    }
+  }
+
+  &__nav-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  &__nav-card {
+    position: relative;
+    background: var(--color-card-bg, var(--color-white));
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        transparent 100%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+      &::after {
+        opacity: 0.05;
+      }
+
+      .icon {
+        transform: scale(1.1);
+        color: var(--color-primary);
+      }
+
+      h3 {
+        color: var(--color-primary);
+      }
+    }
+
+    .icon {
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+      color: var(--color-text-light);
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+      line-height: 1.4;
+    }
+  }
+
+  // Dark mode adjustments
+  [data-theme='dark'] & {
+    &__metric-card,
+    &__nav-card {
+      background: var(--color-card-bg);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    &__nav-card {
+      &::after {
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          transparent 100%
+        );
+      }
+
+      &:hover::after {
+        opacity: 0.1;
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    &__cards,
+    &__nav-cards {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    &__metric-card {
+      p {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
