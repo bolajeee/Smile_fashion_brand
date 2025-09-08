@@ -19,7 +19,6 @@ const CheckoutSuccessPage = () => {
                             <ul>
                                 <li>You'll receive an email confirmation with your order details</li>
                                 <li>Our team will process your order within 24 hours</li>
-                                <li>You'll receive tracking information once your order ships</li>
                                 <li>You can view your order status in your account profile</li>
                             </ul>
                         </div>
