@@ -5,18 +5,30 @@ export interface Order {
   total: number;
   shippingAddress: string;
   items: OrderItem[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface OrderItem {
   id: string;
   orderId: string;
   productId: string;
+  name?: string;
+  image?: string;
   quantity: number;
   price: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
+}
+
+export type Order = {
+  status: OrderStatus;
+  // ... other order properties
+};
