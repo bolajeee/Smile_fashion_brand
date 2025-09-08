@@ -28,7 +28,4 @@ export enum OrderStatus {
   CANCELLED = 'CANCELLED'
 }
 
-export type Order = {
-  status: OrderStatus;
-  // ... other order properties
-};
+

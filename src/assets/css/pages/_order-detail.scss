@@ -1,0 +1,89 @@
+@import '../abstracts/variables';
+
+.order-detail {
+  padding: 2rem 0;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      margin: 0;
+    }
+
+    .order-id {
+      font-family: $font-mono;
+      color: $color-text-tertiary;
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .order-date {
+      color: $color-text-tertiary;
+    }
+  }
+
+  &__shipping {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: $radius-base;
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+
+    .shipping-address p {
+      margin: 0.25rem 0;
+    }
+  }
+
+  &__items {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      th {
+        background: var(--bg-secondary);
+        font-weight: 600;
+      }
+
+      tfoot {
+        td {
+          text-align: right;
+        }
+
+        tr:last-child td {
+          border-bottom: none;
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+}

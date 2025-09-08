@@ -44,6 +44,7 @@
 @import 'layout/grid';
 
 // 5. Components
+@import 'components/alert';
 @import 'components/buttons';
 @import 'components/checkbox';
 @import 'components/product-item';
@@ -62,6 +63,7 @@
 @import 'components/featured';
 @import 'components/products-featured';
 @import 'components/product-carousel';
+@import 'components/logo';
 @import 'components/carousel-nav';
 @import 'components/product-details';
 @import 'components/section';
@@ -80,3 +82,5 @@
 @import 'pages/profile';
 @import 'pages/admin';
 @import 'pages/admin-dashboard';
+@import 'pages/admin-orders';
+@import 'pages/order-detail';

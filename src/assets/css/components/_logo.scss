@@ -1,0 +1,18 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &__image {
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 9999px; /* Full border radius */
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

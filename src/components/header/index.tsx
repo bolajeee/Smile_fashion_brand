@@ -3,8 +3,8 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect, useRef, useState } from 'react';
 import useOnClickOutside from "use-onclickoutside";
 import Image from "next/image";
-
-import { useCart } from '@/contexts/CartContext'; // Assuming this context exists
+import { Logo } from '@/components/logo/Logo';
+import { useCart } from '@/contexts/CartContext';
 import dynamic from 'next/dynamic';
 const ThemeToggle = dynamic(() => import('../theme/ThemeToggle').then(mod => mod.ThemeToggle), {
   ssr: false
@@ -52,7 +52,7 @@ const Header = () => {
       <div className="container">
         <div className="site-header__wrapper">
           <Link href="/" className="site-header__logo">
-            Smile 
+            <Logo width={120} height={40} />
           </Link>
           <nav
             className={`site-header__nav ${
