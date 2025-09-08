@@ -30,13 +30,19 @@ const Header = () => {
   });
 
   useEffect(() => {
+    let mounted = true;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (mounted) {
+        setIsScrolled(window.scrollY > 10);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial scroll position
 
     return () => {
+      mounted = false;
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -55,12 +61,15 @@ const Header = () => {
             ref={navRef}
           >
             {/* Neon Glass Effects */}
-            <span className="shine shine-top"></span>
-            <span className="shine shine-bottom"></span>
-            <span className="glow glow-top"></span>
-            <span className="glow glow-bottom"></span>
-            <span className="glow glow-bright glow-top"></span>
-            <span className="glow glow-bright glow-bottom"></span>
+            {['top', 'bottom'].map((position) => (
+              <span key={`shine-${position}`} className={`shine shine-${position}`} />
+            ))}
+            {['top', 'bottom'].map((position) => (
+              <span key={`glow-${position}`} className={`glow glow-${position}`} />
+            ))}
+            {['top', 'bottom'].map((position) => (
+              <span key={`glow-bright-${position}`} className={`glow glow-bright glow-${position}`} />
+            ))}
 
             <div className="site-header__nav-inner">
               {session && (

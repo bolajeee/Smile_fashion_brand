@@ -12,10 +12,6 @@ import type { Product } from "@/types/product";
 import Layout from "@/layouts/Main";
 import { server } from "@/utils/server";
 
-// Unused: Description, Reviews (now handled in ProductTabs inside ProductDetails)
-// Remove these imports if not needed elsewhere
-// const Description = dynamic(() => import("@/components/product/details/description"));
-// const Reviews = dynamic(() => import("@/components/product/details/reviews"));
 const ProductsFeatured = dynamic(() => import("@/components/products-featured"));
 
 type ProductPageProps = {
@@ -87,7 +83,7 @@ const Product = ({ product }: ProductPageProps) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  <Tabs product={product} />
+                  <Tabs product={product} show={true} />
                 </motion.div>
               </div>
             </div>

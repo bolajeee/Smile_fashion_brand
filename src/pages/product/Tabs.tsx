@@ -3,7 +3,25 @@ import dynamic from "next/dynamic";
 const Description = dynamic(() => import("@/components/product/details/description"));
 const Reviews = dynamic(() => import("@/components/product/details/reviews"));
 
-export const Tabs = ({ product }: { product: any }) => {
+interface Product {
+  id: string;
+  description: string;
+  reviews: Array<{
+    id: string;
+    rating: number;
+    review: string;
+    user: {
+      name: string;
+    };
+    createdAt: string;
+  }>;
+}
+
+interface TabsProps {
+  product: Product;
+}
+
+export const Tabs = ({ product }: TabsProps) => {
   const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
   return (
     <>
@@ -25,14 +43,12 @@ export const Tabs = ({ product }: { product: any }) => {
           Customer Reviews
         </button>
       </div>
-      <div className="product-details__info-content">
         {activeTab === "description" && (
           <Description description={product.description} show={true} />
         )}
         {activeTab === "reviews" && (
-          <Reviews product={product} show={true} />
+          <Reviews reviews={product.reviews} show={true} />
         )}
-      </div>
     </>
   );
 };

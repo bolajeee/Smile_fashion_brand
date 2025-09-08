@@ -7,7 +7,7 @@ interface ProductTabsProps {
   productId: string;
 }
 
-const ProductTabs: React.FC<ProductTabsProps> = ({ description, specifications, reviews, productId }) => {
+const ProductTabs: React.FC<ProductTabsProps> = ({ description, specifications, reviews }) => {
   const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'reviews'>('description');
 
   return (

@@ -5,14 +5,17 @@ type CheckoutStatusProps = {
 const CheckoutStatus = ({ step }: CheckoutStatusProps) => {
   return (
     <div className="checkout-status">
-      <ul className="checkout-steps">
-        <li className={`${step === "cart" ? "active" : "done"}`}>
-          <i className="icon-cart" />
-        </li>
-        <li className={`${step === "checkout" ? "active" : "done"}`}>
-          <i className="icon-delivery" />
-        </li>
-      </ul>
+      <div className="checkout-steps">
+        <div className={`checkout-step ${step === "cart" ? "active" : ""}`}>
+          <span className="step-number">1</span>
+          <span className="step-label">Shopping Cart</span>
+        </div>
+        <div className="checkout-divider"></div>
+        <div className={`checkout-step ${step === "checkout" ? "active" : ""}`}>
+          <span className="step-number">2</span>
+          <span className="step-label">Checkout</span>
+        </div>
+      </div>
     </div>
   );
 };

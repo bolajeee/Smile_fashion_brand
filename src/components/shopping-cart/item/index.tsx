@@ -47,6 +47,36 @@ const CartItem = ({
     }, newCount);
   };
 
+  // Color mapping for better display
+  const getColorHex = (colorName?: string): string => {
+    const colorMap: { [key: string]: string } = {
+      'black': '#000000',
+      'white': '#FFFFFF',
+      'red': '#DC2626',
+      'blue': '#2563EB',
+      'green': '#059669',
+      'yellow': '#EAB308',
+      'pink': '#EC4899',
+      'purple': '#9333EA',
+      'gray': '#6B7280',
+      'grey': '#6B7280',
+      'brown': '#92400E',
+      'orange': '#EA580C',
+      'navy': '#1E3A8A',
+      'beige': '#F5F5DC',
+      'cream': '#F5F5DC',
+    };
+    return colorMap[colorName?.toLowerCase() ?? ''] || colorName || '#6B7280';
+  };
+
+  // Format price to ensure it's a number
+  const formatPrice = (priceValue: any): string => {
+    const numPrice = typeof priceValue === 'string' ? parseFloat(priceValue) : priceValue;
+    return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2);
+  };
+
+  const totalItemPrice = (typeof price === 'string' ? parseFloat(price) : price) * count;
+
   return (
     <tr className="cart-item">
       <td className="cart-item__product">
@@ -57,13 +87,16 @@ const CartItem = ({
 
           <div className="cart-product__content">
             <h3 className="cart-product__title">{name}</h3>
-            <p className="cart-product__id">#{id}</p>
+            <p className="cart-product__id">ID: #{id}</p>
           </div>
         </div>
       </td>
 
       <td className="cart-item__color" data-label="Color">
-        <span className="cart-item__color-swatch" style={{ backgroundColor: color }}></span>
+        <span 
+          className="cart-item__color-swatch" 
+          style={{ backgroundColor: getColorHex(color) }}
+        ></span>
         {color}
       </td>
 
@@ -71,7 +104,7 @@ const CartItem = ({
         {size}
       </td>
 
-      <td className="cart-item__quantity">
+      <td className="cart-item__quantity" data-label="Quantity">
         <div className="quantity-button">
           <button
             type="button"
@@ -93,14 +126,17 @@ const CartItem = ({
         </div>
       </td>
 
-      <td className="cart-item__price">${price}</td>
+      <td className="cart-item__price" data-label="Price">
+        ${formatPrice(totalItemPrice)}
+      </td>
 
-      <td className="cart-item__actions">
+      <td className="cart-item__actions" data-label="Actions">
         <button
           type="button"
           onClick={removeFromCart}
           className="cart-item__remove"
           aria-label="Remove item from cart"
+          title="Remove from cart"
         >
           <i className="icon-cancel" />
         </button>

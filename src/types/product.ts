@@ -14,6 +14,15 @@ export interface Product {
   featuredOrder?: number | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+    reviews: Array<{
+    id: string;
+    rating: number;
+    review: string;
+    user: {
+      name: string;
+    };
+    createdAt: string;
+  }>;
 }
 
 export interface ProductType {
