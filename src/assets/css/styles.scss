@@ -68,12 +68,15 @@
 @import 'components/admin-form';
 @import 'components/admin-settings';
 @import 'components/admin-products';
+@import 'components/checkout-status';
 
 // 6. Pages
 @import 'pages/base';
 @import 'pages/products';
 @import 'pages/product';
 @import 'pages/cart';
+@import 'pages/checkout';
+@import 'pages/checkout-success';
 @import 'pages/profile';
 @import 'pages/admin';
 @import 'pages/admin-dashboard';

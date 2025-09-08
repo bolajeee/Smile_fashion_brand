@@ -43,12 +43,12 @@ const ShoppingCart = () => {
             <table className="cart-table">
               <thead>
                 <tr>
-                  <th className="cart-table__header">Product</th>
-                  <th className="cart-table__header">Color</th>
-                  <th className="cart-table__header">Size</th>
-                  <th className="cart-table__header">Quantity</th>
-                  <th className="cart-table__header">Price</th>
-                  <th className="cart-table__header">Actions</th>
+                  <th className="cart-table__header" style={{ width: '40%' }}>Product</th>
+                  <th className="cart-table__header" style={{ width: '15%' }}>Color</th>
+                  <th className="cart-table__header" style={{ width: '15%' }}>Size</th>
+                  <th className="cart-table__header" style={{ width: '15%' }}>Quantity</th>
+                  <th className="cart-table__header" style={{ width: '10%' }}>Price</th>
+                  <th className="cart-table__header" style={{ width: '5%' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>

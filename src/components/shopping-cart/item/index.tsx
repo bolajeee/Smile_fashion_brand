@@ -10,7 +10,7 @@ const CartItem = ({
   count,
   price,
 }: ProductStoreType & { thumb: string }) => {
-  const { removeProduct, setCount } = useCart();
+  const { removeProduct, setCount, updateVariant } = useCart();
 
   const removeFromCart = () => {
     removeProduct({
@@ -93,15 +93,78 @@ const CartItem = ({
       </td>
 
       <td className="cart-item__color" data-label="Color">
-        <span 
-          className="cart-item__color-swatch" 
-          style={{ backgroundColor: getColorHex(color) }}
-        ></span>
-        {color}
+        <div className="cart-item__select-wrapper">
+          <select
+            className={`cart-item__select ${color ? 'has-value' : ''}`}
+            value={color}
+            onChange={(e) => updateVariant({
+              id,
+              name,
+              price,
+              images: [thumb],
+              color,
+              size,
+              thumb,
+              discount: 0,
+              currentPrice: price,
+              count: count
+            }, { color: e.target.value })}
+            style={color ? {
+              backgroundColor: getColorHex(color),
+              color: ['White', 'Yellow'].includes(color) ? '#374151' : '#ffffff',
+              borderColor: getColorHex(color),
+              fontWeight: '600'
+            } : undefined}
+          >
+            <option value="">Select Color</option>
+            <option value="Black" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Black</option>
+            <option value="White" style={{ backgroundColor: '#ffffff', color: '#374151' }}>White</option>
+            <option value="Red" style={{ backgroundColor: '#DC2626', color: '#ffffff' }}>Red</option>
+            <option value="Blue" style={{ backgroundColor: '#2563EB', color: '#ffffff' }}>Blue</option>
+            <option value="Green" style={{ backgroundColor: '#059669', color: '#ffffff' }}>Green</option>
+            <option value="Yellow" style={{ backgroundColor: '#EAB308', color: '#374151' }}>Yellow</option>
+            <option value="Pink" style={{ backgroundColor: '#EC4899', color: '#ffffff' }}>Pink</option>
+            <option value="Purple" style={{ backgroundColor: '#9333EA', color: '#ffffff' }}>Purple</option>
+            <option value="Gray" style={{ backgroundColor: '#6B7280', color: '#ffffff' }}>Gray</option>
+            <option value="Brown" style={{ backgroundColor: '#92400E', color: '#ffffff' }}>Brown</option>
+            <option value="Navy" style={{ backgroundColor: '#1E3A8A', color: '#ffffff' }}>Navy</option>
+          </select>
+        </div>
       </td>
 
       <td className="cart-item__size" data-label="Size">
-        {size}
+        <div className="cart-item__select-wrapper">
+          <select
+            className={`cart-item__select ${size ? 'has-value' : ''}`}
+            value={size}
+            onChange={(e) => updateVariant({
+              id,
+              name,
+              price,
+              images: [thumb],
+              color,
+              size,
+              thumb,
+              discount: 0,
+              currentPrice: price,
+              count: count
+            }, { size: e.target.value })}
+            style={size ? {
+              backgroundColor: '#f3f4f6',
+              color: '#374151',
+              borderColor: '#9ca3af',
+              fontWeight: '600'
+            } : undefined}
+          >
+            <option value="">Select Size</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+          </select>
+        </div>
       </td>
 
       <td className="cart-item__quantity" data-label="Quantity">

@@ -13,6 +13,7 @@ type CartAction =
   | { type: 'ADD_PRODUCT'; payload: { product: ProductStoreType; count: number } }
   | { type: 'REMOVE_PRODUCT'; payload: { product: ProductStoreType } }
   | { type: 'SET_COUNT'; payload: { product: ProductStoreType; count: number } }
+  | { type: 'UPDATE_VARIANT'; payload: { product: ProductStoreType; color?: string; size?: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'LOAD_CART'; payload: ProductStoreType[] };
 
@@ -22,6 +23,7 @@ interface CartContextType {
   addProduct: (product: ProductStoreType, count: number) => void;
   removeProduct: (product: ProductStoreType) => void;
   setCount: (product: ProductStoreType, count: number) => void;
+  updateVariant: (product: ProductStoreType, updates: { color?: string; size?: string }) => void;
   clearCart: () => void;
   getProductCount: (product: ProductStoreType) => number;
 }
@@ -84,6 +86,22 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       const updatedItems = state.cartItems.map(item =>
         item.id === product.id && item.color === product.color && item.size === product.size
           ? { ...item, count }
+          : item
+      );
+
+      return {
+        ...state,
+        cartItems: updatedItems,
+        totalItems: updatedItems.reduce((sum, item) => sum + item.count, 0),
+        totalPrice: updatedItems.reduce((sum, item) => sum + (item.price * item.count), 0),
+      };
+    }
+
+    case 'UPDATE_VARIANT': {
+      const { product, color, size } = action.payload;
+      const updatedItems = state.cartItems.map(item =>
+        item.id === product.id && item.color === product.color && item.size === product.size
+          ? { ...item, color: color || item.color, size: size || item.size }
           : item
       );
 
@@ -169,6 +187,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     },
     setCount: (product: ProductStoreType, count: number) => {
       dispatch({ type: 'SET_COUNT', payload: { product, count } });
+    },
+    updateVariant: (product: ProductStoreType, updates: { color?: string; size?: string }) => {
+      dispatch({ type: 'UPDATE_VARIANT', payload: { product, ...updates } });
     },
     clearCart: () => {
       dispatch({ type: 'CLEAR_CART' });

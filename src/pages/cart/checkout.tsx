@@ -8,7 +8,7 @@ import CheckoutStatus from "@/components/checkout-status";
 import { useCart } from "@/contexts/CartContext";
 import type { ProductStoreType } from "@/types";
 
-import Layout from "../../layouts/Main";
+import Layout from "@/layouts/Main";
 
 const CheckoutPage = () => {
   const { data: session } = useSession();
@@ -16,20 +16,33 @@ const CheckoutPage = () => {
   const { state: { cartItems }, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
+    email: session?.user?.email || '',
     address: '',
     firstName: '',
     city: '',
     lastName: '',
     postalCode: '',
     phone: '',
-    country: 'Nigeria'
+    country: 'Nigeria',
+    state: '',
   });
+
+  // Supported countries
+  const countries = [
+    { code: 'NG', name: 'Nigeria' },
+    { code: 'US', name: 'United States' },
+    { code: 'GB', name: 'United Kingdom' },
+    { code: 'DE', name: 'Germany' },
+    { code: 'FR', name: 'France' },
+    { code: 'IT', name: 'Italy' },
+    { code: 'ES', name: 'Spain' },
+    { code: 'NL', name: 'Netherlands' }
+  ];
 
   const priceTotal = () => {
     let totalPrice = 0;
     if (cartItems.length > 0) {
-      cartItems.map((item: ProductStoreType) => (totalPrice += item.price * item.count));
+      totalPrice = cartItems.reduce((total, item) => total + item.price * item.count, 0);
     }
     return totalPrice;
   };
@@ -96,7 +109,7 @@ const CheckoutPage = () => {
       <section className="cart">
         <div className="container">
           <div className="cart__intro">
-            <h3 className="cart__title">Shipping and Payment</h3>
+            <h3 className="cart__title">Checkout</h3>
             <CheckoutStatus step="checkout" />
           </div>
 
@@ -109,32 +122,73 @@ const CheckoutPage = () => {
                 </div>
               ) : (
                 <div className="checkout__user-info">
-                  <p>Logged in as: {session.user.email}</p>
+                  <p>Welcome back, <strong>{session.user.email}</strong></p>
                 </div>
               )}
 
               <div className="block">
-                <h3 className="block__title">Shipping information</h3>
+                <h3 className="block__title">Shipping Information</h3>
                 <form className="form" onSubmit={handleSubmit}>
                   <div className="form__input-row form__input-row--two">
                     <div className="form__col">
                       <input
                         className="form__input form__input--sm"
+                        type="text"
+                        name="firstName"
+                        placeholder="First Name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form__col">
+                      <input
+                        className="form__input form__input--sm"
+                        type="text"
+                        name="lastName"
+                        placeholder="Last Name"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form__input-row">
+                    <div className="form__col">
+                      <input
+                        className="form__input form__input--sm"
                         type="email"
                         name="email"
-                        placeholder="Email"
+                        placeholder="Email Address"
                         value={formData.email}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
+                  </div>
 
+                  <div className="form__input-row">
+                    <div className="form__col">
+                      <input
+                        className="form__input form__input--sm"
+                        type="tel"
+                        name="phone"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form__input-row">
                     <div className="form__col">
                       <input
                         className="form__input form__input--sm"
                         type="text"
                         name="address"
-                        placeholder="Address"
+                        placeholder="Street Address"
                         value={formData.address}
                         onChange={handleInputChange}
                         required
@@ -147,18 +201,6 @@ const CheckoutPage = () => {
                       <input
                         className="form__input form__input--sm"
                         type="text"
-                        name="firstName"
-                        placeholder="First name"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__col">
-                      <input
-                        className="form__input form__input--sm"
-                        type="text"
                         name="city"
                         placeholder="City"
                         value={formData.city}
@@ -166,122 +208,91 @@ const CheckoutPage = () => {
                         required
                       />
                     </div>
-                  </div>
-
-                  <div className="form__input-row form__input-row--two">
                     <div className="form__col">
                       <input
                         className="form__input form__input--sm"
                         type="text"
-                        name="lastName"
-                        placeholder="Last name"
-                        value={formData.lastName}
+                        name="state"
+                        placeholder="State/Province"
+                        value={formData.state}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
+                  </div>
 
+                  <div className="form__input-row form__input-row--two">
+                    <div className="form__col">
+                      <select
+                        className="form__input form__input--sm"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="">Select Country</option>
+                        {countries.map((country) => (
+                          <option key={country.code} value={country.name}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <div className="form__col">
                       <input
                         className="form__input form__input--sm"
                         type="text"
                         name="postalCode"
-                        placeholder="Postal code / ZIP"
+                        placeholder="Postal Code"
                         value={formData.postalCode}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
                   </div>
-
-                  <div className="form__input-row form__input-row--two">
-                    <div className="form__col">
-                      <input
-                        className="form__input form__input--sm"
-                        type="text"
-                        name="phone"
-                        placeholder="Phone number"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__col">
-                      <div className="select-wrapper select-form">
-                        <select
-                          name="country"
-                          value={formData.country}
-                          onChange={handleInputChange}
-                        >
-                          <option value="Argentina">Argentina</option>
-                          <option value="United States">United States</option>
-                          <option value="Canada">Canada</option>
-                          <option value="United Kingdom">United Kingdom</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
                 </form>
-              </div>
-            </div>
-
-            <div className="checkout__col-4">
-              <div className="block">
-                <h3 className="block__title">Payment method</h3>
-                <ul className="round-options round-options--three">
-                  <li className="round-item">
-                    <img src="/images/logos/paypal.png" alt="Paypal" />
-                  </li>
-                  <li className="round-item">
-                    <img src="/images/logos/visa.png" alt="Visa" />
-                  </li>
-                  <li className="round-item">
-                    <img src="/images/logos/mastercard.png" alt="Mastercard" />
-                  </li>
-                  <li className="round-item">
-                    <img src="/images/logos/maestro.png" alt="Maestro" />
-                  </li>
-                  <li className="round-item">
-                    <img src="/images/logos/discover.png" alt="Discover" />
-                  </li>
-                  <li className="round-item">
-                    <img src="/images/logos/ideal-logo.svg" alt="Ideal" />
-                  </li>
-                </ul>
-              </div>
-
-              <div className="block">
-                <h3 className="block__title">Delivery method</h3>
-                <ul className="round-options round-options--two">
-                  <li className="round-item round-item--bg">
-                    <img src="/images/logos/inpost.svg" alt="InPost" />
-                    <p>$20.00</p>
-                  </li>
-                  <li className="round-item round-item--bg">
-                    <img src="/images/logos/dpd.svg" alt="DPD" />
-                    <p>$12.00</p>
-                  </li>
-                  <li className="round-item round-item--bg">
-                    <img src="/images/logos/dhl.svg" alt="DHL" />
-                    <p>$15.00</p>
-                  </li>
-                  <li className="round-item round-item--bg">
-                    <img src="/images/logos/maestro.png" alt="Maestro" />
-                    <p>$10.00</p>
-                  </li>
-                </ul>
               </div>
             </div>
 
             <div className="checkout__col-2">
               <div className="block">
-                <h3 className="block__title">Your cart</h3>
+                <h3 className="block__title">Order Summary</h3>
                 <CheckoutItems />
 
                 <div className="checkout-total">
-                  <p>Total cost</p>
+                  <p>Total Amount</p>
                   <h3>${priceTotal().toFixed(2)}</h3>
+                </div>
+
+                <div className="payment-notes">
+                  <p>
+                    <i className="icon-shield"></i>
+                    Your transaction will be securely processed by Paystack
+                  </p>
+                  <p>
+                    <i className="icon-info"></i>
+                    International orders may be subject to customs duties and taxes
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="checkout__col-4">
+              <div className="block">
+                <h3 className="block__title">Payment Method</h3>
+                <div className="payment-info">
+                  <p>Payment will be processed securely via Paystack</p>
+                  <ul className="round-options round-options--three">
+                    <li className="round-item">
+                      <img src="/images/logos/visa.png" alt="Visa" />
+                    </li>
+                    <li className="round-item">
+                      <img src="/images/logos/mastercard.png" alt="Mastercard" />
+                    </li>
+                    <li className="round-item">
+                      <img src="/images/logos/verve.png" alt="Verve" />
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -289,11 +300,11 @@ const CheckoutPage = () => {
 
           <div className="cart-actions cart-actions--checkout">
             <Link href="/cart" className="cart__btn-back">
-              <i className="icon-left" /> Back
+              <i className="icon-left"></i> Back to Cart
             </Link>
             <div className="cart-actions__items-wrapper">
               <Link href="/product" className="btn btn--rounded btn--border">
-                Continue shopping
+                Continue Shopping
               </Link>
               <button
                 type="submit"
@@ -301,7 +312,17 @@ const CheckoutPage = () => {
                 disabled={isProcessing}
                 onClick={handleSubmit}
               >
-                {isProcessing ? 'Processing...' : 'Proceed to payment'}
+                {isProcessing ? (
+                  <>
+                    <i className="icon-spinner animate-spin"></i>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Proceed to Payment
+                    <i className="icon-arrow-right"></i>
+                  </>
+                )}
               </button>
             </div>
           </div>
