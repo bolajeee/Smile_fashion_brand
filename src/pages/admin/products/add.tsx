@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Layout from '@/layouts/Main';
+import MainLayout from '@/layouts/Main';
 import { withAdminProtection } from '@/components/auth/withAdminProtection';
 
 const schema = z.object({
@@ -14,7 +14,6 @@ const schema = z.object({
     .regex(/^\d+(\.\d{0,2})?$/, 'Price must be a valid number with up to 2 decimal places')
     .transform((val) => parseFloat(val))
     .refine((val) => val > 0, 'Price must be positive'),
-  images: z.string().optional(),
   countInStock: z.coerce.number().int().nonnegative('Stock must be 0 or more'),
 });
 
@@ -26,7 +25,54 @@ const AddProductPage = () => {
     resolver: zodResolver(schema),
   });
   const [uploading, setUploading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+
+  const handleFileUpload = async (files: File[]) => {
+    if (files.length === 0) return;
+    
+    setUploading(true);
+    const uploadPromises = files.map(async (file) => {
+      try {
+        const reader = new FileReader();
+        const fileDataUrl = await new Promise<string>((resolve) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.readAsDataURL(file);
+        });
+        
+        const res = await fetch('/api/upload/cloudinary', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ file: fileDataUrl }),
+        });
+        
+        if (!res.ok) {
+          throw new Error('Upload failed');
+        }
+        
+        const data = await res.json();
+        return data.url;
+      } catch (err) {
+        console.error('Upload error:', err);
+        return null;
+      }
+    });
+
+    try {
+      const urls = (await Promise.all(uploadPromises)).filter(Boolean) as string[];
+      setUploadedUrls(prev => [...prev, ...urls]);
+      // Set first uploaded image as thumbnail if none exists
+      if (!thumbnailUrl && urls.length > 0) {
+        setThumbnailUrl(urls[0]);
+      }
+    } catch (err) {
+      alert('Some uploads failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const onSubmit = async (values: FormValues) => {
     const res = await fetch('/api/products', {
@@ -38,7 +84,8 @@ const AddProductPage = () => {
         name: values.name,
         description: values.description,
         price: values.price,
-        images: [uploadedUrl || values.images].filter(Boolean),
+        images: uploadedUrls,
+        thumbnail: thumbnailUrl || uploadedUrls[0] || null,
         stock: values.countInStock,
       }),
     });
@@ -48,7 +95,7 @@ const AddProductPage = () => {
   };
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="container">
         <div className="admin-form">
           <h1 className="admin-form__title">Add New Product</h1>
@@ -69,39 +116,49 @@ const AddProductPage = () => {
               {errors.price && <small className="error-message">{errors.price.message}</small>}
             </div>
             <div className="form-group">
-              <label>Thumbnail Image</label>
-              <input type="text" placeholder="https://..." {...register('images')} />
-              {errors.images && <small className="error-message">{errors.images.message}</small>}
+              <label>Product Images</label>
               <div className="image-upload">
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    setUploading(true);
-                    try {
-                      const res = await fetch('/api/upload', { method: 'POST', body: formData });
-                      const data = await res.json();
-                      if (res.ok) {
-                        setUploadedUrl(data.url);
-                      } else {
-                        alert(data.message || 'Upload failed');
-                      }
-                    } catch (err) {
-                      alert('Upload error');
-                    } finally {
-                      setUploading(false);
-                    }
-                  }}
+                  multiple
+                  onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
                 />
-                {uploading && <small>Uploading...</small>}
-                {uploadedUrl && (
-                  <div className="image-preview">
-                    <img src={uploadedUrl} alt="uploaded" />
-                    <small>{uploadedUrl}</small>
+                {uploading && <div className="upload-status">Uploading images...</div>}
+                
+                {uploadedUrls.length > 0 && (
+                  <div className="images-preview">
+                    {uploadedUrls.map((url, index) => (
+                      <div key={url} className="image-preview-item">
+                        <img src={url} alt={`Product ${index + 1}`} />
+                        <div className="image-preview-actions">
+                          <button
+                            type="button"
+                            className={`btn btn--small ${url === thumbnailUrl ? 'btn--primary' : 'btn--outline'}`}
+                            onClick={() => setThumbnailUrl(url)}
+                          >
+                            {url === thumbnailUrl ? 'Thumbnail' : 'Set as Thumbnail'}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn--small btn--danger"
+                            onClick={() => {
+                              setUploadedUrls(prev => prev.filter(u => u !== url));
+                              if (thumbnailUrl === url) {
+                                setThumbnailUrl(uploadedUrls.find(u => u !== url) || null);
+                              }
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {uploadedUrls.length === 0 && (
+                  <div className="no-images">
+                    <p>No images uploaded yet</p>
                   </div>
                 )}
               </div>
@@ -122,7 +179,7 @@ const AddProductPage = () => {
           </form>
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 };
 

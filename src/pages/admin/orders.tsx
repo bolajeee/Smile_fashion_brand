@@ -190,7 +190,7 @@ function AdminOrdersPage() {
                                             </div>
                                         </td>
                                         <td className="text-primary">
-                                            ${(typeof order.total === 'number' ? order.total : parseFloat(order.total.toString())).toFixed(2)}
+                                            ${(typeof order.total === 'number' ? order.total : parseFloat(String(order.total))).toFixed(2)}
                                         </td>
                                         <td>
                                             <span className={`status-badge status-badge--${order.status.toLowerCase()}`}>

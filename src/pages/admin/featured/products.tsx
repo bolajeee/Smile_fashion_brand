@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Layout from '@/layouts/Main';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { withAdminProtection } from '@/components/auth/withAdminProtection';
 
 interface Product {
@@ -76,15 +75,23 @@ const FeaturedProductsPage = () => {
     }
   };
 
-  const handleDragEnd = async (result: any) => {
-    if (!result.destination) return;
+  // Handle moving featured products up and down
+  const moveProduct = async (productId: string, direction: 'up' | 'down') => {
+    const currentIndex = featuredProducts.findIndex(p => p.id === productId);
+    if (
+      (direction === 'up' && currentIndex === 0) || 
+      (direction === 'down' && currentIndex === featuredProducts.length - 1)
+    ) {
+      return;
+    }
 
-    const items = Array.from(featuredProducts);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    const newProducts = [...featuredProducts];
+    const [movedProduct] = newProducts.splice(currentIndex, 1);
+    newProducts.splice(newIndex, 0, movedProduct);
 
     // Update optimistically
-    setFeaturedProducts(items);
+    setFeaturedProducts(newProducts);
     const previousProducts = [...featuredProducts];
 
     try {
@@ -95,7 +102,7 @@ const FeaturedProductsPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          orderedIds: items.map((item, index) => ({
+          orderedIds: newProducts.map((item, index) => ({
             id: item.id,
             order: index,
           })),
@@ -108,7 +115,6 @@ const FeaturedProductsPage = () => {
       }
     } catch (error) {
       console.error('Error saving featured products order:', error);
-      // Revert to the previous order on error
       setFeaturedProducts(previousProducts);
       alert(error instanceof Error ? error.message : 'Error saving the new order');
     } finally {
@@ -120,7 +126,10 @@ const FeaturedProductsPage = () => {
     return (
       <Layout>
         <div className="container">
-          <div>Loading...</div>
+          <div className="loading-spinner">
+            <i className="icon-spin animate-spin" />
+            <span>Loading featured products...</span>
+          </div>
         </div>
       </Layout>
     );
@@ -136,55 +145,51 @@ const FeaturedProductsPage = () => {
 
           <div className="featured-products-section">
             <h2>Featured Products</h2>
-            <p>Drag and drop to reorder featured products</p>
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="featured-products">
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="featured-products-list"
-                  >
-                    {featuredProducts.map((product, index) => (
-                      <Draggable
-                        key={product.id}
-                        draggableId={product.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="featured-product-item"
-                          >
-                            <div className="product-info">
-                              {product.images[0] && (
-                                <img
-                                  src={product.images[0]}
-                                  alt={product.name}
-                                  width={50}
-                                  height={50}
-                                />
-                              )}
-                              <span>{product.name}</span>
-                            </div>
-                            <button
-                              onClick={() => toggleFeatured(product.id, false)}
-                              className="btn btn--danger"
-                              disabled={isUpdating}
-                            >
-                              {isUpdating ? 'Updating...' : 'Remove from Featured'}
-                            </button>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
+            <p>Manage your featured products and their order</p>
+            <div className="featured-products-list">
+              {featuredProducts.map((product, index) => (
+                <div key={product.id} className="featured-product-item">
+                  <div className="product-info">
+                    {product.images[0] && (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        width={50}
+                        height={50}
+                      />
+                    )}
+                    <span>{product.name}</span>
                   </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                  <div className="product-actions">
+                    <div className="order-buttons">
+                      <button
+                        onClick={() => moveProduct(product.id, 'up')}
+                        className="btn btn--icon"
+                        disabled={isUpdating || index === 0}
+                        title="Move Up"
+                      >
+                        <i className="icon-chevron-up" />
+                      </button>
+                      <button
+                        onClick={() => moveProduct(product.id, 'down')}
+                        className="btn btn--icon"
+                        disabled={isUpdating || index === featuredProducts.length - 1}
+                        title="Move Down"
+                      >
+                        <i className="icon-chevron-down" />
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => toggleFeatured(product.id, false)}
+                      className="btn btn--danger"
+                      disabled={isUpdating}
+                    >
+                      {isUpdating ? 'Updating...' : 'Remove from Featured'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="all-products-section">

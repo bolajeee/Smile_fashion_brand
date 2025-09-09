@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Logo } from '@/components/logo/Logo';
 
 const Footer = () => {
   return (
@@ -8,7 +9,7 @@ const Footer = () => {
         <div className="site-footer__top">
           <div className="site-footer__brand">
             <div className="site-footer__logo">
-              <Image src="/images/logos/smile_logo.jpg" alt="Smile" width={60} height={60} priority />
+              <Logo width={70} height={24} />
               <h3 className="site-footer__brand-name">
                 <span className="highlight">Smile</span> Fashion
               </h3>
@@ -42,11 +43,11 @@ const Footer = () => {
                 </p>
               </div>
               <div className="contact-info">
-                <a href="mailto:hello@smilefashion.com" className="contact-link">
-                  hello@smilefashion.com
+                <a href="mailto:Ibrahimomoblaji1999@gmail.com" className="contact-link">
+                  Ibrahimomoblaji1999@gmail.com
                 </a>
-                <a href="tel:+1234567890" className="contact-link">
-                  +1 (234) 567-890
+                <a href="tel:+2348149189399" className="contact-link">
+                  +234 814 918 9399
                 </a>
               </div>
             </div>

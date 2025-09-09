@@ -1,0 +1,105 @@
+// Image upload styles
+.image-upload {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: var(--color-surface-secondary);
+  border-radius: $radius-lg;
+  border: 2px dashed var(--color-border);
+
+  input[type="file"] {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-surface);
+    border-radius: $radius-base;
+    cursor: pointer;
+    
+    &::-webkit-file-upload-button {
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: $radius-base;
+      cursor: pointer;
+      transition: $transition-all;
+
+      &:hover {
+        background: var(--color-primary-dark);
+      }
+    }
+  }
+
+  .upload-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: $color-text-tertiary;
+    font-size: $text-sm;
+  }
+
+  .upload-status {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border-radius: $radius-base;
+    color: $color-text-secondary;
+    text-align: center;
+  }
+
+  .images-preview {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .image-preview-item {
+    background: var(--color-surface);
+    border-radius: $radius-base;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .image-preview-actions {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .btn {
+        width: 100%;
+        
+        &--outline {
+          background: transparent;
+          border: 1px solid var(--color-border);
+          color: $color-text-primary;
+
+          &:hover {
+            background: var(--color-surface-secondary);
+          }
+        }
+      }
+    }
+  }
+
+  .no-images {
+    text-align: center;
+    padding: 2rem;
+    color: $color-text-tertiary;
+
+    p {
+      margin: 0;
+      font-size: $text-base;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: $text-sm;
+    }
+  }
+}

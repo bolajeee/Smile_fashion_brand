@@ -35,7 +35,7 @@ export default withAuth(
     });
 
     // Admin routes check
-    if (path.startsWith('/admin') || path.startsWith('/api/products/featured')) {
+    if (path.startsWith('/admin')) {
       // Make sure we have a token and it has the ADMIN role
       if (!token || token.role !== 'ADMIN') {
         console.log('Access denied: Not an admin');
@@ -67,7 +67,6 @@ export const config = {
     '/products',  // Add this to handle the redirect
     '/admin/:path*', 
     '/account/:path*', 
-    '/checkout', 
-    '/api/products/featured/:path*'
+    '/checkout'
   ],
 };

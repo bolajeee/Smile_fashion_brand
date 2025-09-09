@@ -27,9 +27,9 @@
     }
 
     .btn {
-      font-size: var(--text-sm);
-      font-weight: 500;
-      padding: var(--space-xs) var(--space-md);
+      font-size: var(--text-base);
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-lg);
       border-radius: var(--border-radius-full);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       
@@ -37,15 +37,27 @@
         background: var(--color-primary);
         color: var(--color-white);
         box-shadow: var(--shadow-sm);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+
+        i {
+          transition: transform 0.3s ease;
+        }
 
         &:hover {
           background: var(--color-primary-dark);
           transform: translateY(-2px);
           box-shadow: var(--shadow-md);
+
+          i {
+            transform: translateX(4px);
+          }
         }
 
         &:active {
           transform: translateY(0);
+          box-shadow: var(--shadow-sm);
         }
       }
     }

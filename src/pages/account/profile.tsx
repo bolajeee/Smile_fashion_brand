@@ -296,27 +296,43 @@ const ProfilePage = () => {
                         </div>
                       </div>
                       
-                      {order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELLED && (
+                      {order.status !== OrderStatus.DELIVERED && order.status !== OrderStatus.CANCELLED && (
                         <div className="order-progress">
                           <div className={`order-progress__bar order-progress__bar--${order.status.toLowerCase()}`} />
                           <div className="order-progress__steps">
-                            <div className={`order-progress__step ${order.status !== OrderStatus.PENDING ? 'is-complete' : ''}`}>
+                            <div className={`order-progress__step ${
+                              order.status === OrderStatus.PENDING ? 'is-active' : 'is-complete'
+                            }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-check" />
                               </div>
                               <span>Order Placed</span>
                             </div>
-                            <div className={`order-progress__step ${order.status === OrderStatus.PROCESSING ? 'is-active' : order.status === OrderStatus.COMPLETED ? 'is-complete' : ''}`}>
+                            <div className={`order-progress__step ${
+                              order.status === OrderStatus.PROCESSING ? 'is-active' : 
+                              (order.status === OrderStatus.SHIPPED || order.status === OrderStatus.DELIVERED) ? 'is-complete' : ''
+                            }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-box" />
                               </div>
                               <span>Processing</span>
                             </div>
-                            <div className={`order-progress__step ${order.status === OrderStatus.COMPLETED ? 'is-complete' : ''}`}>
+                            <div className={`order-progress__step ${
+                              order.status === OrderStatus.SHIPPED ? 'is-active' :
+                              order.status === OrderStatus.DELIVERED ? 'is-complete' : ''
+                            }`}>
+                              <div className="order-progress__step-icon">
+                                <i className="icon-truck" />
+                              </div>
+                              <span>Shipped</span>
+                            </div>
+                            <div className={`order-progress__step ${
+                              order.status === OrderStatus.DELIVERED ? 'is-active' : ''
+                            }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-check-circle" />
                               </div>
-                              <span>Completed</span>
+                              <span>Delivered</span>
                             </div>
                           </div>
                         </div>
@@ -378,7 +394,7 @@ const ProfilePage = () => {
                           <strong>${order.total.toFixed(2)}</strong>
                         </div>
                         <div className="order-item__footer-actions">
-                          {order.status === OrderStatus.COMPLETED && (
+                          {order.status === OrderStatus.DELIVERED && (
                             <button 
                               className="btn btn--text btn--sm"
                               onClick={() => handleReorder(order)}

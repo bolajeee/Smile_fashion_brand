@@ -58,8 +58,8 @@
       }
     }
 
-    /* Completed step */
-    &.completed {
+    /* Delivered step */
+    &.delivered {
       .checkout-status__item-number {
         background: $color-success;
         color: $color-text-inverse;

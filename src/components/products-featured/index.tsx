@@ -12,8 +12,8 @@ const ProductsFeatured = () => {
       <div className="container">
         <header className="section-products-featured__header">
           <h3>Selected just for you</h3>
-          <Link href="/product" className="btn btn--primary btn--rounded-lg">
-            Show All
+          <Link href="/product" className="btn btn--primary btn--rounded btn--show-all">
+            Show All Products <i className="icon-arrow-long-right" />
           </Link>
         </header>
 

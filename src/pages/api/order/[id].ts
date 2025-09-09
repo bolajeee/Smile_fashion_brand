@@ -24,9 +24,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       case 'PUT': {
         const { status, total, shippingAddress } = req.body || {};
+        
+        // Validate the status is a valid OrderStatus
+        const validStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
+        if (status && !validStatuses.includes(status)) {
+          return res.status(400).json({ message: 'Invalid order status' });
+        }
+
+        const updateData: any = {};
+        if (status) updateData.status = status;
+        if (total) updateData.total = total;
+        if (shippingAddress) updateData.shippingAddress = shippingAddress;
+
         const updated = await prisma.order.update({
           where: { id },
-          data: { status, total, shippingAddress },
+          data: updateData,
           include: { items: true, user: true },
         });
         return res.status(200).json(updated);

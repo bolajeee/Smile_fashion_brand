@@ -10,10 +10,35 @@ interface ProductsContentProps {
   products: Product[];
 }
 
-
-const ProductsContent: React.FC<ProductsContentProps> = ({ products }) => {
-  const [orderProductsOpen, setOrderProductsOpen] = useState(false);
+const ProductsContent: React.FC<ProductsContentProps> = ({ products: initialProducts }) => {
+  // const [orderProductsOpen, setOrderProductsOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('popular');
   const router = useRouter();
+
+  const products = useMemo(() => {
+    let sortedProducts = [...initialProducts];
+    
+    switch (sortBy) {
+      case 'newest':
+        sortedProducts.sort((a, b) => 
+          new Date(b.createdAt || new Date()).getTime() - new Date(a.createdAt || new Date()).getTime()
+        );
+        break;
+      case 'price-low':
+        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+        break;
+      case 'price-high':
+        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+        break;
+      case 'popular':
+      default:
+        // For popular, we could use a view count or sales count if available
+        // For now, we'll keep the default order
+        break;
+    }
+    
+    return sortedProducts;
+  }, [initialProducts, sortBy]);
 
   const appliedFilters = useMemo(() => {
     const { type, size, color, price } = router.query as Record<string, string>;
@@ -63,7 +88,12 @@ const ProductsContent: React.FC<ProductsContentProps> = ({ products }) => {
           <div className="products-content__header-right">
             <div className="products-content__sort">
               <label htmlFor="sort">Sort by:</label>
-              <select id="sort">
+              <select 
+                id="sort" 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="products-content__sort-select"
+              >
                 <option value="popular">Popular</option>
                 <option value="newest">Newest</option>
                 <option value="price-low">Price: Low to High</option>

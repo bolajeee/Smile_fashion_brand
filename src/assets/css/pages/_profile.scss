@@ -259,7 +259,7 @@
       color: var(--color-info);
     }
 
-    &--completed {
+    &--delivered {
       background: var(--color-success-light);
       color: var(--color-success);
     }
@@ -303,7 +303,7 @@
         background: var(--color-info);
       }
 
-      &--completed::before {
+      &--delivered::before {
         width: 100%;
         background: var(--color-success);
       }

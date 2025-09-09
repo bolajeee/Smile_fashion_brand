@@ -13,7 +13,7 @@ export const Logo = ({ width = 120, height = 40, className = '' }: LogoProps) =>
   return (
     <div className={`logo ${className}`}>
       <Image
-        src={theme === 'dark' ? '/images/logos/smile-logo-dark.jpg' : '/images/logos/smile-logo-light.jpg'}
+        src={theme === 'dark' ? '/images/logos/smile_logo_dark.jpg' : '/images/logos/smile_logo_light.jpg'}
         alt="Smile"
         width={width}
         height={height}

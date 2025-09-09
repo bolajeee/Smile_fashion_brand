@@ -1,0 +1,32 @@
+.app-main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+main {
+  flex: 1;
+  padding-top: var(--header-height); // Add space for fixed header
+}
+
+.main-page {
+  padding-bottom: var(--space-2xl);
+}
+
+// Add a smooth transition between sections
+section:not(:last-child) {
+  margin-bottom: var(--space-2xl);
+}
+
+// Container utilities
+.container {
+  width: 100%;
+  max-width: var(--container-width-xl);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+
+  @media (max-width: 768px) {
+    padding: 0 var(--space-sm);
+  }
+}
