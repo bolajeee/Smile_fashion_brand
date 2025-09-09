@@ -13,6 +13,8 @@ import { SessionProvider } from "next-auth/react";
 import { AppContextProvider } from '@/contexts/AppContext';
 import { Provider } from "react-redux";
 import { makeStore } from "@/store";
+import ErrorBoundary from '@/components/error-boundary';
+import * as Sentry from '@sentry/nextjs';
 
 import * as gtag from "../utils/gtag";
 
@@ -32,20 +34,22 @@ const poppins = Poppins({
 });
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-  <SessionProvider session={session}>
-    <AppContextProvider>
-      <Provider store={store}>
-      <Fragment>
-        <style jsx global>{`
-          :root {
-            --main-font: ${poppins.style.fontFamily};
-          }
-        `}</style>
-        <Component {...pageProps} />
-      </Fragment>
-      </Provider>
-    </AppContextProvider>
-  </SessionProvider>
+  <ErrorBoundary>
+    <SessionProvider session={session}>
+      <AppContextProvider>
+        <Provider store={store}>
+          <Fragment>
+            <style jsx global>{`
+              :root {
+                --main-font: ${poppins.style.fontFamily};
+              }
+            `}</style>
+            <Component {...pageProps} />
+          </Fragment>
+        </Provider>
+      </AppContextProvider>
+    </SessionProvider>
+  </ErrorBoundary>
 );
 
 export default MyApp;

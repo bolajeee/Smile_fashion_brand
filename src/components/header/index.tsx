@@ -52,7 +52,7 @@ const Header = () => {
       <div className="container">
         <div className="site-header__wrapper">
           <Link href="/" className="site-header__logo">
-            <Logo width={80} height={26} />
+            <Logo width={40} height={40} />
           </Link>
           <nav
             className={`site-header__nav ${

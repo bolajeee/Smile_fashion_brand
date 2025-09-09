@@ -2,6 +2,8 @@ import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import * as Sentry from '@sentry/nextjs';
+import api from '@/utils/api-client';
 import Layout from '../../layouts/Main';
 import type { Order } from '@/types/order';
 import { OrderStatus } from '@/types/order';
@@ -9,7 +11,9 @@ import type { User } from '@/types/auth';
 import ProfileSkeleton from '@/components/auth/ProfileSkeleton';
 import OrderSkeleton from '@/components/auth/OrderSkeleton';
 
-const ProfilePage = () => {
+import ErrorBoundary from '@/components/error-boundary';
+
+const ProfileContent = () => {
   const { data: session, status, update: updateSession } = useSession();
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -29,15 +33,16 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       if (session?.user?.id) {
         try {
-          const response = await fetch('/api/account/profile');
-          if (!response.ok) {
-            throw new Error('Failed to fetch profile');
-          }
-          const data = await response.json();
+          const { data } = await api.get('/api/account/profile');
           setProfile(data);
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-          setUploadError('Failed to load profile. Please try again.');
+        } catch (error: any) {
+          Sentry.captureException(error, {
+            extra: {
+              component: 'ProfilePage',
+              action: 'fetchProfile',
+            },
+          });
+          setUploadError(error.message || 'Failed to load profile. Please try again.');
         }
       }
     };
@@ -45,15 +50,19 @@ const ProfilePage = () => {
     const fetchOrders = async () => {
       if (session?.user?.id) {
         try {
-          const response = await fetch(`/api/account/orders?userId=${session.user.id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch orders');
-          }
-          const data = await response.json();
+          const { data } = await api.get(`/api/account/orders`, {
+            params: { userId: session.user.id }
+          });
           setOrders(data);
-        } catch (error) {
-          console.error('Error fetching orders:', error);
-          setUploadError(error instanceof Error ? error.message : 'Failed to load orders');
+        } catch (error: any) {
+          Sentry.captureException(error, {
+            extra: {
+              component: 'ProfilePage',
+              action: 'fetchOrders',
+              userId: session.user.id,
+            },
+          });
+          setUploadError(error.message || 'Failed to load orders');
         }
       }
       setIsLoading(false);
@@ -111,31 +120,18 @@ const ProfilePage = () => {
     formData.append('file', file);
 
     try {
-      const uploadRes = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      // Upload image
+      const { data: { url } } = await api.post('/api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-
-      if (!uploadRes.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const { url } = await uploadRes.json();
 
       // Update user profile with new image URL
-      const updateRes = await fetch('/api/account/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image: url }),
+      const { data: updatedProfile } = await api.put('/api/account/profile', {
+        image: url,
       });
 
-      if (!updateRes.ok) {
-        throw new Error('Failed to update profile');
-      }
-
-      const updatedProfile = await updateRes.json();
       setProfile(updatedProfile);
       
       // Update session to reflect the new image
@@ -167,18 +163,16 @@ const ProfilePage = () => {
 
   const handleDownloadInvoice = async (order: Order) => {
     try {
-      const response = await fetch(`/api/invoices/${order.id}`);
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Failed to download invoice');
-      }
+      const response = await api.get(`/api/invoices/${order.id}`, {
+        responseType: 'blob'
+      });
 
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers['content-type'];
       if (!contentType || !contentType.includes('application/pdf')) {
         throw new Error('Invalid invoice format');
       }
 
-      const blob = await response.blob();
+      const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -187,9 +181,15 @@ const ProfilePage = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-    } catch (error) {
-      console.error('Error downloading invoice:', error);
-      setUploadError(error instanceof Error ? error.message : 'Failed to download invoice');
+    } catch (error: any) {
+      Sentry.captureException(error, {
+        extra: {
+          component: 'ProfilePage',
+          action: 'downloadInvoice',
+          orderId: order.id,
+        },
+      });
+      setUploadError(error.message || 'Failed to download invoice');
     }
   };
 
@@ -419,6 +419,14 @@ const ProfilePage = () => {
         </div>
       </section>
     </Layout>
+  );
+};
+
+const ProfilePage = () => {
+  return (
+    <ErrorBoundary>
+      <ProfileContent />
+    </ErrorBoundary>
   );
 };
 

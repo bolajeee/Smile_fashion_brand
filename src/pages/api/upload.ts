@@ -19,7 +19,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         fs.mkdirSync(uploadDir, { recursive: true });
     }
 
-    const form = formidable({ multiples: false, maxFileSize: 5 * 1024 * 1024 });
+    const form = formidable({ 
+    multiples: true, 
+    maxFileSize: 5 * 1024 * 1024, // 5MB
+    maxFiles: 5,
+    filter: (part) => {
+        // Only allow image files
+        return part.mimetype?.startsWith('image/') || false;
+    }
+});
 
     form.parse(req, async (err: unknown, _fields: Fields, files: Files) => {
         if (err) {
@@ -30,22 +38,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         try {
 
-            const file = files.file;
-            const fileArray = Array.isArray(file) ? file : [file];
-            const first = fileArray[0] as formidable.File | undefined;
-            if (!first || !first.filepath || !first.originalFilename) {
-                return res.status(400).json({ message: 'No file provided' });
+            const photos = files.photos;
+            if (!photos) {
+                return res.status(400).json({ message: 'No files provided' });
             }
 
-            const ext = path.extname(first.originalFilename);
-            const base = path.basename(first.originalFilename, ext).replace(/[^a-z0-9-_]/gi, '_');
-            const filename = `${base}_${Date.now()}${ext || '.png'}`;
-            const destPath = path.join(uploadDir, filename);
+            const photoArray = Array.isArray(photos) ? photos : [photos];
+            const uploadedUrls = await Promise.all(photoArray.map(async (photo) => {
+                if (!photo.filepath || !photo.originalFilename) {
+                    throw new Error('Invalid file data');
+                }
 
-            await fs.promises.copyFile(first.filepath, destPath);
+                const ext = path.extname(photo.originalFilename);
+                const base = path.basename(photo.originalFilename, ext).replace(/[^a-z0-9-_]/gi, '_');
+                const filename = `${base}_${Date.now()}${ext || '.png'}`;
+                const destPath = path.join(uploadDir, filename);
 
-            const publicUrl = `/uploads/${filename}`;
-            res.status(200).json({ url: publicUrl });
+                await fs.promises.copyFile(photo.filepath, destPath);
+                return `/uploads/${filename}`;
+            }));
+
+            res.status(200).json({ urls: uploadedUrls });
         } catch (e) {
             // eslint-disable-next-line no-console
             console.error('Upload processing error:', e);

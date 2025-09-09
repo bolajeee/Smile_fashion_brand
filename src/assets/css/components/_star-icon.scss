@@ -1,0 +1,45 @@
+// Star Icon Styles
+.star-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--star-color-empty);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &[fill="currentColor"] {
+    color: var(--star-color);
+  }
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.empty-star {
+  width: 48px;
+  height: 48px;
+  color: var(--star-color-empty);
+  margin-bottom: 1rem;
+}
+
+// Review Form Star Buttons
+.review-form {
+  .stars {
+    button {
+      padding: 0.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      .star-icon {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+}

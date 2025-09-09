@@ -15,7 +15,25 @@
     padding: var(--space-xs) 0;
 
     .site-header__logo {
-      transform: scale(0.9);
+      transform: scale(0.95);
+
+      svg {
+        width: 36px;
+      }
+
+      &::after {
+        font-size: var(--text-lg);
+      }
+
+      @media (max-width: 768px) {
+        svg {
+          width: 28px;
+        }
+
+        &::after {
+          font-size: var(--text-base);
+        }
+      }
     }
   }
 
@@ -34,14 +52,45 @@
   }
 
   &__logo {
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    
+    svg {
+      width: 40px;
+      height: auto;
+    }
+
+    &::after {
+      content: 'SMILE';
+      font-size: var(--text-xl);
+      font-weight: var(--font-bold);
+      color: var(--color-text-primary);
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
     
     &:hover {
       transform: translateY(-1px);
+
+      &::after {
+        color: var(--color-primary);
+      }
     }
 
     &:active {
       transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      svg {
+        width: 32px;
+      }
+
+      &::after {
+        font-size: var(--text-lg);
+      }
     }
   }
 

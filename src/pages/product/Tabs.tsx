@@ -12,8 +12,12 @@ interface Product {
     review: string;
     user: {
       name: string;
+      image?: string;
     };
     createdAt: string;
+    photos?: string[];
+    helpful?: number;
+    verified?: boolean;
   }>;
 }
 
