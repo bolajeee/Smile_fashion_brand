@@ -1,6 +1,6 @@
 import Footer from "@/components/footer";
 import PageIntro from "@/components/page-intro";
-import ProductsFeatured from "@/components/products-featured";
+import ProductsFeatured from "@/components/product/featured";
 import Subscribe from "@/components/subscribe";
 import { motion } from "framer-motion";
 import Layout from "../layouts/Main";

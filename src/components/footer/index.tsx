@@ -99,9 +99,9 @@ const Footer = () => {
 
             <div className="footer-bottom__right">
               <ul className="footer-legal">
-                <li><Link href="/privacy">Privacy Policy</Link></li>
-                <li><Link href="/terms">Terms of Service</Link></li>
-                <li><Link href="/cookies">Cookie Policy</Link></li>
+                <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link href="/terms-of-service">Terms of Service</Link></li>
+                <li><Link href="/cookie-policy">Cookie Policy</Link></li>
                 <li><Link href="/accessibility">Accessibility</Link></li>
               </ul>
             </div>

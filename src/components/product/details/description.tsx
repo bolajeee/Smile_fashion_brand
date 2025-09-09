@@ -1,24 +1,25 @@
+import type { FC } from 'react';
+
 interface DescriptionProps {
   show: boolean;
   description?: string;
 }
 
-const Description: React.FC<DescriptionProps> = ({ show, description }) => {
+const Description: FC<DescriptionProps> = ({ show, description }) => {
   if (!show) return null;
 
   return (
-    <div className="product-description">
-      <div className="product-description__content">
+    <div className="product-single__description">
+      <div className="product-details__description-content">
         {description ? (
           <div className="rich-text">
-            <h3>Product Description</h3>
             <p>{description}</p>
           </div>
         ) : (
           <p className="text-muted">No description available for this product.</p>
         )}
         
-        <div className="product-description__features">
+        <div className="product-details__features">
           <h3>Product Features</h3>
           <ul className="feature-list">
             <li>
@@ -31,7 +32,7 @@ const Description: React.FC<DescriptionProps> = ({ show, description }) => {
             </li>
             <li>
               <i className="icon-check" />
-              <span>Modern aesthetic with attention to detail</span>
+              <span>Easy care and maintenance</span>
             </li>
             <li>
               <i className="icon-check" />
@@ -40,7 +41,7 @@ const Description: React.FC<DescriptionProps> = ({ show, description }) => {
           </ul>
         </div>
 
-        <div className="product-description__care">
+        <div className="product-details__care">
           <h3>Care Instructions</h3>
           <div className="care-grid">
             <div className="care-item">

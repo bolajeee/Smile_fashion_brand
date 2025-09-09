@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/breadcrumb";
 import Footer from "@/components/footer";
-import ProductsContent from "@/components/products-content";
+import ProductsContent from "@/components/product/list"
 import ProductsFilter from "@/components/products-filter";
 import Layout from "@/layouts/Main";
 import type {

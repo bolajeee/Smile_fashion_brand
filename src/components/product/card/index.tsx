@@ -46,7 +46,10 @@ const ProductCard = ({
 
     // Add a small delay for better UX
     setTimeout(() => {
-      const productPrice = typeof currentPrice === 'number' ? currentPrice : parseFloat(String(currentPrice || 0));
+      // Ensure we get the correct price, prioritizing currentPrice (discounted) over regular price
+      const productPrice = currentPrice 
+        ? (typeof currentPrice === 'number' ? currentPrice : parseFloat(String(currentPrice)))
+        : (typeof price === 'number' ? price : parseFloat(String(price || 0)));
 
       addProduct({
         id,

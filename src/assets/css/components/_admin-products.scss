@@ -136,6 +136,22 @@
               background: var(--color-bg-secondary);
             }
           }
+
+          &--danger {
+            background-color: var(--color-danger, #dc3545);
+            color: #fff;
+            border: none;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+              background-color: var(--color-danger-dark, #bd2130);
+            }
+
+            &:disabled {
+              background-color: var(--color-danger-light, #f5c2c7);
+              cursor: not-allowed;
+            }
+          }
         }
       }
 
@@ -213,16 +229,85 @@
   [data-theme="dark"] & {
     .products-table {
       box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+      background: var(--bg-primary-dark);
+
+      .btn--danger {
+        background-color: var(--color-danger, #dc3545);
+        color: #fff;
+        
+        &:hover {
+          background-color: var(--color-danger-dark, #bd2130);
+        }
+
+        &:disabled {
+          background-color: var(--color-danger-light, #f5c2c7);
+          opacity: 0.7;
+        }
+      }
 
       table {
-        td .btn--yellow {
-          background-color: #d4af37;
-          color: #fff;
+        th {
+          background: var(--bg-secondary-dark);
+          color: var(--text-primary);
+          border-bottom: 1px solid var(--border-color-dark);
 
-          &:hover {
-            background-color: darken(#d4af37, 10%);
+          &.sortable:hover {
+            background: var(--bg-hover-dark);
           }
         }
+
+        td {
+          color: var(--text-secondary);
+          border-bottom: 1px solid var(--border-color-dark);
+
+          .btn {
+            &--yellow {
+              background-color: #d4af37;
+              color: #fff;
+
+              &:hover {
+                background-color: darken(#d4af37, 10%);
+              }
+            }
+
+            &--border {
+              border-color: var(--border-color-dark);
+              color: var(--text-primary);
+
+              &:hover {
+                background: var(--bg-hover-dark);
+              }
+            }
+
+            &--delete {
+              background-color: var(--color-danger);
+              color: var(--color-white);
+              border: none;
+
+              &:hover {
+                background-color: var(--color-danger-dark);
+              }
+            }
+          }
+        }
+
+        tr:hover {
+          background: var(--bg-hover-dark);
+        }
+      }
+    }
+
+    .search-box .search-input {
+      background: var(--bg-primary-dark);
+      border-color: var(--border-color-dark);
+      color: var(--text-primary);
+
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+
+      &:focus {
+        border-color: var(--color-primary);
       }
     }
   }

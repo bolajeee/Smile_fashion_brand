@@ -12,7 +12,7 @@ import type { Product } from "@/types/product";
 import Layout from "@/layouts/Main";
 import { server } from "@/utils/server";
 
-const ProductsFeatured = dynamic(() => import("@/components/products-featured"));
+const ProductsFeatured = dynamic(() => import("@/components/product/featured"));
 
 type ProductPageProps = {
   product: Product;
@@ -52,7 +52,6 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params 
 };
 
 const Product = ({ product }: ProductPageProps) => {
-  // Removed unused activeTab state
 
   return (
     <Layout>
@@ -83,7 +82,7 @@ const Product = ({ product }: ProductPageProps) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  <Tabs product={product} show={true} />
+                  <Tabs product={{ ...product, description: product.description || '' }} />
                 </motion.div>
               </div>
             </div>
