@@ -109,13 +109,7 @@ const ProductCard = ({
             </div>
           )}
 
-          <button 
-            onClick={toggleFav}
-            className={`product-item__favorite ${isFavourite ? 'is-active' : ''}`}
-            aria-label={isFavourite ? 'Remove from favorites' : 'Add to favorites'}
-          >
-            <i className={`icon-heart${isFavourite ? '-filled' : ''}`} />
-          </button>
+          {/* Like/Favorite button removed */}
         </div>
 
         <div className="product-item__content">

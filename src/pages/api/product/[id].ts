@@ -16,7 +16,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     switch (req.method) {
       case 'GET': {
-        const product = await prisma.product.findUnique({ where: { id } });
+        const product = await prisma.product.findUnique({
+          where: { id },
+          include: {
+            reviews: {
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    image: true
+                  }
+                }
+              },
+              orderBy: { createdAt: 'desc' }
+            }
+          }
+        });
         if (!product) return res.status(404).json({ message: 'Not found' });
         return res.status(200).json(product);
       }
