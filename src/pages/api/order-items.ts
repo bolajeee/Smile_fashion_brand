@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/utils/db';
+import { withCors } from '@/utils/cors';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         switch (req.method) {
             case 'GET': {
@@ -26,6 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error('Error in /api/order-items:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
+
+export default withCors(handler);
 
 

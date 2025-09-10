@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 import { getErrorMessage } from '@/utils/error-helpers';
 import type { Session } from 'next-auth';
+import { withCors } from '@/utils/cors';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Get user session
     const session = await getServerSession(req, res, authOptions);
@@ -18,9 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'GET':
         return handleGet(req, res);
       case 'POST':
-  return handlePost(req, res, session);
+        return handlePost(req, res, session);
       case 'PATCH':
-  return handlePatch(req, res);
+        return handlePatch(req, res);
       default:
         res.setHeader('Allow', ['GET', 'POST', 'PATCH']);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -29,7 +29,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Reviews API Error:', error);
     return res.status(500).json({ error: getErrorMessage(error) });
   }
-}
+};
+
+export default withCors(handler);
 
 // GET /api/reviews?productId={id}
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {

@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { type Fields, type Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
+import { withCors } from '@/utils/cors';
 
 export const config = {
     api: {
@@ -9,7 +10,7 @@ export const config = {
     },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method not allowed' });
     }
@@ -75,6 +76,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Clean up the timeout when the request ends
     req.on('close', () => clearTimeout(timeout));
-}
+};
+
+export default withCors(handler);
 
 

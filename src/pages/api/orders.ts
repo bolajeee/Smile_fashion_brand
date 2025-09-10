@@ -3,6 +3,7 @@ import { prisma } from '@/utils/db';
 import { withAuth } from '@/utils/api-middleware';
 import { sendEmail } from '@/lib/email';
 import { templates } from '@/lib/emailTemplates';
+import { withCors } from '@/utils/cors';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = ((req as unknown) as { user: { id: string; role: string } }).user;
@@ -64,4 +65,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withAuth(handler);
+export default withCors(withAuth(handler));

@@ -1,9 +1,9 @@
 import { sendEmail } from '@/lib/email';
 import { templates } from '@/lib/emailTemplates';
-
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { withCors } from '@/utils/cors';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const data = req.body;
     await sendEmail({
@@ -20,4 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else {
     res.status(405).end();
   }
-}
+};
+
+export default withCors(handler);

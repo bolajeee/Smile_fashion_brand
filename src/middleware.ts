@@ -64,7 +64,7 @@ export default withAuth(
 // Configure protected routes and redirects
 export const config = {
   matcher: [
-    '/products',  // Add this to handle the redirect
+    '/products',  
     '/admin/:path*', 
     '/account/:path*', 
     '/checkout'

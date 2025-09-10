@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/utils/db';
 import { withAdmin } from '@/utils/api-middleware';
+import { withCors } from '@/utils/cors';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -35,9 +36,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 // Only allow admins to create products, but allow public access to GET
-export default async function productsHandler(req: NextApiRequest, res: NextApiResponse) {
+const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     return handler(req, res);
   }
   return withAdmin(handler)(req, res);
-}
+};
+
+export default withCors(wrappedHandler);

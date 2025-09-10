@@ -1,8 +1,9 @@
+
 import { Prisma } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 import { prisma } from '@/utils/db';
 import { withAdmin } from '@/utils/api-middleware';
+import { withCors } from '@/utils/cors';
 
 async function handler(
   req: NextApiRequest,
@@ -72,9 +73,11 @@ async function handler(
 
 // Only allow GET for admins
 // POST is public for registration
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+const wrappedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     return withAdmin(handler)(req, res);
   }
   return handler(req, res);
-}
+};
+
+export default withCors(wrappedHandler);
