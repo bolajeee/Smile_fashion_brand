@@ -26,6 +26,8 @@ export default class CustomDocument extends Document<DocumentProps> {
     return (
       <Html lang="en">
         <Head>
+          {/* Set custom favicon */}
+          <link rel="icon" type="image/jpeg" href="/images/logos/smile_logo_dark.jpg" />
           {/* We only want to add the scripts if in production */}
           {isProduction && (
             <>
