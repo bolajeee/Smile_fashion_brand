@@ -1,4 +1,4 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const lightLogo = '/images/logos/smile_logo_light.jpg';
@@ -15,13 +15,15 @@ export const Logo = ({ width = 120, height = 40, className = '' }: LogoProps) =>
   
   return (
     <div className={`logo ${className}`}>
-      <Image
+      <img
         src={theme === 'dark' ? darkLogo : lightLogo}
         alt="Smile"
         width={width}
         height={height}
-        priority
         className="logo__image"
+        loading="eager"
+        decoding="async"
+        style={{ display: 'block' }}
       />
     </div>
   );
