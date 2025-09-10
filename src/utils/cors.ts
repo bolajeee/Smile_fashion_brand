@@ -6,7 +6,7 @@ export type CorsOptions = {
   origin?: string;
 };
 
-const DEFAULT_ORIGIN = 'https://smile-fashion.vercel.app';
+const DEFAULT_ORIGIN = '*';
 const DEFAULT_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 
 export function withCors(
