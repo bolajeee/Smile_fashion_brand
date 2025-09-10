@@ -56,7 +56,7 @@ const IndexPage = () => {
                   New arrivals are now in!
                 </motion.h3>
                 <motion.a
-                  href="#"
+                  href="/products"
                   className="btn btn--rounded"
                   variants={{
                     hidden: { opacity: 0, y: 10 },
@@ -103,7 +103,7 @@ const IndexPage = () => {
                   Basic t-shirts $29,99
                 </motion.h3>
                 <motion.a
-                  href="#"
+                  href="/products"
                   className="btn btn--rounded"
                   variants={{
                     hidden: { opacity: 0, y: 10 },
@@ -150,7 +150,7 @@ const IndexPage = () => {
                   Summer Sale is Live!
                 </motion.h3>
                 <motion.a
-                  href="#"
+                  href="/products"
                   className="btn btn--rounded"
                   variants={{
                     hidden: { opacity: 0, y: 10 },
