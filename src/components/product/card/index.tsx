@@ -1,8 +1,8 @@
-import { some } from "lodash";
+// import { some } from "lodash";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useUser } from "@/contexts/UserContext";
+// import { useUser } from "@/contexts/UserContext";
 import { useCart } from "@/contexts/CartContext";
 import { useUI } from "@/contexts/UIContext";
 import { formatCurrency } from "@/utils/format";
@@ -17,25 +17,14 @@ const ProductCard = ({
   currentPrice,
   // ...existing code...
 }: ProductTypeList) => {
-  const { state: { favoriteProducts }, toggleFavoriteProduct } = useUser();
+  // const { state: { favoriteProducts }, toggleFavoriteProduct } = useUser();
   const { addProduct } = useCart();
   const { addNotification } = useUI();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const isFavourite = some(favoriteProducts, (productId) => productId === id);
-
-  const toggleFav = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleFavoriteProduct(id);
-
-    addNotification({
-      type: isFavourite ? 'info' : 'success',
-      message: isFavourite ? 'Removed from favorites' : 'Added to favorites',
-      duration: 2000
-    });
-  };
+  // const isFavourite = some(favoriteProducts, (productId) => productId === id);
+  // Favorite button and logic removed
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
