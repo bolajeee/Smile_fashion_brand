@@ -86,6 +86,11 @@ const LoginPage = () => {
                     {...register("password", { required: "Password is required" })}
                   />
                   {errors.password && <p className="message message--error">{errors.password.message}</p>}
+                  <div style={{ textAlign: 'right', marginTop: '4px' }}>
+                    <Link href="/forgot-password" className="form__forgot-link">
+                      Forgot password?
+                    </Link>
+                  </div>
                 </div>
 
                 {successMessage && (

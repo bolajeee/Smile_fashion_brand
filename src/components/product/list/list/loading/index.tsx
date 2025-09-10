@@ -6,7 +6,7 @@ const ProductsLoading = () => {
     <section className="products-list">
       {/* Render a few skeleton loaders */}
       {Array.from({ length: 6 }).map((_, index) => (
-        <ProductItemLoading key={index} />
+        <ProductCardLoading key={index} />
       ))}
     </section>
   );

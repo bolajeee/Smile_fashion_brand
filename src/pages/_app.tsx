@@ -14,7 +14,7 @@ import { AppContextProvider } from '@/contexts/AppContext';
 import { Provider } from "react-redux";
 import { makeStore } from "@/store";
 import ErrorBoundary from '@/components/error-boundary';
-import * as Sentry from '@sentry/nextjs';
+
 
 import * as gtag from "../utils/gtag";
 

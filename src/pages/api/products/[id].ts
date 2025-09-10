@@ -68,9 +68,70 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Update the product with only the changed fields
+        // Handle color updates if provided
+        if (req.body.colors !== undefined) {
+          // Get existing colors
+          const existingColors = await prisma.productColor.findMany({
+            where: { productId: id }
+          });
+
+          // Delete colors that are no longer present
+          const newColorHexCodes = new Set(req.body.colors.map((c: any) => c.hexCode));
+          const colorsToDelete = existingColors.filter(
+            (color: any) => !newColorHexCodes.has(color.hexCode)
+          );
+
+          if (colorsToDelete.length > 0) {
+            await prisma.productColor.deleteMany({
+              where: {
+                id: {
+                  in: colorsToDelete.map((c: any) => c.id)
+                }
+              }
+            });
+          }
+
+          // Update or create colors
+          const colorPromises = req.body.colors.map((color: any) => {
+            const existingColor = existingColors.find(
+              (ec: any) => ec.hexCode === color.hexCode
+            );
+
+            if (existingColor) {
+              // Update existing color
+              return prisma.productColor.update({
+                where: { id: existingColor.id },
+                data: {
+                  name: color.name,
+                  stock: color.stock,
+                  inStock: color.inStock,
+                }
+              });
+            } else {
+              // Create new color
+              return prisma.productColor.create({
+                data: {
+                  name: color.name,
+                  hexCode: color.hexCode,
+                  stock: color.stock,
+                  inStock: color.inStock,
+                  productId: id,
+                }
+              });
+            }
+          });
+
+          await Promise.all(colorPromises);
+          delete updateData.colors; // Remove colors from main product update
+        }
+
+        // Update the product
         const updatedProduct = await prisma.product.update({
           where: { id },
           data: updateData,
+          include: {
+            colors: true
+          }
         });
 
         return res.status(200).json(updatedProduct);

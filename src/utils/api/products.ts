@@ -16,17 +16,21 @@ export const getProducts = async (): Promise<Product[]> => {
       return products.map(p => ({
         id: p.id,
         name: p.name,
-        description: p.description || null,
+        description: p.description ?? '',
         price: Number(p.price),
         images: p.images,
         stock: p.stock || 0,
-        color: null,
-        type: null,
         sizes: [],
         currentPrice: Number(p.price),
         featured: p.featured || false,
-        featuredOrder: p.featuredOrder || null,
-        discount: null
+        featuredOrder: p.featuredOrder ?? null,
+        reviews: [] as Array<{
+          id: string;
+          rating: number;
+          review: string;
+          user: { name: string };
+          createdAt: string;
+        }>
       }));
     } else {
       // Client-side: Use API route

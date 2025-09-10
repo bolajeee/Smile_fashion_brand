@@ -9,11 +9,7 @@ import { withAdminProtection } from '@/components/auth/withAdminProtection';
 const schema = z.object({
   name: z.string().min(2, 'Name is required'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  price: z.string()
-    .min(1, 'Price is required')
-    .regex(/^\d+(\.\d{0,2})?$/, 'Price must be a valid number with up to 2 decimal places')
-    .transform((val) => parseFloat(val))
-    .refine((val) => val > 0, 'Price must be positive'),
+  price: z.coerce.number().positive('Price must be positive'),
   countInStock: z.coerce.number().int().nonnegative('Stock must be 0 or more'),
 });
 
@@ -21,12 +17,13 @@ type FormValues = z.infer<typeof schema>;
 
 const AddProductPage = () => {
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
   });
   const [uploading, setUploading] = useState(false);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+
 
   const handleFileUpload = async (files: File[]) => {
     if (files.length === 0) return;
@@ -87,6 +84,7 @@ const AddProductPage = () => {
         images: uploadedUrls,
         thumbnail: thumbnailUrl || uploadedUrls[0] || null,
         stock: values.countInStock,
+  // No color selection
       }),
     });
     if (res.ok) {
@@ -112,7 +110,7 @@ const AddProductPage = () => {
             </div>
             <div className="form-group">
               <label>Price</label>
-              <input type="number" step="0.01" {...register('price')} />
+              <input type="number" step="0.01" {...register('price', { valueAsNumber: true })} />
               {errors.price && <small className="error-message">{errors.price.message}</small>}
             </div>
             <div className="form-group">
@@ -163,11 +161,14 @@ const AddProductPage = () => {
                 )}
               </div>
             </div>
+
+
             <div className="form-group">
               <label>Count in Stock</label>
-              <input type="number" {...register('countInStock')} />
+              <input type="number" {...register('countInStock', { valueAsNumber: true })} />
               {errors.countInStock && <small className="error-message">{errors.countInStock.message}</small>}
             </div>
+
             <div className="form-actions">
               <button type="button" className="btn btn--rounded btn--border" onClick={() => router.push('/admin/products')}>
                 Cancel

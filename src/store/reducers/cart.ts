@@ -14,7 +14,7 @@ const initialState = {
 const indexSameProduct = (state: CartTypes, action: ProductStoreType) => {
   const sameProduct = (product: ProductStoreType) =>
     product.id === action.id &&
-    product.color === action.color &&
+    product.colorId === action.colorId &&
     product.size === action.size;
 
   return state.cartItems.findIndex(sameProduct);

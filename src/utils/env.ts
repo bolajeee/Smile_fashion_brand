@@ -20,12 +20,12 @@ const envSchema = z.object({
 
   // Application Configuration
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.string().transform(Number).default('3000'),
+  PORT: z.string().transform(Number).default(3000),
 
   // Security Configuration
   CORS_ORIGINS: z.string().default('*'),
-  RATE_LIMIT_WINDOW: z.string().transform(Number).default('900000'), // 15 minutes
-  RATE_LIMIT_MAX: z.string().transform(Number).default('100'),
+  RATE_LIMIT_WINDOW: z.string().transform(Number).default(900000), // 15 minutes
+  RATE_LIMIT_MAX: z.string().transform(Number).default(100),
 });
 
 export const env = envSchema.parse({

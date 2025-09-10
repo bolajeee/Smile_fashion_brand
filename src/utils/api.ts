@@ -41,9 +41,9 @@ api.interceptors.response.use(
     // Log all errors
     logger.error('API request failed', error, errorContext);
 
-    // If it's a critical error (not a validation error), send to Sentry
+    // If it's a critical error (not a validation error), log the error
     if (!error.response || error.response.status >= 500) {
-      logger.captureException(error, errorContext);
+      logger.error('Critical API error', error, errorContext);
     }
 
     return Promise.reject(error);

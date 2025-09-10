@@ -1,4 +1,3 @@
-
 import Slider from "rc-slider";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -19,6 +18,8 @@ interface ProductsFilterProps {
     price?: string;
     size?: string;
     color?: string;
+    minPrice?: string;
+    maxPrice?: string;
   };
 }
 
@@ -39,10 +40,19 @@ const ProductsFilter = ({
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterCategories>({
-    type: selectedFilters.type?.split(",") || [],
-    size: selectedFilters.size?.split(",") || [],
-    color: selectedFilters.color?.split(",") || [],
-    price: selectedFilters.price?.split("-").map(Number) || [0, 500],
+    type: Array.isArray(selectedFilters.type)
+      ? selectedFilters.type
+      : selectedFilters.type?.split(",") || [],
+    size: Array.isArray(selectedFilters.size)
+      ? selectedFilters.size
+      : selectedFilters.size?.split(",") || [],
+    color: Array.isArray(selectedFilters.color)
+      ? selectedFilters.color
+      : selectedFilters.color?.split(",") || [],
+    price:
+      (selectedFilters.minPrice && selectedFilters.maxPrice)
+        ? [Number(selectedFilters.minPrice), Number(selectedFilters.maxPrice)]
+        : selectedFilters.price?.split("-").map(Number) || [0, 500],
   });
 
   const updateFilters = (
@@ -74,29 +84,26 @@ const ProductsFilter = ({
   const applyFilters = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const query: { [key: string]: string } = {};
+    const query: { [key: string]: string | string[] } = {};
 
     if (activeFilters.type.length) {
-      query["type"] = activeFilters.type.join(",");
+      query["type"] = activeFilters.type;
     }
-
     if (activeFilters.size.length) {
-      query["size"] = activeFilters.size.join(",");
+      query["size"] = activeFilters.size;
     }
-
     if (activeFilters.color.length) {
-      query["color"] = activeFilters.color.join(",");
+      query["color"] = activeFilters.color;
     }
-
     if (activeFilters.price?.length === 2) {
-      query["price"] = activeFilters.price.join("-");
+      query["minPrice"] = String(activeFilters.price[0]);
+      query["maxPrice"] = String(activeFilters.price[1]);
     }
 
     router.push({
       pathname: router.pathname,
       query,
     }, undefined, { shallow: true }).then(() => {
-      // Close the filter dropdown after applying filters
       setFiltersOpen(false);
     });
   };

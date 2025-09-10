@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { ProductTypeList } from "@/types";
 import ProductCard from "@/components/product/card";
 

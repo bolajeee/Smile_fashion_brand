@@ -67,7 +67,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
         price: product.price,
         images: product.images,
         count: quantity,
-        color: selectedColor,
+        colorId: selectedColor,
         size: selectedSize,
         discount: product.discount,
         currentPrice: product.currentPrice,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
 // UI State Interface
 interface UIState {
@@ -139,12 +139,7 @@ export const UIProvider: React.FC<UIProviderProps> = ({ children }) => {
 
   const addNotification = (notification: Omit<NotificationItem, 'id'>) => {
     dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
-
-    // Auto-remove notification after duration (default: 5000ms)
-    const duration = notification.duration || 5000;
-    setTimeout(() => {
-      dispatch({ type: 'REMOVE_NOTIFICATION', payload: notification.id || '' });
-    }, duration);
+    // Note: If you want to auto-remove, you need to know the generated id. For now, this only adds the notification.
   };
 
   const removeNotification = (id: string) => dispatch({ type: 'REMOVE_NOTIFICATION', payload: id });

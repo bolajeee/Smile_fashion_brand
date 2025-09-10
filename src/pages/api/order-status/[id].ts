@@ -1,12 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { OrderStatus } from '@prisma/client';
 
-function getId(req: NextApiRequest): string | null {
-  const value = req.query[id];
-  if (Array.isArray(value)) return value[0] ?? null;
-  if (typeof value === 'string') return value;
-  return null;
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // This route treats [id] as the enum value to validate or describe

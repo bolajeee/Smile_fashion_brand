@@ -1,5 +1,4 @@
 import { DefaultSession, DefaultUser } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
 
 export type UserId = string;
 
@@ -40,21 +39,18 @@ export interface SafeUser {
 
 declare module 'next-auth' {
   interface Session {
-    user: {
+    user: DefaultSession['user'] & {
       id: string;
-      name: string;
-      email: string;
       role: Role;
-      image?: string;
-      phoneNumber?: string;
-    } & DefaultSession['user'];
+      phoneNumber?: string | null;
+    };
   }
 
   interface User extends DefaultUser {
     id: string;
     role: Role;
-    image?: string;
-    phoneNumber?: string;
+    image?: string | null;
+    phoneNumber?: string | null;
   }
 }
 
@@ -62,7 +58,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     role: Role;
-    image?: string;
-    phoneNumber?: string;
+    image?: string | null;
+    phoneNumber?: string | null;
   }
 }

@@ -10,7 +10,7 @@ const ThemeToggle = dynamic(() => import('../theme/ThemeToggle').then(mod => mod
   ssr: false
 });
 
-const Header = () => {
+const Header: React.FC<{ isErrorPage?: boolean }> = () => {
   const { data: session } = useSession();
   const { state: { cartItems } } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);

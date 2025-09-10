@@ -25,8 +25,9 @@ interface TabsProps {
   product: Product;
 }
 
-export const Tabs = ({ product }: TabsProps) => {
+const Tabs = ({ product }: TabsProps) => {
   const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
+  if (!product) return null;
   return (
     <>
       <div className="product-details__info-btns">
@@ -47,12 +48,14 @@ export const Tabs = ({ product }: TabsProps) => {
           Customer Reviews
         </button>
       </div>
-        {activeTab === "description" && (
+        {activeTab === "description" && product.description && (
           <Description description={product.description} show={true} />
         )}
-        {activeTab === "reviews" && (
+        {activeTab === "reviews" && Array.isArray(product.reviews) && (
           <Reviews reviews={product.reviews} show={true} />
         )}
     </>
   );
 };
+
+export default Tabs;

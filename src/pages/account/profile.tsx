@@ -102,13 +102,7 @@ const ProfileContent = () => {
     return `order-item__status order-item__status--${status.toLowerCase()}`;
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase();
-  };
+
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -214,9 +208,7 @@ const ProfileContent = () => {
                 {profile.image ? (
                   <img src={profile.image} alt={profile.name || ''} />
                 ) : (
-                  <div className="profile-info__avatar-placeholder">
-                    {getInitials(profile.name || 'U')}
-                  </div>
+                  <img src="/images/featured-1.jpg" alt="Default avatar" />
                 )}
                 <label 
                   htmlFor="avatar-upload" 
@@ -309,8 +301,8 @@ const ProfileContent = () => {
                               <span>Order Placed</span>
                             </div>
                             <div className={`order-progress__step ${
-                              order.status === OrderStatus.PROCESSING ? 'is-active' : 
-                              (order.status === OrderStatus.SHIPPED || order.status === OrderStatus.DELIVERED) ? 'is-complete' : ''
+                              (order.status as string) === OrderStatus.PROCESSING ? 'is-active' : 
+                              ((order.status as string) === 'SHIPPED' || (order.status as string) === 'DELIVERED') ? 'is-complete' : ''
                             }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-box" />
@@ -318,8 +310,8 @@ const ProfileContent = () => {
                               <span>Processing</span>
                             </div>
                             <div className={`order-progress__step ${
-                              order.status === OrderStatus.SHIPPED ? 'is-active' :
-                              order.status === OrderStatus.DELIVERED ? 'is-complete' : ''
+                              (order.status as string) === 'SHIPPED' ? 'is-active' :
+                              (order.status as string) === 'DELIVERED' ? 'is-complete' : ''
                             }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-truck" />
@@ -327,7 +319,7 @@ const ProfileContent = () => {
                               <span>Shipped</span>
                             </div>
                             <div className={`order-progress__step ${
-                              order.status === OrderStatus.DELIVERED ? 'is-active' : ''
+                              (order.status as string) === 'DELIVERED' ? 'is-active' : ''
                             }`}>
                               <div className="order-progress__step-icon">
                                 <i className="icon-check-circle" />
@@ -372,7 +364,7 @@ const ProfileContent = () => {
                             <div key={item.id} className="order-item__products-item">
                               <div className="order-item__products-item-image">
                                 <img 
-                                  src={item.image || '/images/products/placeholder.jpg'} 
+                                  src={item.image || '/images/featured-1.jpg'} 
                                   alt={item.name || `Product ${item.productId}`}
                                 />
                               </div>

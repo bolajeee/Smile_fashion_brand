@@ -1,0 +1,14 @@
+.cart-item__color-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-width: 80px;
+
+  span {
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  }
+}

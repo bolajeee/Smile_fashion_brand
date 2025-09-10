@@ -25,12 +25,12 @@ interface ReviewsProps {
 
 const Reviews: React.FC<ReviewsProps> = ({ show, reviews: initialReviews = [] }) => {
   const { data: session } = useSession();
-  const { theme } = useTheme();
+
   const [reviews, setReviews] = useState<ReviewsProps['reviews']>(initialReviews);
   const [activeTab, setActiveTab] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const { helpfulReviews, toggleHelpful, isHelpful } = useHelpfulReviews();
+  const { toggleHelpful, isHelpful } = useHelpfulReviews();
 
   const fetchReviews = async () => {
     try {
@@ -501,10 +501,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ onClose, onSubmitSuccess }) => 
           onClick={onClose}
           disabled={isSubmitting}
           style={{
-            color: 'var(--text-secondary)',
-            '&:hover': {
-              color: 'var(--text-primary)'
-            }
+            color: 'var(--text-secondary)'
           }}
         >
           Cancel

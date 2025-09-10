@@ -11,9 +11,10 @@ const EditProfilePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    phone: '',
+    phoneNumber: '',
     address: '',
+    // Keep these for UI, but don't send to API until supported
+    email: '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
@@ -31,9 +32,9 @@ const EditProfilePage = () => {
             setFormData(prev => ({
               ...prev,
               name: data.name || '',
-              email: data.email || '',
-              phone: data.phone || '',
-              address: data.address || ''
+              phoneNumber: data.phoneNumber || '',
+              address: data.address || '',
+              email: data.email || '' // for display only
             }));
           }
         } catch (error) {
@@ -55,44 +56,46 @@ const EditProfilePage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Helper to convert file to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
     setIsLoading(true);
-
     try {
-      const uploadRes = await fetch('/api/upload', {
+      // Convert file to base64
+      const base64 = await fileToBase64(file);
+      // Send to cloudinary upload endpoint
+      const uploadRes = await fetch('/api/upload/cloudinary', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file: base64 }),
       });
-
       if (!uploadRes.ok) {
         throw new Error('Failed to upload image');
       }
-
       const { url } = await uploadRes.json();
-
-      // Update user profile with new image URL
+      // Only send updatable fields
       const updateRes = await fetch('/api/account/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, image: url }),
+        body: JSON.stringify({ image: url }),
       });
-
       if (!updateRes.ok) {
         throw new Error('Failed to update profile');
       }
-
       const updatedProfile = await updateRes.json();
-      
-      // Update session with new image
       await update(updatedProfile);
-
       addNotification({
         type: 'success',
         message: 'Profile photo updated successfully!',
@@ -113,11 +116,18 @@ const EditProfilePage = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Only send fields supported by the API
+    const updatePayload: any = {
+      name: formData.name,
+      address: formData.address,
+      phoneNumber: formData.phoneNumber,
+    };
+
     try {
       const response = await fetch('/api/account/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(updatePayload)
       });
 
       if (response.ok) {
@@ -202,6 +212,7 @@ const EditProfilePage = () => {
                 />
               </div>
 
+              {/* Email field is display only, not editable for now */}
               <div className="form-group">
                 <label htmlFor="email">Email Address</label>
                 <input
@@ -209,18 +220,17 @@ const EditProfilePage = () => {
                   id="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleChange}
-                  required
+                  disabled
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phoneNumber">Phone Number</label>
                 <input
                   type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                 />
               </div>
@@ -237,10 +247,11 @@ const EditProfilePage = () => {
               </div>
             </div>
 
+            {/* Password change UI can be re-enabled when API supports it */}
+            {/*
             <div className="form-divider">
               <span>Change Password</span>
             </div>
-
             <div className="form-grid">
               <div className="form-group">
                 <label htmlFor="currentPassword">Current Password</label>
@@ -252,7 +263,6 @@ const EditProfilePage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="newPassword">New Password</label>
                 <input
@@ -263,7 +273,6 @@ const EditProfilePage = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="confirmPassword">Confirm New Password</label>
                 <input
@@ -275,6 +284,7 @@ const EditProfilePage = () => {
                 />
               </div>
             </div>
+            */}
 
             <div className="form-actions">
               <button

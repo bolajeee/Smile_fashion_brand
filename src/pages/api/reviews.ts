@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 import { getErrorMessage } from '@/utils/error-helpers';
+import type { Session } from 'next-auth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -16,9 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'GET':
         return handleGet(req, res);
       case 'POST':
-        return handlePost(req, res, session);
+  return handlePost(req, res, session);
       case 'PATCH':
-        return handlePatch(req, res, session);
+  return handlePatch(req, res);
       default:
         res.setHeader('Allow', ['GET', 'POST', 'PATCH']);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -57,7 +59,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 async function handlePost(
   req: NextApiRequest,
   res: NextApiResponse,
-  session: { user: { id: string; email: string; name: string } }
+  session: Session
 ) {
   const { productId, rating, review, photos = [] } = req.body;
 
@@ -70,11 +72,18 @@ async function handlePost(
     return res.status(400).json({ error: 'Rating must be between 1 and 5' });
   }
 
+
+  // Defensive: ensure user fields are present
+  const userId = session.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   // Check if user has already reviewed this product
   const existingReview = await prisma.review.findFirst({
     where: {
       productId,
-      userId: session.user.id
+      userId: userId
     }
   });
 
@@ -95,7 +104,7 @@ async function handlePost(
   const newReview = await prisma.review.create({
     data: {
       productId,
-      userId: session.user.id,
+      userId: userId,
       rating,
       review,
       photos,
@@ -113,20 +122,9 @@ async function handlePost(
   });
 
   // Update product rating statistics
-  const allReviews = await prisma.review.findMany({
-    where: { productId }
-  });
 
-  const totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-  const averageRating = totalRating / allReviews.length;
 
-  await prisma.product.update({
-    where: { id: productId },
-    data: {
-      rating: averageRating,
-      reviewCount: allReviews.length
-    }
-  });
+
 
   return res.status(201).json(newReview);
 }
@@ -134,8 +132,7 @@ async function handlePost(
 // PATCH /api/reviews/{id}/helpful
 async function handlePatch(
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: { user: { id: string } }
+  res: NextApiResponse
 ) {
   const { id } = req.query;
   const { helpful } = req.body;

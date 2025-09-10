@@ -34,14 +34,8 @@ const defaultOptions: Required<InvoiceOptions> = {
 
 export async function generateInvoice(order: Order, options?: InvoiceOptions): Promise<Buffer> {
   // Merge options with defaults
-  const mergedOptions: Required<InvoiceOptions> = {
-    ...defaultOptions,
-    ...options,
-    fontSize: { ...defaultOptions.fontSize, ...options?.fontSize },
-    colors: { ...defaultOptions.colors, ...options?.colors },
-  };
 
-  const { fontSize, colors } = mergedOptions;
+  // const { fontSize, colors } = mergedOptions;
 
   return new Promise((resolve) => {
     const doc = new PDFDocument({ 

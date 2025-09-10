@@ -32,22 +32,31 @@ export default async function handler(
                 productId: true,
                 quantity: true,
                 price: true,
+                product: {
+                  select: {
+                    name: true,
+                    images: true,
+                  },
+                },
               },
             },
           },
           orderBy: { createdAt: 'desc' },
         });
-        
-        const formattedOrders = orders.map(order => ({
-      ...order,
-      total: order.total.toNumber(),
-      items: order.items.map(item => ({
-        ...item,
-        price: item.price.toNumber(),
-      })),
-    }));
 
-    return res.status(200).json(formattedOrders as Order[]);
+        const formattedOrders = orders.map((order: any) => ({
+          ...order,
+          total: order.total.toNumber(),
+          items: order.items.map((item: any) => ({
+            ...item,
+            price: item.price.toNumber(),
+            name: item.product?.name || '',
+            image: item.product?.images?.[0] || '',
+            product: undefined, // remove nested product from response
+          })),
+        }));
+
+        return res.status(200).json(formattedOrders as Order[]);
       }
       default:
         return res.status(405).json({ message: 'Method not allowed' });

@@ -16,7 +16,6 @@ function calculateTotal(orders: Order[]): number {
 
 function AdminOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [statuses, setStatuses] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     
@@ -30,12 +29,11 @@ function AdminOrdersPage() {
                 ]);
                 if (!ordersRes.ok) throw new Error('Failed to load orders');
                 if (!statusRes.ok) throw new Error('Failed to load statuses');
-                const [ordersJson, statusesJson] = await Promise.all([
+                const [ordersJson] = await Promise.all([
                     ordersRes.json(),
                     statusRes.json(),
                 ]);
                 setOrders(ordersJson);
-                setStatuses(statusesJson);
             } catch (err: any) {
                 setError(err.message || 'Error loading orders');
             } finally {

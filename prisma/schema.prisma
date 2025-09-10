@@ -29,18 +29,34 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
   description String
-  price       Decimal  @db.Decimal(12, 2)
+  price       Decimal       @db.Decimal(12, 2)
   images      String[]
   stock       Int
-  featured    Boolean  @default(false)
-  featuredOrder Int?   // For controlling the order of featured products
+  featured    Boolean       @default(false)
+  featuredOrder Int?        // For controlling the order of featured products
+  colors      ProductColor[]
   orderItems  OrderItem[]
   reviews     Review[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model ProductColor {
+  id        String   @id @default(cuid())
+  name      String   // e.g., "Navy Blue", "Forest Green"
+  hexCode   String   // e.g., "#000080", "#228B22"
+  inStock   Boolean  @default(true)
+  stock     Int      @default(0)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  orderItems OrderItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, hexCode])
 }
 
 model Review {
@@ -71,15 +87,17 @@ model Order {
 }
 
 model OrderItem {
-  id        String   @id @default(cuid())
-  orderId   String
-  order     Order    @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Decimal  @db.Decimal(12, 2)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String       @id @default(cuid())
+  orderId       String
+  order         Order        @relation(fields: [orderId], references: [id])
+  productId     String
+  product       Product      @relation(fields: [productId], references: [id])
+  productColorId String?
+  productColor  ProductColor? @relation(fields: [productColorId], references: [id])
+  quantity      Int
+  price         Decimal      @db.Decimal(12, 2)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 enum OrderStatus {

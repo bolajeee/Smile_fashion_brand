@@ -4,7 +4,7 @@ import type { JWT } from 'next-auth/jwt';
 import { ZodError } from 'zod';
 import { logger } from './logger';
 
-interface AuthenticatedRequest extends NextApiRequest {
+export interface AuthenticatedRequest extends NextApiRequest {
   user: JWT;
 }
 
@@ -50,7 +50,7 @@ export function withErrorHandler(handler: NextApiHandler) {
         errorResponse = {
           code: 'VALIDATION_ERROR',
           message: 'Invalid request data',
-          details: error.errors,
+          details: error.issues,
         };
       }
 

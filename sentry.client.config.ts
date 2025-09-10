@@ -29,9 +29,5 @@ Sentry.init({
   ],
 
   // Automatically instrument React components for better error tracking
-  integrations: [
-    new Sentry.BrowserTracing({
-      tracePropagationTargets: ['localhost', /^https:\/\/your-domain\.com/],
-    }),
-  ],
+  // (No manual integrations needed for Sentry v10+)
 });

@@ -15,8 +15,7 @@ const ProductCard = ({
   name,
   price,
   currentPrice,
-  description,
-  category,
+  // ...existing code...
 }: ProductTypeList) => {
   const { state: { favoriteProducts }, toggleFavoriteProduct } = useUser();
   const { addProduct } = useCart();
@@ -57,7 +56,7 @@ const ProductCard = ({
         thumb: images && images.length > 0 ? images[0] : '',
         price: productPrice,
         count: 1,
-        color: '',  // Empty string since color is optional
+        colorId: '', // Empty string since colorId is optional
         size: '',
         images: images || [],
       }, 1);

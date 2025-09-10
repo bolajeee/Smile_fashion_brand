@@ -59,7 +59,7 @@ const ShoppingCart = () => {
                     thumb={item?.images?.[0]}
                     images={item.images}
                     name={item.name}
-                    color={item.color}
+                    colorId={item.colorId}
                     price={item.price}
                     size={item.size}
                     count={item.count}

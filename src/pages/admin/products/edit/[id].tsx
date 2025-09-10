@@ -5,6 +5,15 @@ import { withAdminProtection } from '@/components/auth/withAdminProtection';
 import { useUI } from '@/contexts/UIContext';
 import Image from 'next/image';
 
+
+interface ProductColor {
+  id?: string;
+  name: string;
+  hexCode: string;
+  inStock: boolean;
+  stock: number;
+}
+
 interface ProductFormData {
   name: string;
   description: string;
@@ -12,6 +21,7 @@ interface ProductFormData {
   stock: string;
   images: string[];
   featured: boolean;
+  colors: ProductColor[];
 }
 
 const EditProductPage = () => {
@@ -26,6 +36,7 @@ const EditProductPage = () => {
     stock: '',
     images: [],
     featured: false,
+    colors: [],
   });
   
   const [isLoading, setIsLoading] = useState(true);
@@ -63,9 +74,7 @@ const EditProductPage = () => {
         stock: String(product.stock),
         images: product.images || [],
         featured: product.featured || false,
-        category: product.category || '',
-        color: product.color || '',
-        size: product.size || '',
+        colors: product.colors || [],
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error fetching product';
@@ -259,6 +268,27 @@ const EditProductPage = () => {
                 />
                 Featured Product
               </label>
+            </div>
+
+            <div className="form-group">
+              <label>Product Colors</label>
+              {/* ColorSwatch component removed because it is not implemented. You can add your color management UI here. */}
+              {/* Example placeholder for color management: */}
+              {/*
+              <div>
+                {formData.colors.map((color, idx) => (
+                  <div key={color.id || idx}>
+                    <span style={{ background: color.hexCode, display: 'inline-block', width: 20, height: 20 }} />
+                    {color.name} ({color.inStock ? 'In Stock' : 'Out of Stock'})
+                  </div>
+                ))}
+                <button type="button" onClick={() => setFormData(prev => ({ ...prev, colors: [...prev.colors, { name: '', hexCode: '', inStock: true, stock: 0 }] }))}>
+                  Add Color
+                </button>
+              </div>
+              */}
+              {/* Uncomment the above block to manage colors */}
+              {/* onColorsChange={(colors: ProductColor[]) => setFormData(prev => ({ ...prev, colors }))} */}
             </div>
 
             <div className="form-group">

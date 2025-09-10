@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Breadcrumb from "@/components/breadcrumb";
 import Footer from "@/components/footer";
 import Gallery from "@/components/product/details/gallery";
-import { Tabs } from "./Tabs";
+import Tabs from "./Tabs";
 import ProductDetails from "@/components/product/details/content";
 import type { Product } from "@/types/product";
 import Layout from "@/layouts/Main";

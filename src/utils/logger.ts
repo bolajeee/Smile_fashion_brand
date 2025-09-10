@@ -10,11 +10,6 @@ interface LogEntry {
   error?: Error;
 }
 
-interface RetryConfig {
-  maxRetries?: number;
-  retryDelay?: number;
-  shouldRetry?: (error: any) => boolean;
-}
 
 class Logger {
   private static instance: Logger;

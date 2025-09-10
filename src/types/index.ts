@@ -49,7 +49,9 @@ export type ProductStoreType = {
   images: string[];
   price: number;
   count: number;
-  color?: string;
+  colorId?: string;
+  colorName?: string;
+  colorHexCode?: string;
   size?: string;
   discount?: number;
   currentPrice?: number;
