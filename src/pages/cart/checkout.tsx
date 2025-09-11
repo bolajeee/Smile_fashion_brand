@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
+// Paystack public key (replace with your real key)
+const PAYSTACK_PUBLIC_KEY = "YOUR_PAYSTACK_PUBLIC_KEY";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -54,54 +56,93 @@ const CheckoutPage = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Toast helper
+  const showToast = (msg: string) => {
+    if (typeof window !== 'undefined' && (window as any).toast) {
+      (window as any).toast.error(msg);
+    } else {
+      alert(msg);
+    }
+  };
 
+  // Form submit handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!session?.user?.id) {
       router.push('/login');
       return;
     }
-
     if (cartItems.length === 0) {
-      alert('Your cart is empty');
+      showToast('Your cart is empty');
       return;
     }
-
     setIsProcessing(true);
-
-    try {
-      // Create order
-      const orderResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: session.user.id,
-          total: priceTotal(),
-          shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
-          items: cartItems.map((item: ProductStoreType) => ({
-            productId: item.id,
-            quantity: item.count,
-            price: item.price
-          }))
-        }),
-      });
-
-      if (orderResponse.ok) {
-        // Clear cart and redirect to success page
-        clearCart();
-        router.push('/checkout-success');
-      } else {
-        const error = await orderResponse.json();
-        alert(`Error creating order: ${error.message}`);
-      }
-    } catch (error) {
-      console.error('Error during checkout:', error);
-      alert('An error occurred during checkout');
-    } finally {
-      setIsProcessing(false);
+    // Dynamically load Paystack script if not present
+    const launch = () => launchPaystack();
+    if (!document.getElementById('paystack-js')) {
+      const script = document.createElement('script');
+      script.id = 'paystack-js';
+      script.src = 'https://js.paystack.co/v1/inline.js';
+      script.async = true;
+      script.onload = launch;
+      document.body.appendChild(script);
+    } else {
+      launch();
     }
+  };
+
+  const launchPaystack = () => {
+    // @ts-ignore
+    const handler = window.PaystackPop && window.PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: formData.email,
+      amount: Math.round(priceTotal() * 100), // kobo
+      currency: 'NGN',
+      ref: `SMILE_${Date.now()}`,
+      callback: async function(response: any) {
+        // Optionally verify transaction on backend here
+        // On success, create order, clear cart, redirect
+        try {
+          if (!session || !session.user) {
+            showToast('Session expired. Please log in again.');
+            setIsProcessing(false);
+            router.push('/login');
+            return;
+          }
+          const orderResponse = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: session.user.id,
+              total: priceTotal(),
+              shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
+              items: cartItems.map((item: ProductStoreType) => ({
+                productId: item.id,
+                quantity: item.count,
+                price: item.price
+              })),
+              paystackRef: response.reference
+            }),
+          });
+          if (orderResponse.ok) {
+            clearCart();
+            router.push('/profile');
+          } else {
+            const error = await orderResponse.json();
+            showToast(`Order error: ${error.message}`);
+            setIsProcessing(false);
+          }
+        } catch (error) {
+          showToast('Order error.');
+          setIsProcessing(false);
+        }
+      },
+      onClose: function() {
+        alert('Payment was not completed.');
+        setIsProcessing(false);
+      }
+    });
+    if (handler) handler.openIframe();
   };
 
   return (
@@ -310,7 +351,6 @@ const CheckoutPage = () => {
                 type="submit"
                 className="btn btn--rounded btn--yellow"
                 disabled={isProcessing}
-                onClick={handleSubmit}
               >
                 {isProcessing ? (
                   <>

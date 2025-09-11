@@ -1,9 +1,10 @@
 const COLORS = {
+  white: '#ffffff',
   black: '#000000',
-  navy: '#1B2B65',
+  blue: '#1B2B65',
+  teal: '#14b8a6',
   red: '#DC2626',
   green: '#059669',
-  purple: '#7C3AED'
 };
 const DEFAULT_SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 

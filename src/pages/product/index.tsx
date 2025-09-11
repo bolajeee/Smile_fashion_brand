@@ -43,18 +43,13 @@ const ProductsPage: NextPage<ProductsPageProps> = ({
         );
       }
 
-      // Filter by price range
-      if (router.query.price) {
-        const [min, max] = (router.query.price as string)
-          .split("-")
-          .map(Number);
-        filteredProducts = filteredProducts.filter(
-          (product) => {
-            const price = Number(product.price);
-            return !isNaN(price) && price >= min && price <= max;
-          }
-        );
-      }
+      // Price range filter (sidebar)
+      const min = router.query.priceMin ? Number(router.query.priceMin) : 0;
+      const max = router.query.priceMax ? Number(router.query.priceMax) : 5000;
+      filteredProducts = filteredProducts.filter(product => {
+        const price = Number(product.price);
+        return !isNaN(price) && price >= min && price <= max;
+      });
 
       // Filter by size
       if (router.query.size) {
@@ -84,10 +79,7 @@ const ProductsPage: NextPage<ProductsPageProps> = ({
       <Breadcrumb />
       <section className="products-page">
         <div className="container">
-          <ProductsFilter
-            {...{ productTypes, productSizes, productColors }}
-            selectedFilters={router.query}
-          />
+          {/* ProductsFilter removed as requested */}
           {loading ? (
             <div className="products-page__loading">Loading...</div>
           ) : (

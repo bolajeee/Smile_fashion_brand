@@ -1,5 +1,19 @@
+import React from 'react';
 import { useCart } from "@/contexts/CartContext";
 import type { ProductStoreType } from "@/types";
+
+// Utility to get color hex code
+const getColorHex = (colorName: string) => {
+  const colorMap: { [key: string]: string } = {
+    white: '#ffffff',
+    black: '#000000',
+    blue: '#2563EB',
+    teal: '#14b8a6',
+    red: '#DC2626',
+    green: '#059669',
+  };
+  return colorMap[colorName?.toLowerCase()] || '#6B7280';
+};
 
 const CartItem = ({
   thumb,
@@ -13,7 +27,6 @@ const CartItem = ({
   price,
 }: ProductStoreType & { thumb: string }) => {
   const { removeProduct, setCount, updateVariant } = useCart();
-
 
   const removeFromCart = () => {
     removeProduct({
@@ -54,8 +67,6 @@ const CartItem = ({
     }, newCount);
   };
 
-
-
   // Format price to ensure it's a number
   const formatPrice = (priceValue: any): string => {
     const numPrice = typeof priceValue === 'string' ? parseFloat(priceValue) : priceValue;
@@ -80,13 +91,74 @@ const CartItem = ({
       </td>
 
       <td className="cart-item__color" data-label="Color">
-        {colorName && (
-          <div className="cart-item__color-display" style={{ backgroundColor: colorHexCode || '#6B7280' }}>
-            <span style={{ color: ['#FFFFFF', '#FFFF00'].includes(colorHexCode || '') ? '#374151' : '#ffffff' }}>
-              {colorName}
-            </span>
-          </div>
-        )}
+        <div className="cart-item__select-wrapper" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* Use local state to reflect dropdown changes instantly */}
+          {(() => {
+            const [selectedColor, setSelectedColor] = React.useState((colorName || '').toLowerCase());
+            React.useEffect(() => { setSelectedColor((colorName || '').toLowerCase()); }, [colorName]);
+            return <>
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  backgroundColor: getColorHex(selectedColor),
+                  border: '2px solid #222',
+                  boxShadow: '0 0 0 1.5px #8882',
+                  marginRight: 4,
+                  transition: 'background 0.2s',
+                }}
+                title={selectedColor || 'No color selected'}
+              />
+              <select
+                className={`cart-item__select ${selectedColor ? 'has-value' : ''}`}
+                value={selectedColor}
+                onChange={e => {
+                  setSelectedColor(e.target.value);
+                  updateVariant({
+                    id,
+                    name,
+                    price,
+                    images: [thumb],
+                    colorId,
+                    colorName: e.target.value,
+                    colorHexCode: getColorHex(e.target.value),
+                    size,
+                    thumb,
+                    discount: 0,
+                    currentPrice: price,
+                    count: count
+                  }, { colorName: e.target.value, colorHexCode: getColorHex(e.target.value) });
+                }}
+                style={(() => {
+                  const color = selectedColor;
+                  const bg = color ? getColorHex(color) : '#fff';
+                  let text = '#fff';
+                  if (["white", "teal", "yellow"].includes(color)) text = '#222';
+                  if (!color) text = '#222';
+                  return {
+                    minWidth: 120,
+                    backgroundColor: bg,
+                    color: text,
+                    border: color ? `2px solid #222` : '1px solid #ccc',
+                    fontWeight: '600',
+                    boxShadow: color ? '0 0 0 2px #8882 inset' : undefined,
+                    transition: 'background 0.2s, color 0.2s',
+                  };
+                })()}
+              >
+                <option value="">Select Color</option>
+                <option value="white">White</option>
+                <option value="black">Black</option>
+                <option value="blue">Blue</option>
+                <option value="teal">Teal</option>
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+              </select>
+            </>;
+          })()}
+        </div>
       </td>
 
       <td className="cart-item__size" data-label="Size">

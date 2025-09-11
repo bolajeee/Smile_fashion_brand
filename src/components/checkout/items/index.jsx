@@ -45,28 +45,33 @@ const CheckoutItems = () => {
                     <span className="checkout-item__detail-label">Color:</span>
                     <div className="checkout-item__variant">
                       <select
-                        className="checkout-item__select"
-                        value={item.color}
-                        onChange={(e) => updateVariant(item, { color: e.target.value })}
-                        style={item.color ? {
-                          backgroundColor: getColorHex(item.color),
-                          color: ['White', 'Yellow'].includes(item.color) ? '#374151' : '#ffffff',
-                          borderColor: getColorHex(item.color),
-                          fontWeight: '600'
-                        } : undefined}
+                        className={`checkout-item__select ${item.colorName ? 'has-value' : ''}`}
+                        value={(item.colorName || '').toLowerCase()}
+                        onChange={(e) => updateVariant(item, { colorName: e.target.value, colorHexCode: getColorHex(e.target.value) })}
+                        style={(() => {
+                          const color = (item.colorName || '').toLowerCase();
+                          const bg = color ? getColorHex(color) : '#fff';
+                          let text = '#fff';
+                          if (["white", "teal", "yellow"].includes(color)) text = '#222';
+                          if (!color) text = '#222';
+                          return {
+                            minWidth: 120,
+                            backgroundColor: bg,
+                            color: text,
+                            border: color ? `2px solid #222` : '1px solid #ccc',
+                            fontWeight: '600',
+                            boxShadow: color ? '0 0 0 2px #8882 inset' : undefined,
+                            transition: 'background 0.2s, color 0.2s',
+                          };
+                        })()}
                       >
                         <option value="">Select Color</option>
-                        <option value="Black" style={{ backgroundColor: '#000000', color: '#ffffff' }}>Black</option>
-                        <option value="White" style={{ backgroundColor: '#ffffff', color: '#374151' }}>White</option>
-                        <option value="Red" style={{ backgroundColor: '#DC2626', color: '#ffffff' }}>Red</option>
-                        <option value="Blue" style={{ backgroundColor: '#2563EB', color: '#ffffff' }}>Blue</option>
-                        <option value="Green" style={{ backgroundColor: '#059669', color: '#ffffff' }}>Green</option>
-                        <option value="Yellow" style={{ backgroundColor: '#EAB308', color: '#374151' }}>Yellow</option>
-                        <option value="Pink" style={{ backgroundColor: '#EC4899', color: '#ffffff' }}>Pink</option>
-                        <option value="Purple" style={{ backgroundColor: '#9333EA', color: '#ffffff' }}>Purple</option>
-                        <option value="Gray" style={{ backgroundColor: '#6B7280', color: '#ffffff' }}>Gray</option>
-                        <option value="Brown" style={{ backgroundColor: '#92400E', color: '#ffffff' }}>Brown</option>
-                        <option value="Navy" style={{ backgroundColor: '#1E3A8A', color: '#ffffff' }}>Navy</option>
+                        <option value="white">White</option>
+                        <option value="black">Black</option>
+                        <option value="blue">Blue</option>
+                        <option value="teal">Teal</option>
+                        <option value="red">Red</option>
+                        <option value="green">Green</option>
                       </select>
                     </div>
                   </div>
@@ -74,7 +79,7 @@ const CheckoutItems = () => {
                     <span className="checkout-item__detail-label">Size:</span>
                     <div className="checkout-item__variant">
                       <select
-                        className="checkout-item__select"
+                        className={`checkout-item__select ${item.size ? 'has-value' : ''}`}
                         value={item.size}
                         onChange={(e) => updateVariant(item, { size: e.target.value })}
                         style={item.size ? {
