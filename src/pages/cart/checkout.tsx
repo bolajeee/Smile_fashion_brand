@@ -1,5 +1,11 @@
+// TypeScript declaration for PaystackPop
+declare global {
+  interface Window {
+    PaystackPop?: any;
+  }
+}
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 // Paystack public key (replace with your real key)
 const PAYSTACK_PUBLIC_KEY = "YOUR_PAYSTACK_PUBLIC_KEY";
 import { useSession } from "next-auth/react";
@@ -8,11 +14,24 @@ import { useRouter } from "next/router";
 import CheckoutItems from "@/components/checkout/items";
 import CheckoutStatus from "@/components/checkout-status";
 import { useCart } from "@/contexts/CartContext";
-import type { ProductStoreType } from "@/types";
 
 import Layout from "@/layouts/Main";
 
 const CheckoutPage = () => {
+  // Helper to check if all shipping fields are filled
+  const isShippingComplete = () => {
+    return (
+      !!formData.firstName &&
+      !!formData.lastName &&
+      !!formData.email &&
+      !!formData.phone &&
+      !!formData.address &&
+      !!formData.city &&
+      !!formData.state &&
+      !!formData.country &&
+      !!formData.postalCode
+    );
+  };
   const { data: session } = useSession();
   const router = useRouter();
   const { state: { cartItems }, clearCart } = useCart();
@@ -28,6 +47,13 @@ const CheckoutPage = () => {
     country: 'Nigeria',
     state: '',
   });
+  // Refs for latest values
+  const sessionRef = useRef(session);
+  const formDataRef = useRef(formData);
+  const cartItemsRef = useRef(cartItems);
+  useEffect(() => { sessionRef.current = session; }, [session]);
+  useEffect(() => { formDataRef.current = formData; }, [formData]);
+  useEffect(() => { cartItemsRef.current = cartItems; }, [cartItems]);
 
   // Supported countries
   const countries = [
@@ -65,21 +91,140 @@ const CheckoutPage = () => {
     }
   };
 
+  // Paystack launch function
+
+  
+  interface PaystackResponse {
+    reference: string;
+    [key: string]: any;
+  }
+
+  interface SessionUser {
+    id: string;
+    email: string;
+    [key: string]: any;
+  }
+
+  interface Session {
+    user?: SessionUser;
+    [key: string]: any;
+  }
+
+  interface FormData {
+    email: string;
+    address: string;
+    firstName: string;
+    city: string;
+    lastName: string;
+    postalCode: string;
+    phone: string;
+    country: string;
+    state: string;
+  }
+  
+  interface CartItem {
+    id: string;
+    price: number;
+    count: number;
+    [key: string]: any;
+  }
+
+  const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+  function paystackCallback(response: PaystackResponse): void {
+    console.log('[DEBUG] Paystack payment callback', response);
+    const session: Session | null = sessionRef.current;
+    const formData: FormData = formDataRef.current;
+    const cartItems: CartItem[] = cartItemsRef.current;
+    if (!session || !session.user) {
+      showToast('Session expired. Please log in again.');
+      setIsProcessing(false);
+      router.push('/login');
+      return;
+    }
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: session.user.id,
+        total: priceTotal(),
+        shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
+        items: cartItems.map((item: CartItem) => ({
+          productId: item.id,
+          quantity: item.count,
+          price: item.price
+        })),
+        paystackRef: response.reference
+      }),
+    })
+      .then(async (orderResponse: Response) => {
+        if (orderResponse.ok) {
+          console.log('[DEBUG] Order created successfully');
+          clearCart();
+          router.push('/account/profile');
+        } else {
+          const error: { message?: string } = await orderResponse.json();
+          console.log('[DEBUG] Order error', error);
+          showToast(`Order error: ${error.message}`);
+          setIsProcessing(false);
+        }
+      })
+      .catch((error: unknown) => {
+        console.log('[DEBUG] Order error', error);
+        showToast('Order error.');
+        setIsProcessing(false);
+      });
+  }
+
+  const launchPaystack = () => {
+    if (!window.PaystackPop) {
+      console.log('[DEBUG] window.PaystackPop is not available');
+      showToast('Paystack script not loaded. Please try again.');
+      setIsProcessing(false);
+      return;
+    }
+    console.log('[DEBUG] Setting up PaystackPop');
+    const handler = window.PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: formDataRef.current.email,
+      amount: Math.round(priceTotal() * 100), // kobo
+      currency: 'NGN',
+      ref: `SMILE_${Date.now()}`,
+      callback: paystackCallback,
+      onClose: function() {
+        console.log('[DEBUG] Paystack payment closed by user');
+        alert('Payment was not completed.');
+        setIsProcessing(false);
+      }
+    });
+    if (handler) {
+      console.log('[DEBUG] Opening Paystack iframe');
+      handler.openIframe();
+    }
+  };
+
   // Form submit handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('[DEBUG] handleSubmit called');
     if (!session?.user?.id) {
+      console.log('[DEBUG] No user session, redirecting to login');
       router.push('/login');
       return;
     }
     if (cartItems.length === 0) {
+      console.log('[DEBUG] Cart is empty');
       showToast('Your cart is empty');
       return;
     }
     setIsProcessing(true);
     // Dynamically load Paystack script if not present
-    const launch = () => launchPaystack();
+    const launch = () => {
+      console.log('[DEBUG] Launching Paystack');
+      launchPaystack();
+    };
     if (!document.getElementById('paystack-js')) {
+      console.log('[DEBUG] Loading Paystack script');
       const script = document.createElement('script');
       script.id = 'paystack-js';
       script.src = 'https://js.paystack.co/v1/inline.js';
@@ -87,63 +232,11 @@ const CheckoutPage = () => {
       script.onload = launch;
       document.body.appendChild(script);
     } else {
+      console.log('[DEBUG] Paystack script already loaded');
       launch();
     }
   };
 
-  const launchPaystack = () => {
-    // @ts-ignore
-    const handler = window.PaystackPop && window.PaystackPop.setup({
-      key: PAYSTACK_PUBLIC_KEY,
-      email: formData.email,
-      amount: Math.round(priceTotal() * 100), // kobo
-      currency: 'NGN',
-      ref: `SMILE_${Date.now()}`,
-      callback: async function(response: any) {
-        // Optionally verify transaction on backend here
-        // On success, create order, clear cart, redirect
-        try {
-          if (!session || !session.user) {
-            showToast('Session expired. Please log in again.');
-            setIsProcessing(false);
-            router.push('/login');
-            return;
-          }
-          const orderResponse = await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userId: session.user.id,
-              total: priceTotal(),
-              shippingAddress: `${formData.address}, ${formData.city}, ${formData.postalCode}, ${formData.country}`,
-              items: cartItems.map((item: ProductStoreType) => ({
-                productId: item.id,
-                quantity: item.count,
-                price: item.price
-              })),
-              paystackRef: response.reference
-            }),
-          });
-          if (orderResponse.ok) {
-            clearCart();
-            router.push('/profile');
-          } else {
-            const error = await orderResponse.json();
-            showToast(`Order error: ${error.message}`);
-            setIsProcessing(false);
-          }
-        } catch (error) {
-          showToast('Order error.');
-          setIsProcessing(false);
-        }
-      },
-      onClose: function() {
-        alert('Payment was not completed.');
-        setIsProcessing(false);
-      }
-    });
-    if (handler) handler.openIframe();
-  };
 
   return (
     <Layout>
@@ -291,20 +384,44 @@ const CheckoutPage = () => {
                       />
                     </div>
                   </div>
+                  <div className="cart-actions cart-actions--checkout" style={{marginTop: 32}}>
+                    <Link href="/cart" className="cart__btn-back">
+                      <i className="icon-left"></i> Back to Cart
+                    </Link>
+                    <div className="cart-actions__items-wrapper">
+                      <Link href="/product" className="btn btn--rounded btn--border">
+                        Continue Shopping
+                      </Link>
+                      <button
+                        type="submit"
+                        className="btn btn--rounded btn--yellow"
+                        disabled={isProcessing || !session || !isShippingComplete()}
+                      >
+                        {isProcessing ? (
+                          <>
+                            <i className="icon-spinner animate-spin"></i>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            Proceed to Payment
+                            <i className="icon-arrow-right"></i>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </form>
               </div>
             </div>
-
             <div className="checkout__col-2">
               <div className="block">
                 <h3 className="block__title">Order Summary</h3>
                 <CheckoutItems />
-
                 <div className="checkout-total">
                   <p>Total Amount</p>
                   <h3>${priceTotal().toFixed(2)}</h3>
                 </div>
-
                 <div className="payment-notes">
                   <p>
                     <i className="icon-shield"></i>
@@ -317,7 +434,6 @@ const CheckoutPage = () => {
                 </div>
               </div>
             </div>
-
             <div className="checkout__col-4">
               <div className="block">
                 <h3 className="block__title">Payment Method</h3>
@@ -330,42 +446,13 @@ const CheckoutPage = () => {
                     <li className="round-item">
                       <img src="/images/logos/mastercard.png" alt="Mastercard" />
                     </li>
-                    <li className="round-item">
-                      <img src="/images/logos/verve.png" alt="Verve" />
-                    </li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="cart-actions cart-actions--checkout">
-            <Link href="/cart" className="cart__btn-back">
-              <i className="icon-left"></i> Back to Cart
-            </Link>
-            <div className="cart-actions__items-wrapper">
-              <Link href="/product" className="btn btn--rounded btn--border">
-                Continue Shopping
-              </Link>
-              <button
-                type="submit"
-                className="btn btn--rounded btn--yellow"
-                disabled={isProcessing}
-              >
-                {isProcessing ? (
-                  <>
-                    <i className="icon-spinner animate-spin"></i>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    Proceed to Payment
-                    <i className="icon-arrow-right"></i>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+          {/* cart-actions block removed, now only inside the form */}
         </div>
       </section>
     </Layout>

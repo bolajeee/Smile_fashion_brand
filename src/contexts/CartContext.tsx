@@ -166,15 +166,19 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }: CartProv
   // Load cart from localStorage on mount or when user changes
   useEffect(() => {
     const userId = session?.user?.id || null;
+    let cartKey = 'smile-cart-guest';
+    if (userId) cartKey = `smile-cart-${userId}`;
     if (prevUserId.current !== userId) {
       try {
-        const savedCart = localStorage.getItem(getCartKey());
+        const savedCart = localStorage.getItem(cartKey);
         if (savedCart) {
           const parsedCart = JSON.parse(savedCart);
           dispatch({ type: 'LOAD_CART', payload: parsedCart });
-        } else {
+        } else if (userId) {
+          // Only clear cart if user logs in and has no cart
           dispatch({ type: 'CLEAR_CART' });
         }
+        // If guest and no cart, do not clear (keep in-memory cart)
       } catch (error) {
         console.error('Error loading cart from localStorage:', error);
       }
