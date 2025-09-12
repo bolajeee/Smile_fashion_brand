@@ -7,7 +7,6 @@ declare global {
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 // Paystack public key (replace with your real key)
-const PAYSTACK_PUBLIC_KEY = "YOUR_PAYSTACK_PUBLIC_KEY";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -101,8 +100,12 @@ const CheckoutPage = () => {
 
   interface SessionUser {
     id: string;
-    email: string;
     [key: string]: any;
+    // role: Role; // Removed undefined type
+    phoneNumber?: string | null;
+    name?: string | null;
+    email?: string | null; 
+    image?: string | null;
   }
 
   interface Session {

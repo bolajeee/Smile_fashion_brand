@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/breadcrumb";
 import Footer from "@/components/footer";
 import ProductsContent from "@/components/product/list"
-import ProductsFilter from "@/components/products-filter";
+// Removed unused ProductsFilter import
 import Layout from "@/layouts/Main";
 import type {
   Product,
@@ -23,9 +23,7 @@ interface ProductsPageProps {
 
 const ProductsPage: NextPage<ProductsPageProps> = ({
   products: initialProducts,
-  productTypes,
-  productSizes,
-  productColors,
+  // Removed unused productTypes, productSizes, productColors
 }) => {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
