@@ -32,11 +32,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json(user);
       }
       case 'PUT': {
-        const { name, email, address } = req.body || {};
+        const { name, email, address, role } = req.body || {};
+        // Only admin can update role
+        let data: any = { name, email, address };
+        if (typeof role !== 'undefined' && reqUser.role === 'ADMIN') {
+          data.role = role;
+        }
         const updated = await prisma.user.update({
           where: { id },
-          data: { name, email, address },
-          select: { id: true, name: true, email: true, address: true },
+          data,
+          select: { id: true, name: true, email: true, address: true, role: true },
         });
         return res.status(200).json(updated);
       }

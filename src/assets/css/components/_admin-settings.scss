@@ -140,6 +140,10 @@
       box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
 
       table {
+        th {
+          background: #23272f;
+          color: var(--color-text-primary);
+        }
         td .btn--yellow {
           background-color: #d4af37;
           color: #fff;
