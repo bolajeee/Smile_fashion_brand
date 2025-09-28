@@ -83,19 +83,13 @@ const AdminSettingsPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...user,
-          role: newRole,
-        }),
+         body: JSON.stringify({ role: newRole }),
       });
 
       if (!res.ok) throw new Error('Failed to update user role');
 
-      setUsers(users.map(u => 
-        u.id === user.id 
-          ? { ...u, role: newRole }
-          : u
-      ));
+    // Refetch users to ensure persistence
+      await fetchUsers();
       setStatusMessage(`User role updated to ${newRole}`);
     } catch (err) {
       setError(getErrorMessage(err));
