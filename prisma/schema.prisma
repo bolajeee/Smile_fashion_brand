@@ -24,6 +24,8 @@ model User {
   role         Role       @default(USER)
   orders       Order[]
   reviews      Review[]
+  resetToken        String?  
+  resetTokenExpiry  DateTime? 
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

@@ -4,7 +4,7 @@ import ProductsFeatured from "@/components/product/featured";
 import Subscribe from "@/components/subscribe";
 import { motion } from "framer-motion";
 import Layout from "../layouts/Main";
-import FeatureScanner from "@/components/features/FeatureScanner";
+import ButterflyScanner from "@/components/features/ButterflyScanner";
 
 const IndexPage = () => {
   return (
@@ -100,7 +100,7 @@ const IndexPage = () => {
                     },
                   }}
                 >
-                  Basic t-shirts $29,99
+                  Shirts $29,99
                 </motion.h3>
                 <motion.a
                   href="/products"
@@ -121,7 +121,7 @@ const IndexPage = () => {
               </div>
             </motion.article>
 
-            <motion.article
+            {/* <motion.article
               style={{ backgroundImage: "url(/images/featured-3.jpg)" }}
               className="featured-item featured-item--C"
               variants={{
@@ -166,9 +166,10 @@ const IndexPage = () => {
                   VIEW ALL
                 </motion.a>
               </div>
-            </motion.article>
+            </motion.article> */}
           </div>
         </motion.section>
+
 
  <motion.section 
         className="section section--features" 
@@ -177,7 +178,7 @@ const IndexPage = () => {
         viewport={{ once: true }} 
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <FeatureScanner />
+        <ButterflyScanner />
         <div className="container">
           <header className="section__intro">
             <motion.h4
