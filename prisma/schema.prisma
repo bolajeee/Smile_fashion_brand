@@ -37,6 +37,7 @@ model Product {
   price       Decimal       @db.Decimal(12, 2)
   images      String[]
   stock       Int
+  type        String        // Product type: Shirts, Caps, Bags
   featured    Boolean       @default(false)
   featuredOrder Int?        // For controlling the order of featured products
   colors      ProductColor[]

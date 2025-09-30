@@ -11,6 +11,7 @@ const schema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   price: z.coerce.number().positive('Price must be positive'),
   countInStock: z.coerce.number().int().nonnegative('Stock must be 0 or more'),
+  type: z.string().min(1, 'Product type is required'),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -84,7 +85,7 @@ const AddProductPage = () => {
         images: uploadedUrls,
         thumbnail: thumbnailUrl || uploadedUrls[0] || null,
         stock: values.countInStock,
-  // No color selection
+        type: values.type,
       }),
     });
     if (res.ok) {
@@ -97,7 +98,17 @@ const AddProductPage = () => {
       <div className="container">
         <div className="admin-form">
           <h1 className="admin-form__title">Add New Product</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} style={{maxWidth: 500, margin: '0 auto', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+            <div className="form-group">
+              <label>Product Type</label>
+              <select {...register('type')} defaultValue="">
+                <option value="" disabled>Select type</option>
+                <option value="Shirts">Shirts</option>
+                <option value="Caps">Caps</option>
+                <option value="Bags">Bags</option>
+              </select>
+              {errors.type && <small className="error-message">{errors.type.message}</small>}
+            </div>
             <div className="form-group">
               <label>Name</label>
               <input type="text" {...register('name')} />
