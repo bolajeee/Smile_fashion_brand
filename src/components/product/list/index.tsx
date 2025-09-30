@@ -166,10 +166,10 @@ const ProductsContent: React.FC<ProductsContentProps> = ({ products: initialProd
           </div>
         ) : (
           <>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <div>
               <List products={paginatedProducts} />
               <div style={{ height: '2.5rem' }} />
-              <div className="pagination-buttons" style={{ marginTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div className="pagination-buttons">
                 <button
                   className="btn btn--rounded btn--border"
                   onClick={() => setPage(page - 1)}

@@ -1,4 +1,4 @@
-@import 'pages/product-details-grid';
+
 /**
  * Smile Fashion Brand - Main Stylesheet
  * Style architecture following the 7-1 pattern
@@ -24,12 +24,7 @@
 
 // 2. Vendors
 @import './fonts/icons/icons.css';
-// Swiper styles
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/effect-fade';
-@import 'rc-slider/assets/index.css';
-@import 'react-rater/lib/react-rater.css';
+
 
 // 3. Base
 @import 'base/reset';

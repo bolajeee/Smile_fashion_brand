@@ -10,7 +10,7 @@ interface LogoProps {
   className?: string;
 }
 
-export const Logo = ({ width = 120, height = 40, className = '' }: LogoProps) => {
+export const Logo = ({ width = 150, height = 70, className = '' }: LogoProps) => {
   const { theme } = useTheme();
   
   return (
