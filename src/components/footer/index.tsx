@@ -8,9 +8,9 @@ const Footer = () => {
         <div className="site-footer__top">
           <div className="site-footer__brand">
             <div className="site-footer__logo">
-              <Logo width={120} height={40} />
+              <Logo width={150} height={60} />
               <h3 className="site-footer__brand-name">
-                <span className="highlight">Smile</span> Signature
+                <span className="highlight">Smile</span> Fashion
               </h3>
             </div>
             <p className="site-footer__description">

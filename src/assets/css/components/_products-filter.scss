@@ -562,9 +562,9 @@
         }
 
         &__range-input {
-            background-color: var(--color-background-primary-dark);
-            border-color: var(--color-border-dark);
-            color: var(--color-text-primary-dark);
+            background-color: var(--color-background-primary-dark) !important;
+            border-color: var(--color-border-dark) !important;
+            color: var(--color-text-primary-dark) !important;
         }
 
         &__size-option {

@@ -2,22 +2,16 @@ import Slider from "rc-slider";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import type { ProductColor, ProductSize, ProductType } from "@/types/product";
 import Checkbox from "./form-builder/checkbox";
-import CheckboxColor from "./form-builder/checkbox-color";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
+
 interface ProductsFilterProps {
-  productTypes: ProductType[];
-  productSizes: ProductSize[];
-  productColors: ProductColor[];
   selectedFilters: {
     type?: string;
     price?: string;
-    size?: string;
-    color?: string;
     minPrice?: string;
     maxPrice?: string;
   };
@@ -25,34 +19,21 @@ interface ProductsFilterProps {
 
 type FilterCategories = {
   type: string[];
-  size: string[];
-  color: string[];
   price: number[];
-  [key: string]: string[] | number[]; // Add index signature
+  [key: string]: string[] | number[];
 };
 
-const ProductsFilter = ({
-  productTypes,
-  productSizes,
-  productColors,
-  selectedFilters,
-}: ProductsFilterProps) => {
+const ProductsFilter = ({ selectedFilters }: ProductsFilterProps) => {
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterCategories>({
     type: Array.isArray(selectedFilters.type)
       ? selectedFilters.type
       : selectedFilters.type?.split(",") || [],
-    size: Array.isArray(selectedFilters.size)
-      ? selectedFilters.size
-      : selectedFilters.size?.split(",") || [],
-    color: Array.isArray(selectedFilters.color)
-      ? selectedFilters.color
-      : selectedFilters.color?.split(",") || [],
     price:
       (selectedFilters.minPrice && selectedFilters.maxPrice)
         ? [Number(selectedFilters.minPrice), Number(selectedFilters.maxPrice)]
-        : selectedFilters.price?.split("-").map(Number) || [0, 500],
+        : selectedFilters.price?.split("-").map(Number) || [0, 50000],
   });
 
   const updateFilters = (
@@ -89,12 +70,6 @@ const ProductsFilter = ({
     if (activeFilters.type.length) {
       query["type"] = activeFilters.type;
     }
-    if (activeFilters.size.length) {
-      query["size"] = activeFilters.size;
-    }
-    if (activeFilters.color.length) {
-      query["color"] = activeFilters.color;
-    }
     if (activeFilters.price?.length === 2) {
       query["minPrice"] = String(activeFilters.price[0]);
       query["maxPrice"] = String(activeFilters.price[1]);
@@ -111,11 +86,10 @@ const ProductsFilter = ({
   const clearFilters = () => {
     setActiveFilters({
       type: [],
-      size: [],
-      color: [],
-      price: [0, 500],
+      price: [0, 50000],
     });
-    router.push(router.pathname);
+    // Remove all filter query params to show all products
+    router.push({ pathname: router.pathname, query: {} }, undefined, { shallow: true });
   };
 
   return (
@@ -123,8 +97,7 @@ const ProductsFilter = ({
       <button
         type="button"
         onClick={() => setFiltersOpen(!filtersOpen)}
-        className={`products-filter__menu-btn ${filtersOpen ? "products-filter__menu-btn--active" : ""
-          }`}
+        className={`products-filter__menu-btn ${filtersOpen ? "products-filter__menu-btn--active" : ""}`}
         aria-expanded={filtersOpen}
         aria-controls="filters-panel"
       >
@@ -146,14 +119,14 @@ const ProductsFilter = ({
               <div className="products-filter__block">
                 <button type="button">Product type</button>
                 <div className="products-filter__block__content">
-                  {productTypes.map((type) => (
+                  {["Shirts", "Caps", "Bags"].map((type) => (
                     <Checkbox
-                      key={type.id}
+                      key={type}
                       name="product-type"
-                      label={type.name}
-                      checked={activeFilters.type.includes(type.name)}
+                      label={type}
+                      checked={activeFilters.type.includes(type)}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        updateFilters("type", type.name, e.target.checked)
+                        updateFilters("type", type, e.target.checked)
                       }
                     />
                   ))}
@@ -167,7 +140,7 @@ const ProductsFilter = ({
                   <div className="products-filter__range">
                     <Range
                       min={0}
-                      max={500}
+                      max={50000}
                       value={activeFilters.price}
                       onChange={handlePriceChange}
                       tipFormatter={(value) => `$${value}`}
@@ -194,49 +167,9 @@ const ProductsFilter = ({
                         value={activeFilters.price[1]}
                         onChange={(e) => handlePriceChange([activeFilters.price[0], parseInt(e.target.value)])}
                         min={activeFilters.price[0]}
-                        max={500}
+                        max={50000}
                       />
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Size Filter */}
-              <div className="products-filter__block">
-                <button type="button">Size</button>
-                <div className="products-filter__block__content checkbox-square-wrapper">
-                  {productSizes.map((size) => (
-                    <Checkbox
-                      type="square"
-                      key={size.id}
-                      name="product-size"
-                      label={size.label}
-                      checked={activeFilters.size.includes(size.label)}
-                      onChange={(e) =>
-                        updateFilters("size", size.label, e.target.checked)
-                      }
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Color Filter */}
-              <div className="products-filter__block">
-                <button type="button">Color</button>
-                <div className="products-filter__block__content">
-                  <div className="checkbox-color-wrapper">
-                    {productColors.map((type) => (
-                      <CheckboxColor
-                        key={type.id}
-                        valueName={type.color}
-                        name="product-color"
-                        color={type.color}
-                        isChecked={activeFilters.color.includes(type.color)}
-                        onChange={(color: string) =>
-                          updateFilters("color", color, true)
-                        }
-                      />
-                    ))}
                   </div>
                 </div>
               </div>

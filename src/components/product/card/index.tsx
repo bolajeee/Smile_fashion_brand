@@ -118,13 +118,9 @@ const ProductCard = ({
           </div>
 
           <div className="product-item__buttons">
-            <Link 
-              href={`/product/${id}`} 
-              className="btn btn--rounded btn--border"
-              aria-label={`View details of ${name}`}
-            >
-              View Details
-            </Link>
+            <button className="btn btn--rounded btn--quick-view">
+              Quick View
+            </button>
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}

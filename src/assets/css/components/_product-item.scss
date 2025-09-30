@@ -13,6 +13,7 @@
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.03),
     0 1px 3px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--color-border);
 
   &::before {
     content: "";
@@ -29,17 +30,17 @@
   }
 
   &:hover {
-    transform: translateY(-6px) scale(1.01);
+    transform: translateY(-4px);
     box-shadow: 
-      0 12px 24px rgba(0, 0, 0, 0.06),
-      0 4px 8px rgba(0, 0, 0, 0.04);
+      0 10px 20px rgba(0, 0, 0, 0.05),
+      0 3px 6px rgba(0, 0, 0, 0.03);
 
     &::before {
-      opacity: 1;
+      opacity: 0.5;
     }
 
     .product-item__image img {
-      transform: scale(1.08);
+      transform: scale(1.03);
     }
   }
 
@@ -99,8 +100,8 @@
   }
 
   &__name {
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-size: 1.25rem;
+    font-weight: 600;
     line-height: 1.4;
     margin: 0;
     
@@ -123,8 +124,8 @@
     margin: 0.5rem 0;
 
     &-current {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--color-brand-primary);
     }
 
@@ -202,6 +203,18 @@
       overflow: hidden;
       backdrop-filter: blur(10px);
       
+      &--quick-view {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+
+        &:hover {
+          background: var(--color-white);
+          border-color: var(--color-brand-primary);
+          color: var(--color-brand-primary);
+        }
+      }
+
       &--border {
         background: transparent;
         border: 1px solid var(--color-border);

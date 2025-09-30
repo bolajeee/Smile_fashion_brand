@@ -1,6 +1,7 @@
 import Breadcrumb from "@/components/breadcrumb";
 import Footer from "@/components/footer";
 import ProductsContent from "@/components/product/list"
+import ProductsFilter from "@/components/products-filter";
 // Removed unused ProductsFilter import
 import Layout from "@/layouts/Main";
 import type {
@@ -23,11 +24,20 @@ interface ProductsPageProps {
 
 const ProductsPage: NextPage<ProductsPageProps> = ({
   products: initialProducts,
-  // Removed unused productTypes, productSizes, productColors
+  productTypes,
+  productSizes,
+  productColors,
 }) => {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [loading, setLoading] = useState(false);
+
+  const selectedFilters = {
+    type: router.query.type as string,
+    price: router.query.price as string,
+    minPrice: router.query.minPrice as string,
+    maxPrice: router.query.maxPrice as string,
+  };
 
   useEffect(() => {
     const filterProducts = () => {
@@ -36,34 +46,19 @@ const ProductsPage: NextPage<ProductsPageProps> = ({
 
       // Filter by type
       if (router.query.type) {
+        const types = Array.isArray(router.query.type) ? router.query.type : [router.query.type];
         filteredProducts = filteredProducts.filter(
-          (product) => product.type === router.query.type
+          (product) => product.type && types.includes(product.type)
         );
       }
 
-      // Price range filter (sidebar)
-      const min = router.query.priceMin ? Number(router.query.priceMin) : 0;
-      const max = router.query.priceMax ? Number(router.query.priceMax) : 5000;
+      // Filter by price range
+      const minPrice = router.query.minPrice ? Number(router.query.minPrice) : 0;
+      const maxPrice = router.query.maxPrice ? Number(router.query.maxPrice) : 50000;
       filteredProducts = filteredProducts.filter(product => {
         const price = Number(product.price);
-        return !isNaN(price) && price >= min && price <= max;
+        return !isNaN(price) && price >= minPrice && price <= maxPrice;
       });
-
-      // Filter by size
-      if (router.query.size) {
-        const sizes = (router.query.size as string).split(",");
-        filteredProducts = filteredProducts.filter((product) =>
-          product.sizes?.some((size) => sizes.includes(size))
-        );
-      }
-
-      // Filter by color
-      if (router.query.color) {
-        const colors = (router.query.color as string).split(",");
-        filteredProducts = filteredProducts.filter((product) =>
-          product.color ? colors.includes(product.color) : false
-        );
-      }
 
       setProducts(filteredProducts);
       setLoading(false);
@@ -77,7 +72,9 @@ const ProductsPage: NextPage<ProductsPageProps> = ({
       <Breadcrumb />
       <section className="products-page">
         <div className="container">
-          {/* ProductsFilter removed as requested */}
+          <ProductsFilter
+            selectedFilters={selectedFilters}
+          />
           {loading ? (
             <div className="products-page__loading">Loading...</div>
           ) : (

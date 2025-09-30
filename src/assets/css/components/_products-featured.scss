@@ -1,3 +1,18 @@
+// Show All Products button styling
+.btn--show-all {
+  background: var(--color-surface, #fff);
+  color: var(--color-primary, #222);
+  border: 2px solid var(--color-primary, #fbbf24);
+  box-shadow: 0 2px 8px rgba(var(--color-primary-rgb, 0,0,0), 0.08);
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  &:hover {
+    background: var(--color-primary, #fbbf24);
+    color: #fff;
+    border-color: var(--color-primary-dark, #e09e1e);
+    box-shadow: 0 4px 16px rgba(var(--color-primary-rgb, 0,0,0), 0.16);
+  }
+}
 // --- STRONG OVERRIDES FOR PRICE FILTER SIDEBAR ---
 .products-content__sidebar-block,
 .products-content__sidebar-block * {

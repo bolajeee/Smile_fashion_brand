@@ -192,12 +192,12 @@
 
     img {
       width: auto;
-      height: 36px;
+      height: 24px;
       max-width: 100%;
       object-fit: contain;
       
       @media (min-width: 768px) {
-        height: 48px;
+        height: 32px;
       }
     }
   }

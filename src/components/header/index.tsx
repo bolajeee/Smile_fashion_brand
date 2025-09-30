@@ -52,7 +52,7 @@ const Header: React.FC<{ isErrorPage?: boolean }> = () => {
       <div className="container">
         <div className="site-header__wrapper">
           <Link href="/" className="site-header__logo">
-            <Logo width={70} height={70} />
+            <Logo width={60} height={60} />
           </Link>
           <nav
             className={`site-header__nav ${
