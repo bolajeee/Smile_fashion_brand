@@ -21,7 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(400).json({ message: 'Missing required fields' });
         }
         const product = await prisma.product.create({
-          data: { name, description, price, images, stock },
+          data: { name, description, price, images, stock, type },
         });
         return res.status(201).json(product);
       }
