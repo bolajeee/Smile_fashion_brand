@@ -47,13 +47,20 @@
   }
 
   &__brand-name {
-    font-size: var(--text-lg);
-    font-weight: 600;
+    font-size: calc(var(--text-lg) * 1.2);
+    font-family: 'Montserrat', 'Poppins', 'Segoe UI', Arial, sans-serif;
+    font-weight: 800;
     margin-left: var(--space-xs);
     color: var(--color-text-primary);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 
     .highlight {
       color: var(--color-primary);
+      font-weight: 900;
+      font-family: 'Pacifico', 'Montserrat', cursive, sans-serif;
+      letter-spacing: 0.08em;
+      text-shadow: 0 2px 8px rgba(var(--color-primary-rgb), 0.12);
     }
   }
 

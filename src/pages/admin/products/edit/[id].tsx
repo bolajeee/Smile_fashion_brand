@@ -19,6 +19,7 @@ interface ProductFormData {
   description: string;
   price: string;
   stock: string;
+  type: string;
   images: string[];
   featured: boolean;
   colors: ProductColor[];
@@ -30,13 +31,14 @@ const EditProductPage = () => {
   const { addNotification } = useUI();
   
   const [formData, setFormData] = useState<ProductFormData>({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    images: [],
-    featured: false,
-    colors: [],
+  name: '',
+  description: '',
+  price: '',
+  stock: '',
+  type: '',
+  images: [],
+  featured: false,
+  colors: [],
   });
   
   const [isLoading, setIsLoading] = useState(true);
@@ -72,6 +74,7 @@ const EditProductPage = () => {
         description: product.description,
         price: String(product.price),
         stock: String(product.stock),
+        type: product.type || '',
         images: product.images || [],
         featured: product.featured || false,
         colors: product.colors || [],
@@ -137,6 +140,11 @@ const EditProductPage = () => {
       if (formData.price) productData.price = parseFloat(formData.price);
       if (formData.stock) productData.stock = parseInt(formData.stock, 10);
       
+      if (formData.name) productData.name = formData.name;
+      if (formData.description) productData.description = formData.description;
+      if (formData.price) productData.price = parseFloat(formData.price);
+      if (formData.stock) productData.stock = parseInt(formData.stock, 10);
+      if (formData.type) productData.type = formData.type;
       // Only update images if there's a new image or images were removed
       if (newImageUrl || formData.images.length !== initialImages?.length) {
         productData.images = newImageUrl 
@@ -145,6 +153,21 @@ const EditProductPage = () => {
       }
       
       productData.featured = formData.featured; // Boolean can be false
+            <div className="form-group">
+              <label htmlFor="type">Product Type</label>
+              <select
+                id="type"
+                value={formData.type}
+                onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
+                required
+                className="form-control"
+              >
+                <option value="">Select type</option>
+                <option value="shirts">Shirts</option>
+                <option value="caps">Caps</option>
+                <option value="bags">Bags</option>
+              </select>
+            </div>
 
       // Update product
       const response = await fetch(`/api/products/${id}`, {
@@ -217,6 +240,22 @@ const EditProductPage = () => {
             </div>
 
             <div className="form-group">
+              <label htmlFor="type">Product Type</label>
+              <select
+                id="type"
+                value={formData.type}
+                onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
+                required
+                className="form-control"
+              >
+                <option value="">Select type</option>
+                <option value="shirts">Shirts</option>
+                <option value="caps">Caps</option>
+                <option value="bags">Bags</option>
+              </select>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
@@ -270,26 +309,7 @@ const EditProductPage = () => {
               </label>
             </div>
 
-            <div className="form-group">
-              <label>Product Colors</label>
-              {/* ColorSwatch component removed because it is not implemented. You can add your color management UI here. */}
-              {/* Example placeholder for color management: */}
-              {/*
-              <div>
-                {formData.colors.map((color, idx) => (
-                  <div key={color.id || idx}>
-                    <span style={{ background: color.hexCode, display: 'inline-block', width: 20, height: 20 }} />
-                    {color.name} ({color.inStock ? 'In Stock' : 'Out of Stock'})
-                  </div>
-                ))}
-                <button type="button" onClick={() => setFormData(prev => ({ ...prev, colors: [...prev.colors, { name: '', hexCode: '', inStock: true, stock: 0 }] }))}>
-                  Add Color
-                </button>
-              </div>
-              */}
-              {/* Uncomment the above block to manage colors */}
-              {/* onColorsChange={(colors: ProductColor[]) => setFormData(prev => ({ ...prev, colors }))} */}
-            </div>
+            {/* Color management UI placeholder removed for clean JSX. */}
 
             <div className="form-group">
               <label>Current Images</label>

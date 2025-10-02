@@ -17,16 +17,10 @@ import { useRouter } from "next/router";
 
 interface ProductsPageProps {
   products: Product[];
-  productTypes: ProductType[];
-  productSizes: ProductSize[];
-  productColors: ProductColor[];
 }
 
 const ProductsPage: NextPage<ProductsPageProps> = ({
   products: initialProducts,
-  productTypes,
-  productSizes,
-  productColors,
 }) => {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);

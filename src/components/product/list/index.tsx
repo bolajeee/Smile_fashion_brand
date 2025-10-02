@@ -35,14 +35,6 @@ const ProductsContent: React.FC<ProductsContentProps> = ({ products: initialProd
     return sortedProducts;
   }, [initialProducts, sortBy]);
 
-  // Dynamically calculate max price
-  const maxPrice = useMemo(() => {
-    if (!products.length) return 5000;
-    return Math.max(...products.map(p => Number(p.price) || 0), 5000);
-  }, [products]);
-
-
-
 
   // Pagination logic
   const [page, setPage] = useState(1);

@@ -1,8 +1,41 @@
+
 .app-main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-surface);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  transition: background 0.3s, color 0.3s;
+}
+
+main {
+  flex: 1;
+  padding-top: var(--header-height, 72px);
+  background: var(--color-background-secondary);
+  transition: background 0.3s;
+}
+
+.main-page {
+  padding-bottom: var(--space-2xl);
+}
+
+section:not(:last-child) {
+  margin-bottom: var(--space-2xl);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width-xl, 1280px);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  @media (max-width: 768px) {
+    padding: 0 var(--space-sm);
+  }
+}
+
+[data-theme="dark"] .app-main {
+  background: var(--color-background);
+  color: var(--color-text-primary);
 }
 
 main {

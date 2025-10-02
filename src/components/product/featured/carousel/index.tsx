@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ProductTypeList } from "@/types";
 import ProductCard from "@/components/product/card";
 
@@ -9,11 +9,18 @@ type ProductsCarouselType = {
 const ProductsCarousel = ({ products }: ProductsCarouselType) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  if (!Array.isArray(products) || products.length === 0) return <div>Loading...</div>;
+  // Detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  const updateCarousel = (newIndex: number) => {
-    if (isAnimating) return;
+    const updateCarousel = (newIndex: number) => {
+    if (isAnimating || !Array.isArray(products) || products.length === 0) return;
     setIsAnimating(true);
 
     const normalizedIndex = (newIndex + products.length) % products.length;
@@ -24,14 +31,29 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
     }, 800);
   };
 
+  // Timed auto-transition every 3s
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+    if (isMobile) {
+      interval = setInterval(() => {
+        updateCarousel(currentIndex + 1);
+      }, 3000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [currentIndex, isMobile]);
+
+  if (!Array.isArray(products) || products.length === 0) return <div>Loading...</div>;
+
+
+
   const getSlideClass = (index: number) => {
-    const offset = (index - currentIndex + products.length) % products.length;
-    if (offset === 0) return 'center';
-    if (offset === 1) return 'right-1';
-    if (offset === 2) return 'right-2';
-    if (offset === products.length - 1) return 'left-1';
-    if (offset === products.length - 2) return 'left-2';
-    return 'hidden';
+  const offset = (index - currentIndex + products.length) % products.length;
+  if (offset === 0) return 'center';
+  if (offset === 1) return 'right';
+  if (offset === products.length - 1) return 'left';
+  return '';
   };
 
   return (
@@ -52,21 +74,25 @@ const ProductsCarousel = ({ products }: ProductsCarouselType) => {
         ))}
       </div>
 
-      <button 
-        className="nav-arrow btn btn--primary left" 
-        onClick={() => updateCarousel(currentIndex - 1)}
-        aria-label="Previous product"
-      >
-        <i className="icon-arrow-long-left"></i>
-      </button>
-      
-      <button 
-        className="nav-arrow btn btn--primary right" 
-        onClick={() => updateCarousel(currentIndex + 1)}
-        aria-label="Next product"
-      >
-        <i className="icon-arrow-long-right"></i>
-      </button>
+      {/* Hide navigation buttons on mobile */}
+      {!isMobile && (
+        <>
+          <button 
+            className="nav-arrow btn btn--primary left" 
+            onClick={() => updateCarousel(currentIndex - 1)}
+            aria-label="Previous product"
+          >
+            <i className="icon-arrow-long-left"></i>
+          </button>
+          <button 
+            className="nav-arrow btn btn--primary right" 
+            onClick={() => updateCarousel(currentIndex + 1)}
+            aria-label="Next product"
+          >
+            <i className="icon-arrow-long-right"></i>
+          </button>
+        </>
+      )}
 
       <div className="dots">
         {products.map((_, index) => (

@@ -1,9 +1,10 @@
+// ...existing code...
 .products-carousel {
   width: 100%;
   max-width: var(--container-width);
   height: 500px;
   position: relative;
-  perspective: 1000px;
+  perspective: 1200px;
   margin: 2rem auto;
 
   &__track {
@@ -16,83 +17,74 @@
     transform-style: preserve-3d;
     transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  .swiper-slide {
-    position: absolute;
-    width: 280px;
-    height: 400px;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    &.center {
-      z-index: 20;
-      transform: scale(1.18) translateZ(0);
-      box-shadow: 0 24px 48px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.18);
+.swiper-slide {
+  position: absolute;
+  left: 50%; 
+  width: 280px;
+  height: 400px;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  &.center {
+    z-index: 20;
+    transform: translateX(-50%) scale(1.1) rotateY(0deg) translateZ(0);
+    opacity: 1;
+    box-shadow: 0 24px 48px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.18);
+    border-radius: 2rem;
+    
+    .product-item {
+      box-shadow: 0 24px 48px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.22);
+      border: 2px solid var(--color-brand-primary, #fbbf24);
       border-radius: 2rem;
-      .product-item {
-        box-shadow: 0 24px 48px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.22);
-        border: 2px solid var(--color-brand-primary, #fbbf24);
-        border-radius: 2rem;
-        background: var(--bg-primary);
-        transition: box-shadow 0.3s, transform 0.3s;
-        img {
-          filter: none;
-          transform: scale(1.08);
-          border-radius: 1.5rem;
-        }
-        &:hover {
-          box-shadow: 0 32px 64px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.28);
-          transform: scale(1.03);
-        }
+      background: var(--bg-primary);
+      transition: box-shadow 0.3s, transform 0.3s;
+      
+      img {
+        filter: none;
+        transform: scale(1.12);
+        border-radius: 1.5rem;
       }
-    }
-    &.right-1 {
-      z-index: 5;
-      transform: translateX(200px) scale(0.9) translateZ(-100px);
-      opacity: 0.8;
-      .product-item img {
-        filter: brightness(0.85);
-      }
-    }
-    &.right-2 {
-      z-index: 1;
-      transform: translateX(400px) scale(0.8) translateZ(-300px);
-      opacity: 0.5;
-      .product-item img {
-        filter: brightness(0.7);
-      }
-    }
-    &.left-1 {
-      z-index: 5;
-      transform: translateX(-200px) scale(0.9) translateZ(-100px);
-      opacity: 0.8;
-      .product-item img {
-        filter: brightness(0.85);
-      }
-    }
-    &.left-2 {
-      z-index: 1;
-      transform: translateX(-400px) scale(0.8) translateZ(-300px);
-      opacity: 0.5;
-      .product-item img {
-        filter: brightness(0.7);
-      }
-    }
-    @media (max-width: 768px) {
-      &.center {
-        left: 50%;
-        transform: translateX(-50%) scale(1.05) translateZ(0);
-      }
-      &.left-1 {
-        left: 50%;
-        transform: translateX(-120%) scale(0.85) rotateY(6deg) translateZ(-60px);
-      }
-      &.right-1 {
-        left: 50%;
-        transform: translateX(20%) scale(0.85) rotateY(-6deg) translateZ(-60px);
-      }
-      &.left-2, &.right-2 {
-        display: none;
+      
+      &:hover {
+        box-shadow: 0 32px 64px rgba(var(--color-brand-primary-rgb, 0,0,0), 0.28);
+        transform: scale(1.06);
       }
     }
   }
+  
+  &.left {
+    z-index: 15;
+    transform: translateX(calc(-50% - 320px)) scale(0.9) rotateY(25deg) translateZ(-20px); 
+    opacity: 0.8;
+    
+    .product-item img {
+      filter: brightness(0.85);
+    }
+  }
+  
+  &.right {
+    z-index: 15;
+    transform: translateX(calc(-50% + 320px)) scale(0.9) rotateY(-25deg) translateZ(-20px); 
+    opacity: 0.8;
+    
+    .product-item img {
+      filter: brightness(0.85);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    &.center {
+      transform: translateX(-50%) scale(1.05) rotateY(0deg) translateZ(0);
+    }
+    
+    &.left {
+      transform: translateX(calc(-50% - 160%)) scale(0.85) rotateY(18deg) translateZ(-70px);
+    }
+    
+    &.right {
+      transform: translateX(calc(-50% + 60%)) scale(0.85) rotateY(-18deg) translateZ(-70px);
+    }
+  }
+}
 
   .nav-arrow {
     position: absolute;
@@ -159,8 +151,8 @@
     margin-top: 20px;
 
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: rgba(var(--color-primary-rgb), 0.2);
       cursor: pointer;

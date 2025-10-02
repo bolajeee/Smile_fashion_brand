@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await prisma.user.update({
     where: { email },
     data: {
-      resetToken,c 
+      resetToken, 
       resetTokenExpiry: expires,
     },
   });

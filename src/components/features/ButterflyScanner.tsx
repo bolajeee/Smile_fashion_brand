@@ -74,7 +74,7 @@ const ButterflyScanner = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particlesRef.current.forEach((particle, index) => {
+  particlesRef.current.forEach((particle) => {
         // Fade particle
         particle.alpha -= particle.decay;
 

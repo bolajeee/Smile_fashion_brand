@@ -67,7 +67,9 @@
   --star-color-hover: var(--color-primary-dark);
   --primary-color: var(--color-primary);
   --primary-color-alpha: rgba(var(--color-primary-rgb), 0.2);
-  --primary-color-light: var(--color-primary-dark);
+  --primary-color-light: #a5b4fc;
+  --primary-color-light-solid: #a5b4fc;
+  --primary-color-light-transparent: rgba(var(--color-primary-rgb), 0.1);
   --card-bg: var(--color-surface);
   --card-border: var(--color-border);
   --input-bg: var(--color-surface);
