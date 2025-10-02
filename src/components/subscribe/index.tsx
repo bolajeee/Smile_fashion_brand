@@ -87,7 +87,7 @@ const Subscribe = () => {
                 {error && <p className="subscribe__error">{error}</p>}
                 <p className="subscribe__terms">
                   By joining, you agree to receive emails from us.
-                  <a href="/privacy" className="subscribe__link">Privacy Policy</a>
+                  <a href="/privacy-policy" className="subscribe__link">Privacy Policy</a>
                 </p>
               </form>
             ) : (
