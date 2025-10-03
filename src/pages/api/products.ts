@@ -12,6 +12,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             { featuredOrder: 'asc' },
             { createdAt: 'desc' }
           ],
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+            images: true,
+            stock: true,
+            type: true,
+            featured: true,
+            featuredOrder: true,
+            reviews: true,
+          }
         });
         return res.status(200).json(products);
       }

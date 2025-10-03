@@ -16,6 +16,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       orderBy: {
         createdAt: 'desc' // Show newest products first
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        images: true,
+        stock: true,
+        type: true,
+        featured: true,
+        featuredOrder: true,
+        reviews: true,
       }
     });
     
