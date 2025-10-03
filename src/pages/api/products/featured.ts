@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json(products);
   } catch (error) {
     console.error('Error in /api/products/featured:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return res.status(500).json({ message: 'Internal server error', error: errorMessage });
   }
 }
