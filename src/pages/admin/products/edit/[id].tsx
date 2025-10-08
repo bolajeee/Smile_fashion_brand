@@ -153,21 +153,6 @@ const EditProductPage = () => {
       }
       
       productData.featured = formData.featured; // Boolean can be false
-            <div className="form-group">
-              <label htmlFor="type">Product Type</label>
-              <select
-                id="type"
-                value={formData.type}
-                onChange={e => setFormData(prev => ({ ...prev, type: e.target.value }))}
-                required
-                className="form-control"
-              >
-                <option value="">Select type</option>
-                <option value="shirts">Shirts</option>
-                <option value="caps">Caps</option>
-                <option value="bags">Bags</option>
-              </select>
-            </div>
 
       // Update product
       const response = await fetch(`/api/products/${id}`, {
