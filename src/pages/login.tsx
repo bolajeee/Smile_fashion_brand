@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from 'next/image';
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -59,7 +60,7 @@ const LoginPage = () => {
           <div className="form-container">
             <div className="form-image">
               {/* You can replace this with an <Image> component from Next.js for optimization */}
-              <img src="/images/form-image.jpg" alt="Fashion model" />
+              <Image src="/images/form-image.jpg" alt="Login" />
             </div>
             <div className="form-block">
               <h2 className="form-block__title">Log in to your account</h2>
