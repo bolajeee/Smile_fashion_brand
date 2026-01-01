@@ -4,7 +4,7 @@ import ProductsFeatured from "@/components/product/featured";
 import Subscribe from "@/components/subscribe";
 import { motion } from "framer-motion";
 import Layout from "../layouts/Main";
-import ButterflyScanner from "@/components/features/ButterflyScanner";
+// import ButterflyScanner from "@/components/features/ButterflyScanner";
 
 const IndexPage = () => {
   return (
@@ -26,7 +26,7 @@ const IndexPage = () => {
             }
           }}
         >
-          <div className="container">
+          <div className="container featured-grid">
             <motion.article
               style={{ backgroundImage: "url(/images/featured-1.jpg)" }}
               className="featured-item featured-item--A"
@@ -171,21 +171,25 @@ const IndexPage = () => {
 
 
  
-        <ButterflyScanner />
-        <div className="container">
-          <header className="section__intro">
+        {/* <ButterflyScanner /> */}
+
+  <header className="section__intro">
             <motion.h4
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="section__title"
+              className="section__title why-choose-us-title"
             >
               Why should you choose us?
             </motion.h4>
           </header>
+   
+        <div className="container">
+      
+     
 
-          <motion.ul className="shop-data-items" initial="hidden" whileInView="show" viewport={{ once: true }}
+          <motion.ul className="shop-data-items centered" initial="hidden" whileInView="show" viewport={{ once: true }}
             variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}>
             <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
               <i className="icon-shipping" />

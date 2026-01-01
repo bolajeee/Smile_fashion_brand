@@ -15,7 +15,7 @@ const ErrorPage = ({ children, title = "Next.js Ecommerce" }: LayoutType) => {
   return (
     <div className="app-main">
       <Head>
-        <title>Page not found &mdash; {title}</title>
+        <title>{`Page not found — ${title}`}</title>
       </Head>
 
       <Header isErrorPage />

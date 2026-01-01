@@ -1,15 +1,52 @@
+/* Section intro (global) - centers headings above sections */
+.section__intro {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+
+  .section__title {
+    margin: 0 auto 0.75rem;
+    max-width: 760px;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  /* Specific override for the homepage heading */
+  .section__title.why-choose-us-title {
+    margin: 0 auto 1.25rem;
+    max-width: 900px;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-text-primary);
+    padding: 0.5rem 0.5rem;
+  }
+}
+
 .shop-data-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* limit overall width and center the grid on large screens */
+  &.centered {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+
+   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1rem;
 
   li {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
+    display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: left;
     padding: 2rem;
     background: var(--color-white);
     border-radius: 1.5rem;
@@ -58,7 +95,8 @@
       color: var(--color-brand-primary);
       opacity: 0.9;
       flex-shrink: 0;
-      margin-top: 0.25rem;
+      /* vertically center icon with content */
+      margin-top: 0;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       
       &::after {
@@ -79,6 +117,11 @@
 
     .data-item__content {
       flex: 1;
+
+      /* center text for small screens to improve balance */
+      @media (max-width: 480px) {
+        text-align: center;
+      }
 
       h4 {
         font-size: 1.25rem;
@@ -119,6 +162,8 @@
         p {
           font-size: 0.9375rem;
         }
+        /* center title and text on small screens */
+        text-align: center;
       }
     }
   }

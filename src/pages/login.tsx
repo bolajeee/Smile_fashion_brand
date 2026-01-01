@@ -60,7 +60,7 @@ const LoginPage = () => {
           <div className="form-container">
             <div className="form-image">
               {/* You can replace this with an <Image> component from Next.js for optimization */}
-              <Image src="/images/form-image.jpg" alt="Login" />
+              <Image src="/images/form-image.jpg" width={500} height={500} alt="Login" />
             </div>
             <div className="form-block">
               <h2 className="form-block__title">Log in to your account</h2>

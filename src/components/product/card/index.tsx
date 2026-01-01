@@ -119,7 +119,7 @@ const ProductCard = ({
 
           <div className="product-item__buttons">
             <Link href={`/product/${id}`} passHref>
-              <a className="btn btn--rounded btn--quick-view">Quick View</a>
+              <span className="btn btn--rounded btn--quick-view">Quick View</span>
             </Link>
             <button
               onClick={handleAddToCart}

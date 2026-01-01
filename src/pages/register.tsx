@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import type { RegisterData } from "@/types/auth";
 import Layout from "../layouts/Main";
 import { server } from "../utils/server";
+import Image from "next/image";
 
 const RegisterPage = () => {
   const {
@@ -70,7 +71,7 @@ const RegisterPage = () => {
 
           <div className="form-container">
             <div className="form-image">
-              <img src="/images/form-image-2.jpg" alt="Fashion model posing" />
+               <Image src="/images/form-image.jpg" width={500} height={500} alt="register" />
             </div>
             <div className="form-block">
               <div className="form-block__title-wrapper">

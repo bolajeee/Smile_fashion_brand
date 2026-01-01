@@ -110,13 +110,22 @@ const ButterflyScanner = () => {
 
   return (
     <div
-      className="scanner-container absolute inset-0 w-full h-full"
-      style={{ zIndex: 0, pointerEvents: "none" }}
+      className="scanner-container"
+      style={{
+        position: 'absolute',
+        // move the butterfly down and to the right so it sits behind/top-right of featured
+        top: '120px',
+        right: '5rem',
+        width: '160px',
+        height: '360px',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }}
     >
       <canvas
         ref={canvasRef}
-        className="w-full h-full"
-        style={{ display: "block", width: "100vw", height: "100vh" }}
+        className="scanner-canvas"
+        style={{ display: 'block', width: '100%', height: '100%' }}
       />
     </div>
   );
