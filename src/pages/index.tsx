@@ -4,34 +4,35 @@ import ProductsFeatured from "@/components/product/featured";
 import Subscribe from "@/components/subscribe";
 import { motion } from "framer-motion";
 import Layout from "../layouts/Main";
-// import ButterflyScanner from "@/components/features/ButterflyScanner";
+import Link from "next/link";
 
 const IndexPage = () => {
   return (
     <Layout>
       <PageIntro />
 
-        <motion.section 
-          className="featured" 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.2
-              }
+      <motion.section 
+        className="featured-showcase"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.15
             }
-          }}
-        >
-          <div className="container featured-grid">
+          }
+        }}
+      >
+        <div className="container">
+          <div className="featured-showcase-grid">
             <motion.article
               style={{ backgroundImage: "url(/images/featured-1.jpg)" }}
-              className="featured-item featured-item--A"
+              className="showcase-item showcase-item--primary"
               variants={{
-                hidden: { opacity: 0, y: 30 },
+                hidden: { opacity: 0, y: 40 },
                 visible: { 
                   opacity: 1, 
                   y: 0,
@@ -42,7 +43,8 @@ const IndexPage = () => {
                 }
               }}
             >
-              <div className="featured-item__content">
+              <div className="showcase-item__overlay"></div>
+              <div className="showcase-item__content">
                 <motion.h3
                   variants={{
                     hidden: { opacity: 0, y: 20 },
@@ -52,33 +54,45 @@ const IndexPage = () => {
                       transition: { delay: 0.2, duration: 0.6 }
                     }
                   }}
+                  className="showcase-item__title"
                 >
-                  New arrivals are now in!
+                  New Collection
                 </motion.h3>
+                <motion.p
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { 
+                      opacity: 1,
+                      transition: { delay: 0.3, duration: 0.6 }
+                    }
+                  }}
+                  className="showcase-item__subtitle"
+                >
+                  Discover our latest arrivals
+                </motion.p>
                 <motion.a
                   href="/products"
-                  className="btn btn--rounded"
+                  className="showcase-item__link"
                   variants={{
                     hidden: { opacity: 0, y: 10 },
                     visible: { 
                       opacity: 1, 
                       y: 0,
-                      transition: { delay: 0.3, duration: 0.6 }
+                      transition: { delay: 0.4, duration: 0.6 }
                     }
                   }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ x: 5 }}
                 >
-                  Show Collection
+                  Explore Collection <i className="icon-right" />
                 </motion.a>
               </div>
             </motion.article>
 
             <motion.article
               style={{ backgroundImage: "url(/images/featured-2.jpg)" }}
-              className="featured-item featured-item--B"
+              className="showcase-item showcase-item--secondary"
               variants={{
-                hidden: { opacity: 0, y: 30 },
+                hidden: { opacity: 0, y: 40 },
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -89,7 +103,8 @@ const IndexPage = () => {
                 },
               }}
             >
-              <div className="featured-item__content">
+              <div className="showcase-item__overlay"></div>
+              <div className="showcase-item__content">
                 <motion.h3
                   variants={{
                     hidden: { opacity: 0, y: 20 },
@@ -99,140 +114,134 @@ const IndexPage = () => {
                       transition: { delay: 0.2, duration: 0.6 },
                     },
                   }}
+                  className="showcase-item__title"
                 >
-                  Shirts $29,99
+                  Curated Selection
                 </motion.h3>
+                <motion.p
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { 
+                      opacity: 1,
+                      transition: { delay: 0.3, duration: 0.6 }
+                    }
+                  }}
+                  className="showcase-item__subtitle"
+                >
+                  Handpicked for you
+                </motion.p>
                 <motion.a
                   href="/products"
-                  className="btn btn--rounded"
+                  className="showcase-item__link"
                   variants={{
                     hidden: { opacity: 0, y: 10 },
                     visible: {
                       opacity: 1,
                       y: 0,
-                      transition: { delay: 0.3, duration: 0.6 },
+                      transition: { delay: 0.4, duration: 0.6 },
                     },
                   }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ x: 5 }}
                 >
-                  More details
+                  View Selection <i className="icon-right" />
                 </motion.a>
               </div>
             </motion.article>
-
-            {/* <motion.article
-              style={{ backgroundImage: "url(/images/featured-3.jpg)" }}
-              className="featured-item featured-item--C"
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                }
-              }}
-            >
-              <div className="featured-item__content">
-                <motion.h3
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: 0.2, duration: 0.6 },
-                    },
-                  }}
-                >
-                  Summer Sale is Live!
-                </motion.h3>
-                <motion.a
-                  href="/products"
-                  className="btn btn--rounded"
-                  variants={{
-                    hidden: { opacity: 0, y: 10 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: 0.3, duration: 0.6 },
-                    },
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  VIEW ALL
-                </motion.a>
-              </div>
-            </motion.article> */}
           </div>
+        </div>
+      </motion.section>
 
-
- 
-        {/* <ButterflyScanner /> */}
-
-  <header className="section__intro">
-            <motion.h4
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="section__title why-choose-us-title"
-            >
-              Why should you choose us?
-            </motion.h4>
-          </header>
-   
+      <motion.section 
+        className="values-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1
+            }
+          }
+        }}
+      >
         <div className="container">
-      
-     
+          <motion.header 
+            className="values-header"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.6 }
+              }
+            }}
+          >
+            <h2 className="values-title">Why Choose Smile</h2>
+            <p className="values-subtitle">Crafted for those who appreciate quality and authenticity</p>
+          </motion.header>
 
-          <motion.ul className="shop-data-items centered" initial="hidden" whileInView="show" viewport={{ once: true }}
-            variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}>
-            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
-              <i className="icon-shipping" />
-              <div className="data-item__content">
-                <h4>Free Shipping</h4>
-                <p>
-                  All purchases over $199 are eligible for free shipping via
-                  USPS First Class Mail.
-                </p>
+          <motion.ul 
+            className="values-grid" 
+            variants={{ 
+              hidden: { opacity: 0 }, 
+              visible: { 
+                opacity: 1, 
+                transition: { staggerChildren: 0.1, delayChildren: 0.1 } 
+              } 
+            }}
+          >
+            <motion.li 
+              className="value-item"
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            >
+              <div className="value-item__icon">
+                <i className="icon-shipping" />
               </div>
+              <h4 className="value-item__title">Complimentary Shipping</h4>
+              <p className="value-item__text">
+                Free shipping on all orders over $199 with expedited delivery options available.
+              </p>
             </motion.li>
 
-            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
-              <i className="icon-payment" />
-              <div className="data-item__content">
-                <h4>Easy Payments</h4>
-                <p>
-                  All payments are processed instantly over a secure payment
-                  protocol.
-                </p>
+            <motion.li 
+              className="value-item"
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            >
+              <div className="value-item__icon">
+                <i className="icon-payment" />
               </div>
+              <h4 className="value-item__title">Secure Checkout</h4>
+              <p className="value-item__text">
+                All transactions are processed with industry-leading security protocols.
+              </p>
             </motion.li>
 
-            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
-              <i className="icon-cash" />
-              <div className="data-item__content">
-                <h4>Money-Back Guarantee</h4>
-                <p>
-                  If an item arrived damaged, you
-                  can send it back for a full refund.
-                </p>
+            <motion.li 
+              className="value-item"
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            >
+              <div className="value-item__icon">
+                <i className="icon-cash" />
               </div>
+              <h4 className="value-item__title">Satisfaction Guarantee</h4>
+              <p className="value-item__text">
+                Full refund within 30 days if you're not completely satisfied with your purchase.
+              </p>
             </motion.li>
 
-            <motion.li variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}>
-              <i className="icon-materials" />
-              <div className="data-item__content">
-                <h4>Finest Quality</h4>
-                <p>
-                  Designed to last, each of our products has been crafted with
-                  the finest materials.
-                </p>
+            <motion.li 
+              className="value-item"
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            >
+              <div className="value-item__icon">
+                <i className="icon-materials" />
               </div>
+              <h4 className="value-item__title">Premium Quality</h4>
+              <p className="value-item__text">
+                Every piece is made with the finest materials and meticulous craftsmanship.
+              </p>
             </motion.li>
           </motion.ul>
         </div>

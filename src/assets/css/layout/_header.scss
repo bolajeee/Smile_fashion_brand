@@ -5,23 +5,23 @@
  */
 
 .site-header {
-  background-color: transparent;
-  border-bottom: 1px solid transparent;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-gray-200);
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: all 0.3s ease;
+  box-shadow: none;
 
   // Optional scrolled state; toggle this class via JS if desired
   &.site-header--scrolled {
-    background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
-    border-bottom-color: var(--color-border);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
-    backdrop-filter: saturate(120%) blur(10px);
-    -webkit-backdrop-filter: saturate(120%) blur(10px);
+    background-color: var(--color-white);
+    border-bottom-color: var(--color-gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   &__wrapper {

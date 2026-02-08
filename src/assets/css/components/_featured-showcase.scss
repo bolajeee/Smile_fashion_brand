@@ -1,0 +1,166 @@
+// Featured Showcase Section - Minimalist Mature Theme
+.featured-showcase {
+  position: relative;
+  padding: 4rem 1.5rem;
+  background-color: var(--color-background);
+  z-index: 1;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .featured-showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+
+    @media (max-width: 992px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 576px) {
+      gap: 1rem;
+    }
+  }
+
+  .showcase-item {
+    position: relative;
+    height: 480px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.8s ease forwards;
+
+    &:nth-child(1) {
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(26, 26, 26, 0.65) 100%
+      );
+      z-index: 1;
+      transition: all 0.5s ease;
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+
+      .showcase-item__overlay {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(26, 26, 26, 0.8) 100%
+        );
+      }
+
+      .showcase-item__content {
+        transform: translateY(-12px);
+      }
+    }
+
+    &__content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2.5rem;
+      z-index: 2;
+      transform: translateY(0);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      @media (max-width: 576px) {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    &__title {
+      color: var(--color-white);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      margin: 0;
+      line-height: 1.2;
+      text-align: left;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+
+      @media (max-width: 576px) {
+        font-size: 1.25rem;
+      }
+    }
+
+    &__subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      font-weight: 300;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--color-white);
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      border-bottom: 1.5px solid var(--color-white);
+      padding-bottom: 0.25rem;
+      transition: all 0.3s ease;
+      width: fit-content;
+
+      &:hover {
+        border-bottom-color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.9);
+
+        i {
+          transform: translateX(3px);
+        }
+      }
+
+      i {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

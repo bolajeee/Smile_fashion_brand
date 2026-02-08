@@ -70,29 +70,29 @@
     --glow-secondary: #3c67e3;
     --glow-tertiary: #4e00c2;
 
-    // Light theme colors
-    --color-primary: #6366f1;
-    --color-primary-dark: #4f46e5;
-    --color-primary-light: #a5b4fc;
-    --color-secondary: #f59e0b;
-    --color-secondary-dark: #d97706;
-    --color-accent: #ec4899;
-    --color-accent-light: #f9a8d4;
-    --color-background: #f9f9f9;
+    // Light theme colors - Minimalist Mature Palette
+    --color-primary: #1a1a1a;
+    --color-primary-dark: #0f0f0f;
+    --color-primary-light: #4a4a4a;
+    --color-secondary: #6b5b4f;
+    --color-secondary-dark: #5a4d43;
+    --color-accent: #8b7355;
+    --color-accent-light: #a08975;
+    --color-background: #faf9f7;
 
-    // Neutral colors
+    // Neutral colors - Refined Grays
     --color-white: #ffffff;
     --color-black: #000000;
-    --color-gray-50: #f9fafb;
-    --color-gray-100: #f3f4f6;
-    --color-gray-200: #e5e7eb;
-    --color-gray-300: #d1d5db;
-    --color-gray-400: #9ca3af;
-    --color-gray-500: #6b7280;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
+    --color-gray-50: #faf9f7;
+    --color-gray-100: #f5f3f0;
+    --color-gray-200: #ebe8e3;
+    --color-gray-300: #ddd9d0;
+    --color-gray-400: #c4bfb5;
+    --color-gray-500: #8b8680;
+    --color-gray-600: #6b6660;
+    --color-gray-700: #4a4540;
+    --color-gray-800: #2a2520;
+    --color-gray-900: #1a1515;
 
     // Semantic colors
     --color-success: #10b981;
@@ -123,13 +123,13 @@
     --color-bg: var(--color-white);
     --color-bg-secondary: var(--color-gray-50);
 
-    // Brand colors for Smile Fashion
-    --color-brand-primary: #ff6b6b;
-    --color-brand-primary-rgb: 255, 107, 107; // RGB values for animations
-    --color-brand-secondary: #4ecdc4;
-    --color-brand-accent: #45b7d1;
-    --color-brand-warm: #ffa07a;
-    --color-brand-cool: #98d8c8;
+    // Brand colors for Smile Fashion - Minimalist & Mature
+    --color-brand-primary: #1a1a1a;
+    --color-brand-primary-rgb: 26, 26, 26; // RGB values for animations
+    --color-brand-secondary: #6b5b4f;
+    --color-brand-accent: #8b7355;
+    --color-brand-warm: #a08975;
+    --color-brand-cool: #8b7355;
 }
 
 // Dark theme
