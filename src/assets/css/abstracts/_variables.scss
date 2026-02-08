@@ -134,40 +134,54 @@
 
 // Dark theme
 [data-theme="dark"] {
-    // Dark theme colors
-    --color-surface: var(--color-gray-900);
-    --color-surface-secondary: var(--color-gray-800);
-    --color-surface-tertiary: var(--color-gray-700);
-    --color-text-primary: var(--color-gray-100);
-    --color-text-secondary: var(--color-gray-300);
-    --color-text-tertiary: var(--color-gray-400);
-    --color-background: #333;
-    --color-bg: var(--color-gray-900);
+    // Dark theme colors - Minimalist Palette for Dark Mode
+    --color-surface: #1a1a1a;
+    --color-surface-secondary: #242424;
+    --color-surface-tertiary: #2d2d2d;
+    --color-text-primary: #f5f3f0;
+    --color-text-secondary: #d4d0c8;
+    --color-text-tertiary: #a8a39a;
+    --color-background: #0f0f0f;
+    --color-bg: #1a1a1a;
+    
+    // Dark theme neutral colors
+    --color-gray-50: #2d2d2d;
+    --color-gray-100: #3a3a3a;
+    --color-gray-200: #4a4a4a;
+    --color-gray-300: #5a5a5a;
+    --color-gray-400: #707070;
+    --color-gray-500: #8b8680;
+    --color-gray-600: #a8a39a;
+    --color-gray-700: #c4bfb5;
+    --color-gray-800: #d4d0c8;
+    --color-gray-900: #f5f3f0;
     
     // Dark theme backgrounds
-    --bg-primary: var(--color-gray-900);
-    --bg-secondary: var(--color-gray-800);
-    --bg-hover: var(--color-gray-700);
-    --bg-primary-dark: var(--color-gray-900);
-    --bg-secondary-dark: var(--color-gray-800);
-    --bg-hover-dark: var(--color-gray-700);
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #242424;
+    --bg-hover: #2d2d2d;
+    --bg-primary-dark: #1a1a1a;
+    --bg-secondary-dark: #242424;
+    --bg-hover-dark: #2d2d2d;
     
     // Dark theme borders
-    --border-color: var(--color-gray-700);
-    --border-color-hover: var(--color-gray-600);
-    --border-color-dark: var(--color-gray-700);
-    --border-color-hover-dark: var(--color-gray-600);
+    --border-color: #3a3a3a;
+    --border-color-hover: #4a4a4a;
+    --border-color-dark: #3a3a3a;
+    --border-color-hover-dark: #4a4a4a;
     
     // Dark theme shadows
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.4);
-    --shadow-md-dark: 0 4px 6px rgba(0,0,0,0.5);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+    --shadow-md-dark: 0 4px 6px rgba(0, 0, 0, 0.7);
     
-    // Dark theme brand colors
-    --color-brand-primary: #ff6b6b;
+    // Dark theme brand colors - Minimalist & Mature
+    --color-brand-primary: #f5f3f0;
+    --color-brand-secondary: #a08975;
+    --color-brand-accent: #b39a88;
     --primary-color: var(--color-brand-primary);
-    --primary-color-dark: #ff8787;
+    --primary-color-dark: #e8e4db;
 }
 
 // SCSS Variables (for backward compatibility)
