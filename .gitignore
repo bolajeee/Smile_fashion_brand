@@ -1,6 +1,5 @@
 # Node.js and npm
 node_modules/
-package-lock.json
 
 # Prisma
 prisma/.cache

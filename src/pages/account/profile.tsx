@@ -161,7 +161,7 @@ const ProfileContent = () => {
         responseType: 'blob'
       });
 
-      const contentType = response.headers['content-type'];
+      const contentType = String(response.headers['content-type'] ?? '');
       if (!contentType || !contentType.includes('application/pdf')) {
         throw new Error('Invalid invoice format');
       }
