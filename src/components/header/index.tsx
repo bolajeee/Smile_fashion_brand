@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useEffect, useRef, useState } from 'react';
-import useOnClickOutside from "use-onclickoutside";
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import Image from "next/image";
 import { Logo } from '@/components/logo/Logo';
 import { useCart } from '@/contexts/CartContext';
